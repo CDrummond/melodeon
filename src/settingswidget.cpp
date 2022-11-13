@@ -1,0 +1,117 @@
+/*
+ * LMS-Material-App-Qt
+ *
+ * Copyright (c) 2022 Craig Drummond <craig.p.drummond@gmail.com>
+ *
+ * ----
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include "settingswidget.h"
+#include "ui_settingswidget.h"
+#include "columnresizer.h"
+#include "serverdiscovery.h"
+#include "settings.h"
+#include <QtCore/QDebug>
+#include <QtGui/QColor>
+#include <QtGui/QFontMetrics>
+
+SettingsWidget::SettingsWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::SettingsWidget)
+    , discovery(nullptr) {
+    ui->setupUi(this);
+    ColumnResizer* resizer = new ColumnResizer(this);
+    resizer->addWidgetsFromLayout(ui->serverGroupBox->layout(), 0);
+    resizer->addWidgetsFromLayout(ui->interfaceGroupBox->layout(), 0);
+    clearCache = false;
+    connect(ui->backButton, &QPushButton::clicked, this, &SettingsWidget::backClicked);
+    connect(ui->discoverServer, &QPushButton::clicked, this, &SettingsWidget::discoverClicked);
+    connect(ui->clearCache, &QPushButton::clicked, this, &SettingsWidget::clearCacheClicked);
+    connect(ui->zoom, &QSlider::valueChanged, this, &SettingsWidget::updateZoomPc);
+    ui->backButton->setText(QString("\u2190"));
+    QFont f = font();
+    f.setBold(true);
+    ui->backButton->setFont(f);
+    ui->backButton->setMaximumWidth(ui->toolbar->height()+4);
+    ui->backButton->setMinimumHeight(ui->toolbar->height());
+
+    f = font();
+    f.setFixedPitch(true);
+    QFontMetrics fm(f);
+    ui->zoomPc->setFont(f);
+    ui->zoomPc->setFixedWidth(fm.boundingRect("1000 % ").width());
+}
+
+void SettingsWidget::setDark(bool dark) {
+    QPalette pal(palette());
+    pal.setColor(QPalette::Window, dark ? QColor(20, 20, 20) : QColor(220, 220, 220));
+    pal.setColor(QPalette::Button, pal.color(QPalette::Button));
+    ui->toolbar->setPalette(pal);
+    ui->toolbar->setBackgroundRole(QPalette::Window);
+    ui->backButton->setPalette(pal);
+    ui->backButton->setBackgroundRole(QPalette::Window);
+}
+
+void SettingsWidget::backClicked() {
+    Settings cfg;
+    cfg.setZoom(ui->zoom->value()/4.0);
+    cfg.setName(ui->serverName->text().trimmed());
+    cfg.setAddress(ui->serverAddress->text().trimmed());
+    cfg.setPort(ui->serverPort->value());
+    cfg.save();
+    emit close(clearCache);
+    clearCache = false;
+}
+
+void SettingsWidget::discoverClicked() {
+    if (nullptr==discovery) {
+        discovery = new ServerDiscovery(this);
+        connect(discovery, &ServerDiscovery::server, this, &SettingsWidget::serverDiscovered);
+    }
+    discovery->start();
+}
+
+void SettingsWidget::clearCacheClicked() {
+    clearCache = true;
+}
+
+void SettingsWidget::serverDiscovered(const QString &name, const QString &addr, quint16 port) {
+    qDebug() << name << addr << port;
+    if (addr!=ui->serverAddress->text().trimmed() || port!=ui->serverPort->value()) {
+        if (nullptr!=discovery) {
+            discovery->stop();
+        }
+        ui->serverName->setText(name);
+        ui->serverAddress->setText(addr);
+        ui->serverPort->setValue(port);
+    }
+}
+
+void SettingsWidget::updateZoomPc(int val) {
+    ui->zoomPc->setText(tr("%1 %").arg(val*25));
+}
+
+void SettingsWidget::update() {
+    clearCache = false;
+    Settings cfg;
+    ui->zoom->setValue((int)cfg.getZoom()*4);
+    ui->serverName->setText(cfg.getName());
+    ui->serverAddress->setText(cfg.getAddress());
+    ui->serverPort->setValue(cfg.getPort());
+    ui->zoomPc->setText(tr("%1 %").arg(cfg.getZoom()*100));
+}

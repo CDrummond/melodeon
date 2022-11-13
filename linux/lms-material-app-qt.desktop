@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LMS
+GenericName=LMS Client
+Comment=Listen to music via LMS
+Icon=lms-material-app-qt
+Exec=lms-material-app-qt
+Categories=Qt;KDE;AudioVideo;Player;
+Keywords=Music
+
