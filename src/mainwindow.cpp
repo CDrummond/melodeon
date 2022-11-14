@@ -37,6 +37,7 @@
 #include <QtCore/QUrl>
 #include <QtGui/QKeySequence>
 #include <QtGui/QGuiApplication>
+#include <QtGui/QScreen>
 #include <QtWebEngineWidgets/QWebEngineProfile>
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWidgets/QAction>
@@ -77,7 +78,8 @@ MainWindow::MainWindow()
 
     QByteArray geo = cfg.getGeometry();
     if (geo.isEmpty()) {
-        resize(1024, 768);
+        QSize screenSize = qApp->screens()[0]->size();
+        resize(qMin(screenSize.width()-64, 1024), qMin(screenSize.height()-64, 768));
     } else {
         restoreGeometry(geo);
     }
