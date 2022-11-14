@@ -105,6 +105,7 @@ MainWindow::MainWindow()
     zoomOutAct->setShortcut(QKeySequence::ZoomOut);
     connect(zoomOutAct, &QAction::triggered, this, &MainWindow::zoomOut);
     addAction(zoomOutAct);
+    setMinimumSize(450, 500);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
