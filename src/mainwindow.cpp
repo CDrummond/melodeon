@@ -170,22 +170,15 @@ void MainWindow::titleChanged(const QString &title) {
 }
 
 void MainWindow::setTheme(bool dark) {
-    switch (desktop) {
-    case KDE:
-        qApp->setProperty("KDE_COLOR_SCHEME_PATH",
-                          dark ? "/usr/share/color-schemes/BreezeDark.colors"
-                               : "/usr/share/color-schemes/BreezeLight.colors");
-        break;
-    case Windows:
-        // TODO
-        break;
-    case Mac:
-        // TODO:
-        break;
-    default:
-        // TODO GNOME, etc.
-        break;
-    }
+#if defined Q_OS_WIN
+    // TODO
+#elif defined Q_OS_MAC
+    // TODO
+#else
+    qApp->setProperty("KDE_COLOR_SCHEME_PATH",
+                      dark ? "/usr/share/color-schemes/BreezeDark.colors"
+                           : "/usr/share/color-schemes/BreezeLight.colors");
+#endif
     qApp->setPalette(dark ? Themes::constDark : Themes::constLight);
     page->setDark(dark);
     settings->setDark(dark);
