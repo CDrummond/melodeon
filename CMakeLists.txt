@@ -35,6 +35,9 @@ if (UNIX AND NOT APPLE)
     find_package(Qt${QT_VERSION_MAJOR} COMPONENTS DBus REQUIRED)
 endif()
 
+set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
+add_subdirectory(src/3rdparty/singleapplication)
+
 set(PROJECT_SOURCES
     src/main.cpp
     src/mainwindow.cpp
@@ -69,7 +72,8 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::WebEngineWidgets)
+    Qt${QT_VERSION_MAJOR}::WebEngineWidgets
+    SingleApplication::SingleApplication)
 
 if (UNIX AND NOT APPLE)
     target_link_libraries(${EXECUTABLE_NAME} PRIVATE

@@ -26,21 +26,28 @@
 #include "settings.h"
 #include "startup.h"
 #include <QtCore/QCoreApplication>
-#include <QtWidgets/QApplication>
+#include <singleapplication.h>
 
 int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName(PROJECT_NAME);
     QCoreApplication::setApplicationName(PROJECT_NAME);
     QCoreApplication::setApplicationVersion(PROJECT_VERSION);
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication app(argc, argv);
+    SingleApplication app(argc, argv);
 
     if (Settings::self()->getAddress().isEmpty()) {
         Startup *start = new Startup();
         start->show();
     } else {
         MainWindow *mw = new MainWindow();
+
+	QObject::connect( &app, &SingleApplication::instanceStarted, [ mw ]() {
+            mw->raise();
+            mw->activateWindow();
+        });
+
         mw->show();
     }
+
     return app.exec();
 }
