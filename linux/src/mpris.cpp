@@ -108,8 +108,8 @@ QVariantMap Mpris::Metadata() const {
         if (!status.title.isEmpty()) {
             metadataMap.insert("xesam:title", status.title);
         }
-        if (!coverUrl.isEmpty() && coverId==status.id) {
-             metadataMap.insert("mpris:artUrl", coverUrl);
+        if (!coverUrl.isEmpty()) {
+            metadataMap.insert("mpris:artUrl", coverUrl);
         }
     }
 
@@ -156,15 +156,13 @@ void Mpris::statusUpdate(const Status &stat) {
     status = stat;
 }
 
-void Mpris::setCover(const QString &id, const QString &url) {
-    coverId = id;
+void Mpris::setCover(const QString &url) {
+    qWarning() << url;
     if (url==coverUrl) {
         return;
     }
     coverUrl = url;
-    if (id==status.id) {
-        signalUpdate("Metadata", Metadata());
-    }
+    signalUpdate("Metadata", Metadata());
 }
 
 void Mpris::signalUpdate(const QString &property, const QVariant &value) {

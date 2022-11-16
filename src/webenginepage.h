@@ -45,7 +45,7 @@ signals:
     void isDark(bool dark);
     void player(const QString &id, const QString &name);
     void status(const Status &status);
-    void cover(const QString &id, const QString &url);
+    void cover(const QString &url);
 
 private:
     QMap<QString, QString> parse(const QString &message);

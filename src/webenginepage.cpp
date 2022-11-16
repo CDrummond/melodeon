@@ -135,7 +135,7 @@ void WebEnginePage::handleCover(const QMap<QString, QString> &params) {
     if (!url.isEmpty() && !url.startsWith("http")) {
         url=QLatin1String("http://%1:%2").arg(Settings::self()->getAddress()).arg(Settings::self()->getPort())+url;
     }
-    emit cover(params[constTrackId], url);
+    emit cover(url);
 }
 
 void WebEnginePage::handlePlayer(const QMap<QString, QString> &params) {

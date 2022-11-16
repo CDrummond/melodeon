@@ -109,7 +109,7 @@ public slots:
     void Raise() { } // TODO???
     void Quit() { QApplication::quit(); }
     void statusUpdate(const Status &status);
-    void setCover(const QString &id, const QString &url);
+    void setCover(const QString &url);
 
 private:
     void signalUpdate(const QString &property, const QVariant &value);
@@ -119,7 +119,6 @@ private:
 private:
     Player *player;
     Status status;
-    QString coverId;
     QString coverUrl;
 };
 
