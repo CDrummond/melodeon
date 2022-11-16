@@ -26,7 +26,6 @@
 #include "columnresizer.h"
 #include "serverdiscovery.h"
 #include "settings.h"
-#include <QtCore/QDebug>
 #include <QtGui/QColor>
 #include <QtGui/QFontMetrics>
 
@@ -90,7 +89,6 @@ void SettingsWidget::clearCacheClicked() {
 }
 
 void SettingsWidget::serverDiscovered(const QString &name, const QString &addr, quint16 port) {
-    qDebug() << name << addr << port;
     if (addr!=ui->serverAddress->text().trimmed() || port!=ui->serverPort->value()) {
         if (nullptr!=discovery) {
             discovery->stop();

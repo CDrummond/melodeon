@@ -32,7 +32,6 @@
 #endif
 #include <QtCore/QByteArray>
 #include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
 #include <QtCore/QList>
 #include <QtCore/QSet>
 #include <QtCore/QSettings>
@@ -159,7 +158,6 @@ void MainWindow::zoomOut() {
 }
 
 void MainWindow::loadFinished(bool ok) {
-    qDebug() << "loadFinished" << ok;
     if (ok) {
         pageLoaded = true;
     } else {
@@ -250,7 +248,6 @@ void MainWindow::setupProfile() {
 }
 
 void MainWindow::showPage(int index) {
-    qDebug() << "showPage" << index << stack->currentIndex();
     if (index==stack->currentIndex()) {
         return;
     }
@@ -285,6 +282,5 @@ QString MainWindow::buildUrl() {
     if (KDE==desktop) {
         url+=QLatin1String("&desktop=KDE");
     }
-    qDebug() << url;
     return url;
 }
