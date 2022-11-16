@@ -107,7 +107,7 @@ void SettingsWidget::updateZoomPc(int val) {
 
 void SettingsWidget::update() {
     clearCache = false;
-    ui->zoom->setValue((int)Settings::self()->getZoom()*4);
+    ui->zoom->setValue((int)(Settings::self()->getZoom()*4));
     ui->serverName->setText(Settings::self()->getName());
     ui->serverAddress->setText(Settings::self()->getAddress());
     ui->serverPort->setValue(Settings::self()->getPort());
