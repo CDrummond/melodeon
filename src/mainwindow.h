@@ -66,6 +66,7 @@ private slots:
 
 private:
     void determineDesktop();
+    void setupProfile();
     void showPage(int index);
     void loadUrl(const QString &url);
     QString buildUrl();

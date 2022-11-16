@@ -26,11 +26,7 @@
 #include "settings.h"
 #include "startup.h"
 #include <QtCore/QCoreApplication>
-#include <QtWebEngineWidgets/QWebEngineProfile>
 #include <QtWidgets/QApplication>
-
-static const QLatin1String constUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
-static const int constMacCacheSize = 1024;
 
 int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName(PROJECT_NAME);
@@ -38,9 +34,6 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setApplicationVersion(PROJECT_VERSION);
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
-
-    QWebEngineProfile::defaultProfile()->setHttpCacheMaximumSize(constMacCacheSize*1024*1024);
-    QWebEngineProfile::defaultProfile()->setHttpUserAgent(constUserAgent);
 
     if (Settings::self()->getAddress().isEmpty()) {
         Startup *start = new Startup();

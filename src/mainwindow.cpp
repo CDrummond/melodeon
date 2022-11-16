@@ -47,8 +47,10 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QStackedWidget>
 
-const QString constSettingsUrl("mska://settings");
-const QString constQuitUrl("mska://quit");
+static const QString constSettingsUrl("mska://settings");
+static const QString constQuitUrl("mska://quit");
+static const int constMaxCacheSize = 1024;
+static const QLatin1String constUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
 
 enum Pages {
     SETTINGS_PAGE = 0,
@@ -60,6 +62,7 @@ MainWindow::MainWindow()
     player = new Player(this);
     pageLoaded = false;
     determineDesktop();
+    setupProfile();
     stack = new QStackedWidget(this);
     settings = new SettingsWidget(this);
     web = new QWebEngineView(stack);
@@ -238,6 +241,11 @@ void MainWindow::determineDesktop() {
         desktop=GNOME;
     }
 #endif
+}
+
+void MainWindow::setupProfile() {
+    QWebEngineProfile::defaultProfile()->setHttpCacheMaximumSize(constMaxCacheSize*1024*1024);
+    QWebEngineProfile::defaultProfile()->setHttpUserAgent(constUserAgent);
 }
 
 void MainWindow::showPage(int index) {
