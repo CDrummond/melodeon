@@ -68,12 +68,11 @@ void SettingsWidget::setDark(bool dark) {
 }
 
 void SettingsWidget::backClicked() {
-    Settings cfg;
-    cfg.setZoom(ui->zoom->value()/4.0);
-    cfg.setName(ui->serverName->text().trimmed());
-    cfg.setAddress(ui->serverAddress->text().trimmed());
-    cfg.setPort(ui->serverPort->value());
-    cfg.save();
+    Settings::self()->setZoom(ui->zoom->value()/4.0);
+    Settings::self()->setName(ui->serverName->text().trimmed());
+    Settings::self()->setAddress(ui->serverAddress->text().trimmed());
+    Settings::self()->setPort(ui->serverPort->value());
+    Settings::self()->save();
     emit close(clearCache);
     clearCache = false;
 }
@@ -108,10 +107,9 @@ void SettingsWidget::updateZoomPc(int val) {
 
 void SettingsWidget::update() {
     clearCache = false;
-    Settings cfg;
-    ui->zoom->setValue((int)cfg.getZoom()*4);
-    ui->serverName->setText(cfg.getName());
-    ui->serverAddress->setText(cfg.getAddress());
-    ui->serverPort->setValue(cfg.getPort());
-    ui->zoomPc->setText(tr("%1 %").arg(cfg.getZoom()*100));
+    ui->zoom->setValue((int)Settings::self()->getZoom()*4);
+    ui->serverName->setText(Settings::self()->getName());
+    ui->serverAddress->setText(Settings::self()->getAddress());
+    ui->serverPort->setValue(Settings::self()->getPort());
+    ui->zoomPc->setText(tr("%1 %").arg(Settings::self()->getZoom()*100));
 }

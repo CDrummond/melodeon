@@ -28,8 +28,12 @@
 
 class QStackedWidget;
 class QWebEngineView;
+class Player;
 class SettingsWidget;
 class WebEnginePage;
+#ifdef Q_OS_LINUX
+class Mpris;
+#endif
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -67,6 +71,10 @@ private:
     QString buildUrl();
 
 private:
+    Player *player;
+#ifdef Q_OS_LINUX
+    Mpris *mpris;
+#endif
     Desktop desktop;
     QStackedWidget *stack;
     SettingsWidget *settings;

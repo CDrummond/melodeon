@@ -23,12 +23,29 @@
 
 #include "webenginepage.h"
 #include "settings.h"
+#include "status.h"
 #include "themes.h"
-#include <QtCore/QDebug>
 #include <QtGui/QDesktopServices>
 #include <QtWebEngineWidgets/QWebEngineProfile>
 
-static const QLatin1String constThemeLog("MATERIAL-THEME ");
+static const QLatin1String constThemeLog("MATERIAL-THEME");
+static const QLatin1String constStatusLog("MATERIAL-STATUS");
+static const QLatin1String constCoverLog("MATERIAL-COVER");
+static const QLatin1String constPlayerLog("MATERIAL-PLAYER");
+static const QLatin1String constName("NAME");
+static const QLatin1String constPlaying("PLAYING");
+static const QLatin1String constCount("COUNT");
+static const QLatin1String constTitle("TITLE");
+static const QLatin1String constArtist("ARTIST");
+static const QLatin1String constAlbum("ALBUM");
+static const QLatin1String constDuration("DURATION");
+static const QLatin1String constTrackId("TRACKID");
+static const QLatin1String constTime("TIME");
+static const QLatin1String constId("ID");
+static const QLatin1String constUrl("URL");
+static const QLatin1String constShuffle("SHUFFLE");
+static const QLatin1String constRepeat("REPEAT");
+static const QLatin1String constVolume("VOLUME");
 
 WebEnginePage::WebEnginePage(QObject *parent)
     : QWebEnginePage(QWebEngineProfile::defaultProfile(), parent) {
@@ -38,6 +55,7 @@ WebEnginePage::WebEnginePage(QObject *parent)
                              return;
                          this->setFeaturePermission(origin, feature, QWebEnginePage::PermissionGrantedByUser);
                      });
+    qRegisterMetaType<Status>("Status");
 }
 
 void WebEnginePage::setDark(bool dark) {
@@ -56,19 +74,72 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Nav
     return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 }
 
+void WebEnginePage::updateStatus() {
+    runJavaScript("refreshStatus()");
+}
+
 void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) {
     Q_UNUSED(level);
     Q_UNUSED(lineNumber);
     Q_UNUSED(sourceID);
-    qDebug() << "MSG:" << message;
     if (message.startsWith(constThemeLog)) {
-        bool dark = message.toLower().contains("dark") || message.toLower().contains("black");
-        Settings cfg;
-        if (dark!=cfg.getDark()) {
-            cfg.setDark(dark);
-            emit isDark(dark);
+        handleTheme(parse(message));
+    } else if (message.startsWith(constStatusLog)) {
+        handleStatus(parse(message));
+    } else if (message.startsWith(constCoverLog)) {
+        handleCover(parse(message));
+    } else if (message.startsWith(constPlayerLog)) {
+        handlePlayer(parse(message));
+    }
+}
+
+QMap<QString, QString> WebEnginePage::parse(const QString &message) {
+    QMap<QString, QString> map;
+    QStringList lines = message.split("\n", Qt::SkipEmptyParts);
+    for (const auto &line: lines) {
+        int pos = line.indexOf(' ');
+        if (pos>0 && pos<line.size()) {
+            map.insert(line.left(pos), line.mid(pos+1));
         }
     }
+    return map;
+}
+
+void WebEnginePage::handleTheme(const QMap<QString, QString> &params) {
+    QString name = params[constName].toLower();
+    bool dark = name.contains("dark") || name.contains("black");
+    if (dark!=Settings::self()->getDark()) {
+        Settings::self()->setDark(dark);
+        emit isDark(dark);
+    }
+}
+
+void WebEnginePage::handleStatus(const QMap<QString, QString> &params) {
+    Status stat;
+    stat.playing=params[constPlaying].toLower()=="true";
+    stat.count=params[constCount].toUInt();
+    stat.title=params[constTitle];
+    stat.artist=params[constArtist];
+    stat.album=params[constAlbum];
+    stat.duration=params[constDuration].toDouble();
+    stat.time=params[constTime].toDouble();
+    stat.id=params[constTrackId];
+    stat.shuffle=(Status::Shuffle)params[constShuffle].toUInt();
+    stat.repeat=(Status::Repeat)params[constRepeat].toUInt();
+    stat.volume=params[constVolume].toUInt();
+    emit status(stat);
+}
+
+void WebEnginePage::handleCover(const QMap<QString, QString> &params) {
+    QString url = params[constUrl];
+    if (!url.isEmpty() && !url.startsWith("http")) {
+        url=QLatin1String("http://%1:%2").arg(Settings::self()->getAddress()).arg(Settings::self()->getPort())+url;
+    }
+    emit cover(params[constTrackId], url);
+}
+
+void WebEnginePage::handlePlayer(const QMap<QString, QString> &params) {
+    emit player(params[constId], params[constName]);
 }
 
 // TODO: Auth request? void QWebEnginePage::authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator)

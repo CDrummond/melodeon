@@ -23,6 +23,11 @@
 
 #include "settings.h"
 
+Settings * Settings::self() {
+    static Settings *inst = new Settings();
+    return inst;
+}
+
 Settings::Settings() {
     modified = false;
 }

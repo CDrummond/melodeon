@@ -31,10 +31,15 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Network Widgets WebEngineWidgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Widgets WebEngineWidgets REQUIRED)
 
+if (UNIX AND NOT APPLE)
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS DBus REQUIRED)
+endif()
+
 set(PROJECT_SOURCES
     src/columnresizer.cpp
     src/main.cpp
     src/mainwindow.cpp
+    src/player.cpp
     src/settings.cpp
     src/settingswidget.cpp
     src/settingswidget.ui
@@ -43,6 +48,16 @@ set(PROJECT_SOURCES
     src/themes.cpp
     src/webenginepage.cpp
 )
+
+include_directories(src ${CMAKE_BINARY_DIR})
+if (UNIX AND NOT APPLE)
+    include_directories(linux/src)
+    set(PROJECT_SOURCES ${PROJECT_SOURCES}
+        linux/src/mpris.cpp
+        )
+    qt_add_dbus_adaptor(PROJECT_SOURCES linux/src/org.mpris.MediaPlayer2.Player.xml linux/src/mpris.h Mpris)
+    qt_add_dbus_adaptor(PROJECT_SOURCES linux/src/org.mpris.MediaPlayer2.root.xml linux/src/mpris.h Mpris)
+endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${EXECUTABLE_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
@@ -55,6 +70,11 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::WebEngineWidgets)
+
+if (UNIX AND NOT APPLE)
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE
+        Qt${QT_VERSION_MAJOR}::DBus)
+endif()
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER ${EXECUTABLE_NAME}.craigd.com

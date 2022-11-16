@@ -42,8 +42,7 @@ int main(int argc, char *argv[]) {
     QWebEngineProfile::defaultProfile()->setHttpCacheMaximumSize(constMacCacheSize*1024*1024);
     QWebEngineProfile::defaultProfile()->setHttpUserAgent(constUserAgent);
 
-    Settings cfg;
-    if (cfg.getAddress().isEmpty()) {
+    if (Settings::self()->getAddress().isEmpty()) {
         Startup *start = new Startup();
         start->show();
     } else {

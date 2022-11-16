@@ -28,9 +28,11 @@
 #include <QtCore/QSettings>
 
 class Settings : public QSettings {
-public:
     Settings();
     virtual ~Settings();
+
+public:
+    static Settings *self();
 
     void setName(const QString &val);
     QString getName() const;

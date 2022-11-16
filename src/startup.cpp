@@ -49,11 +49,10 @@ void Startup::serverDiscovered(const QString &name, const QString &addr, quint16
     if (!discovery) {
         return;
     }
-    Settings cfg;
-    cfg.setName(name);
-    cfg.setAddress(addr);
-    cfg.setPort(port);
-    cfg.save();
+    Settings::self()->setName(name);
+    Settings::self()->setAddress(addr);
+    Settings::self()->setPort(port);
+    Settings::self()->save();
     showMainWindow(false);
 }
 

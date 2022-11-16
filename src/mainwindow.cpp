@@ -22,10 +22,14 @@
  */
 
 #include "mainwindow.h"
+#include "player.h"
 #include "settings.h"
 #include "settingswidget.h"
 #include "themes.h"
 #include "webenginepage.h"
+#ifdef Q_OS_LINUX
+#include "mpris.h"
+#endif
 #include <QtCore/QByteArray>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -53,15 +57,14 @@ enum Pages {
 
 MainWindow::MainWindow()
     : QMainWindow(nullptr) {
-    qDebug() << "CREATE";
+    player = new Player(this);
     pageLoaded = false;
     determineDesktop();
     stack = new QStackedWidget(this);
-    Settings cfg;
     settings = new SettingsWidget(this);
     web = new QWebEngineView(stack);
     page = new WebEnginePage(web);
-    setTheme(cfg.getDark());
+    setTheme(Settings::self()->getDark());
     web->setPage(page);
     loadUrl(buildUrl());
     web->setContextMenuPolicy(Qt::NoContextMenu);
@@ -71,12 +74,21 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::appUrl, this, &MainWindow::appUrl);
     connect(page, &WebEnginePage::isDark, this, &MainWindow::setTheme);
     connect(settings, &SettingsWidget::close, this, &MainWindow::settingsClosed);
+    connect(page, &WebEnginePage::player, player, &Player::update);
+    connect(player, &Player::updateStatus, page, &WebEnginePage::updateStatus);
+
+#ifdef Q_OS_LINUX
+    mpris = new Mpris(player);
+    connect(page, &WebEnginePage::status, mpris, &Mpris::statusUpdate);
+    connect(page, &WebEnginePage::cover, mpris, &Mpris::setCover);
+#endif
+
     stack->addWidget(settings);
     stack->addWidget(web);
     setCentralWidget(stack);
     showPage(WEBVIEW_PAGE);
 
-    QByteArray geo = cfg.getGeometry();
+    QByteArray geo = Settings::self()->getGeometry();
     if (geo.isEmpty()) {
         QSize screenSize = qApp->screens()[0]->size();
         resize(qMin(screenSize.width()-64, 1024), qMin(screenSize.height()-64, 768));
@@ -84,12 +96,12 @@ MainWindow::MainWindow()
         restoreGeometry(geo);
     }
 
-    QByteArray state = cfg.getState();
+    QByteArray state = Settings::self()->getState();
     if (!state.isEmpty()) {
         restoreGeometry(state);
     }
 
-    web->setZoomFactor(cfg.getZoom());
+    web->setZoomFactor(Settings::self()->getZoom());
 
     QAction *reloadAct = new QAction(this);
     reloadAct->setShortcut(QKeySequence::Refresh);
@@ -109,11 +121,10 @@ MainWindow::MainWindow()
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    Settings cfg;
-    cfg.setGeometry(saveGeometry());
-    cfg.setState(saveState());
-    cfg.setZoom(web->zoomFactor());
-    cfg.save();
+    Settings::self()->setGeometry(saveGeometry());
+    Settings::self()->setState(saveState());
+    Settings::self()->setZoom(web->zoomFactor());
+    Settings::self()->save();
     QMainWindow::closeEvent(event);
 }
 
@@ -187,7 +198,7 @@ void MainWindow::setTheme(bool dark) {
 
 void MainWindow::settingsClosed(bool clearCache) {
     showPage(WEBVIEW_PAGE);
-    web->setZoomFactor(Settings().getZoom());
+    web->setZoomFactor(Settings::self()->getZoom());
     if (clearCache || !pageLoaded) {
         web->stop();
         QWebEngineProfile::defaultProfile()->clearHttpCache();
@@ -249,12 +260,14 @@ void MainWindow::loadUrl(const QString &url) {
 }
 
 QString MainWindow::buildUrl() {
-    Settings cfg;
     QString url = QLatin1String("http://") +
-                  cfg.getAddress() +
+                  Settings::self()->getAddress() +
                   QLatin1Char(':') +
-                  QString::number(cfg.getPort()) +
-                  QLatin1String("/material/?hide=notif,scale&download=native&nativeTheme=c") +
+                  QString::number(Settings::self()->getPort()) +
+                  QLatin1String("/material/?hide=mediaControls,scale&download=native&nativeTheme=c") +
+#ifdef Q_OS_LINUX
+                  QLatin1String("&nativeStatus=c&nativePlayer=c&nativeCover=c") +
+#endif
                   QLatin1String("&appSettings=")+constSettingsUrl +
                   QLatin1String("&appQuit=")+constQuitUrl;
     if (KDE==desktop || Windows==desktop) {

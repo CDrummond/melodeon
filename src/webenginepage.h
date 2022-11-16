@@ -24,8 +24,10 @@
 #ifndef WEBENGINEPAGE_H
 #define WEBENGINEPAGE_H
 
+#include <QtCore/QMap>
 #include <QtWebEngineWidgets/QWebEnginePage>
 
+class Status;
 class WebEnginePage : public QWebEnginePage {
     Q_OBJECT
 public:
@@ -35,9 +37,22 @@ public:
     bool acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) override;
     void javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) override;
 
+public slots:
+    void updateStatus();
+
 signals:
     void appUrl(const QString &url);
     void isDark(bool dark);
+    void player(const QString &id, const QString &name);
+    void status(const Status &status);
+    void cover(const QString &id, const QString &url);
+
+private:
+    QMap<QString, QString> parse(const QString &message);
+    void handleTheme(const QMap<QString, QString> &params);
+    void handleStatus(const QMap<QString, QString> &params);
+    void handleCover(const QMap<QString, QString> &params);
+    void handlePlayer(const QMap<QString, QString> &params);
 };
 
 #endif // WEBENGINEPAGE_H

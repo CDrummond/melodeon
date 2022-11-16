@@ -7,7 +7,7 @@ skin.
 
 Building
 --------
-1. sudo apt install cmake g++ qtwebengine5-dev
+1. sudo apt install cmake g++ qtbase5-dev qtwebengine5-dev
 2. mkdir build
 3. cd build
 4. cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release
