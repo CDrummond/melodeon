@@ -128,6 +128,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     Settings::self()->setState(saveState());
     Settings::self()->setZoom(web->zoomFactor());
     Settings::self()->save();
+    page->deleteLater();
     QMainWindow::closeEvent(event);
 }
 
