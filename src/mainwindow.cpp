@@ -281,6 +281,9 @@ QString MainWindow::buildUrl() {
     if (KDE==desktop || Windows==desktop) {
         url+=QLatin1String("&altBtnLayout=true");
     }
+    if (KDE==desktop) {
+        url+=QLatin1String("&desktop=KDE");
+    }
     qDebug() << url;
     return url;
 }
