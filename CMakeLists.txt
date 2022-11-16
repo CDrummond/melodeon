@@ -36,7 +36,6 @@ if (UNIX AND NOT APPLE)
 endif()
 
 set(PROJECT_SOURCES
-    src/columnresizer.cpp
     src/main.cpp
     src/mainwindow.cpp
     src/player.cpp
@@ -47,16 +46,17 @@ set(PROJECT_SOURCES
     src/startup.cpp
     src/themes.cpp
     src/webenginepage.cpp
+    src/3rdparty/columnresizer/columnresizer.cpp
 )
 
-include_directories(src ${CMAKE_BINARY_DIR})
+include_directories(src src/3rdparty/columnresizer ${CMAKE_BINARY_DIR})
 if (UNIX AND NOT APPLE)
-    include_directories(linux/src)
+    include_directories(src/linux)
     set(PROJECT_SOURCES ${PROJECT_SOURCES}
-        linux/src/mpris.cpp
+        src/linux/mpris.cpp
         )
-    qt_add_dbus_adaptor(PROJECT_SOURCES linux/src/org.mpris.MediaPlayer2.Player.xml linux/src/mpris.h Mpris)
-    qt_add_dbus_adaptor(PROJECT_SOURCES linux/src/org.mpris.MediaPlayer2.root.xml linux/src/mpris.h Mpris)
+    qt_add_dbus_adaptor(PROJECT_SOURCES src/linux/org.mpris.MediaPlayer2.Player.xml src/linux/mpris.h Mpris)
+    qt_add_dbus_adaptor(PROJECT_SOURCES src/linux/org.mpris.MediaPlayer2.root.xml src/linux/mpris.h Mpris)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
