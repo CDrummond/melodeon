@@ -11,6 +11,6 @@ macro (update_iconcache ICON_THEME)
     ")
 endmacro (update_iconcache)
     
-install(FILES lms-material-app-qt.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
-install(FILES ../images/lms-material-app-qt.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps)
+install(FILES melodeon.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+install(FILES ../images/melodeon.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps)
 update_iconcache(hicolor)

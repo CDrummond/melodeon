@@ -1,5 +1,5 @@
 /*
- * LMS-Material-App-Qt
+ * Melodeon - LMS Controller
  *
  * Copyright (c) 2022 Craig Drummond <craig.p.drummond@gmail.com>
  *
