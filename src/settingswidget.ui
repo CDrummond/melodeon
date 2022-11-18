@@ -220,7 +220,7 @@
           </size>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE:&lt;/span&gt; This application requires that you have the 'Material Skin' plugin installed on your LMS server. However, it does not need to be set as the default skin.&lt;/p&gt;&lt;p&gt;Use the 'Discover' button to automaticallty discover LMS servers.&lt;/p&gt;&lt;p&gt;Use the 'Clear cache' button to clear the internal browser cache, forcing the skin to be reloaded.&lt;/p&gt;&lt;p&gt;Pressing the arrow button (top left) will close this settings page and apply all settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE:&lt;/span&gt; This application requires that you have the 'Material Skin' plugin installed on your LMS server. However, it does not need to be set as the default skin.&lt;/p&gt;&lt;p&gt;Use the 'Discover' button to automatically discover LMS servers.&lt;/p&gt;&lt;p&gt;Use the 'Clear cache' button to clear the internal browser cache, forcing the skin to be reloaded.&lt;/p&gt;&lt;p&gt;Pressing the arrow button (top left) will close this settings page and apply all settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
