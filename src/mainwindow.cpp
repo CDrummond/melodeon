@@ -176,9 +176,7 @@ void MainWindow::appUrl(const QString &url) {
 
 void MainWindow::titleChanged(const QString &title) {
     urlTitle = title.contains("Logitech") ? title : QString();
-    if (WEBVIEW_PAGE==stack->currentIndex()) {
-        setWindowTitle(!urlTitle.isEmpty() ? urlTitle : "LMS");
-    }
+    setTitle();
 }
 
 void MainWindow::setTheme(bool dark) {
@@ -250,7 +248,7 @@ void MainWindow::showPage(int index) {
         return;
     }
     stack->setCurrentIndex(index);
-    setWindowTitle(WEBVIEW_PAGE==index && !urlTitle.isEmpty() ? urlTitle : "LMS");
+    setTitle();
     if (SETTINGS_PAGE==index) {
         settings->update();
     }
@@ -281,4 +279,12 @@ QString MainWindow::buildUrl() {
         url+=QLatin1String("&desktop=KDE");
     }
     return url;
+}
+
+void MainWindow::setTitle() {
+    QString title = WEBVIEW_PAGE==stack->currentIndex() && !urlTitle.isEmpty() ? urlTitle : "Melodeon";
+    if (!Settings::self()->getName().isEmpty()) {
+        title+=" (" + Settings::self()->getName() + ")";
+    }
+    setWindowTitle(title);
 }

@@ -68,6 +68,7 @@ private:
     void showPage(int index);
     void loadUrl(const QString &url);
     QString buildUrl();
+    void setTitle();
 
 private:
     Player *player;
