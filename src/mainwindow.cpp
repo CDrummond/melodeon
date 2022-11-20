@@ -148,6 +148,7 @@ void MainWindow::zoomIn() {
     if (zoom<=(constMaxZoom-constZoomStep)) {
         zoom += constZoomStep;
         page->setZoomFactor(zoom);
+        Settings::self()->setZoom(zoom);
     }
 }
 
@@ -156,6 +157,7 @@ void MainWindow::zoomOut() {
     if (zoom>=(constMinZoom+constZoomStep)) {
         zoom -= constZoomStep;
         page->setZoomFactor(zoom);
+        Settings::self()->setZoom(zoom);
     }
 }
 
