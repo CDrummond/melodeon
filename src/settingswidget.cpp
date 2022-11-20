@@ -22,6 +22,7 @@
 #include "settingswidget.h"
 #include "ui_settingswidget.h"
 #include "columnresizer.h"
+#include "mainwindow.h"
 #include "serverdiscovery.h"
 #include "settings.h"
 #include <QtGui/QColor>
@@ -52,6 +53,10 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     QFontMetrics fm(f);
     ui->zoomPc->setFont(f);
     ui->zoomPc->setFixedWidth(fm.boundingRect("1000 % ").width());
+
+    ui->zoom->setMinimum(0);
+    ui->zoom->setMaximum((MainWindow::constMaxZoom-MainWindow::constMinZoom)/MainWindow::constZoomStep);
+    ui->zoom->setSingleStep(1);
 }
 
 void SettingsWidget::setDark(bool dark) {
@@ -65,7 +70,7 @@ void SettingsWidget::setDark(bool dark) {
 }
 
 void SettingsWidget::backClicked() {
-    Settings::self()->setZoom(ui->zoom->value()/4.0);
+    //Settings::self()->setZoom(ui->zoom->value()*MainWindow::constZoomStep);
     Settings::self()->setName(ui->serverName->text().trimmed());
     Settings::self()->setAddress(ui->serverAddress->text().trimmed());
     Settings::self()->setPort(ui->serverPort->value());
@@ -98,14 +103,14 @@ void SettingsWidget::serverDiscovered(const QString &name, const QString &addr, 
 }
 
 void SettingsWidget::updateZoomPc(int val) {
-    ui->zoomPc->setText(tr("%1 %").arg(val*25));
+    ui->zoomPc->setText(tr("%1 %").arg(qRound((MainWindow::constMinZoom+(val*MainWindow::constZoomStep))*100.0)));
 }
 
 void SettingsWidget::update() {
     clearCache = false;
-    ui->zoom->setValue((int)(Settings::self()->getZoom()*4));
+    ui->zoom->setValue((int)((Settings::self()->getZoom()-MainWindow::constMinZoom)/MainWindow::constZoomStep));
     ui->serverName->setText(Settings::self()->getName());
     ui->serverAddress->setText(Settings::self()->getAddress());
     ui->serverPort->setValue(Settings::self()->getPort());
-    ui->zoomPc->setText(tr("%1 %").arg(Settings::self()->getZoom()*100));
+    updateZoomPc(ui->zoom->value());
 }

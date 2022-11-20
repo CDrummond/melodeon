@@ -44,6 +44,10 @@ public:
         Other
     };
 
+    static qreal constMinZoom;
+    static qreal constMaxZoom;
+    static qreal constZoomStep;
+
     explicit MainWindow();
     void closeEvent(QCloseEvent *event) override;
     void showSettings();

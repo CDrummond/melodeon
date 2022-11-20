@@ -54,6 +54,10 @@ enum Pages {
     WEBVIEW_PAGE = 1
 };
 
+qreal MainWindow::constMinZoom(0.25);
+qreal MainWindow::constMaxZoom(5.0);
+qreal MainWindow::constZoomStep(0.05);
+
 MainWindow::MainWindow()
     : QMainWindow(nullptr) {
     player = new Player(this);
@@ -141,16 +145,16 @@ void MainWindow::reload() {
 
 void MainWindow::zoomIn() {
     qreal zoom = page->zoomFactor();
-    if (zoom<=4.75) {
-        zoom += 0.25;
+    if (zoom<=(constMaxZoom-constZoomStep)) {
+        zoom += constZoomStep;
         page->setZoomFactor(zoom);
     }
 }
 
 void MainWindow::zoomOut() {
     qreal zoom = page->zoomFactor();
-    if (zoom>=0.5) {
-        zoom -= 0.25;
+    if (zoom>=(constMinZoom+constZoomStep)) {
+        zoom -= constZoomStep;
         page->setZoomFactor(zoom);
     }
 }
