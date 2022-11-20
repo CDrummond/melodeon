@@ -73,6 +73,7 @@ private:
     void loadUrl(const QString &url);
     QString buildUrl();
     void setTitle();
+    void setZoom(qreal zoom);
 
 private:
     Player *player;

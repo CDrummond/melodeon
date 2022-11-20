@@ -146,18 +146,14 @@ void MainWindow::reload() {
 void MainWindow::zoomIn() {
     qreal zoom = page->zoomFactor();
     if (zoom<=(constMaxZoom-constZoomStep)) {
-        zoom += constZoomStep;
-        page->setZoomFactor(zoom);
-        Settings::self()->setZoom(zoom);
+        setZoom(zoom + constZoomStep);
     }
 }
 
 void MainWindow::zoomOut() {
     qreal zoom = page->zoomFactor();
     if (zoom>=(constMinZoom+constZoomStep)) {
-        zoom -= constZoomStep;
-        page->setZoomFactor(zoom);
-        Settings::self()->setZoom(zoom);
+        setZoom(zoom - constZoomStep);
     }
 }
 
@@ -293,4 +289,11 @@ void MainWindow::setTitle() {
         title+=" (" + Settings::self()->getName() + ")";
     }
     setWindowTitle(title);
+}
+
+void MainWindow::setZoom(qreal zoom) {
+    QString zoomStr = tr("Zoom: %1 %").arg(qRound(zoom*100.0));
+    page->setZoomFactor(zoom);
+    page->runJavaScript(QLatin1String("bus.$emit('showMessage', '%1')").arg(zoomStr));
+    Settings::self()->setZoom(zoom);
 }
