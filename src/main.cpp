@@ -35,14 +35,14 @@ int main(int argc, char *argv[]) {
 
     if (Settings::self()->getAddress().isEmpty()) {
         Startup *start = new Startup();
-	QObject::connect( &app, &SingleApplication::instanceStarted, [ start ]() {
+        QObject::connect( &app, &SingleApplication::instanceStarted, [ start ]() {
             start->raise();
             start->activateWindow();
         });
         start->show();
     } else {
         MainWindow *mw = new MainWindow();
-	QObject::connect( &app, &SingleApplication::instanceStarted, [ mw ]() {
+        QObject::connect( &app, &SingleApplication::instanceStarted, [ mw ]() {
             mw->raise();
             mw->activateWindow();
         });
