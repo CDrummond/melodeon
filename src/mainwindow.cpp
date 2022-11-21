@@ -23,6 +23,7 @@
 #include "player.h"
 #include "settings.h"
 #include "settingswidget.h"
+#include "status.h"
 #include "themes.h"
 #include "webenginepage.h"
 #ifdef Q_OS_LINUX
@@ -86,6 +87,7 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::status, mpris, &Mpris::statusUpdate);
     connect(page, &WebEnginePage::cover, mpris, &Mpris::setCover);
 #endif
+    connect(page, &WebEnginePage::status, this, &MainWindow::statusUpdate);
 
     stack->addWidget(settings);
     stack->addWidget(web);
@@ -185,6 +187,28 @@ void MainWindow::appUrl(const QString &url) {
 void MainWindow::titleChanged(const QString &title) {
     urlTitle = title.contains("Logitech") ? title : QString();
     setTitle();
+}
+
+void MainWindow::receivedMessage(quint32 instanceId, QByteArray message) {
+    if (message=="play") {
+        player->play();
+    } else if (message=="pause") {
+        player->pause();
+    } else if (message=="playPause") {
+        if (isPlaying) {
+            player->pause();
+        } else {
+            player->play();
+        }
+    } else if (message=="prev") {
+        player->prev();
+    } else if (message=="next") {
+        player->next();
+    }
+}
+
+void MainWindow::statusUpdate(const Status &status) {
+    isPlaying = status.playing;
 }
 
 void MainWindow::setTheme(bool dark) {

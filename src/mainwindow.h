@@ -32,6 +32,7 @@ class WebEnginePage;
 #ifdef Q_OS_LINUX
 class Mpris;
 #endif
+struct Status;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -60,6 +61,8 @@ public slots:
     void stackChanged(int index);
     void appUrl(const QString &url);
     void titleChanged(const QString &title);
+    void receivedMessage(quint32 instanceId, QByteArray message);
+    void statusUpdate(const Status &status);
 
 private slots:
     void setTheme(bool dark);
@@ -88,6 +91,7 @@ private:
     bool pageLoaded;
     QString currentUrl;
     QString urlTitle;
+    bool isPlaying;
 };
 
 #endif // MAINWINDOW_H

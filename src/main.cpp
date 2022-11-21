@@ -23,31 +23,39 @@
 #include "mainwindow.h"
 #include "settings.h"
 #include "startup.h"
+#include "singleapplication.h"
 #include <QtCore/QCoreApplication>
-#include <singleapplication.h>
 
 int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName(PROJECT_NAME);
     QCoreApplication::setApplicationName(PROJECT_NAME);
     QCoreApplication::setApplicationVersion(PROJECT_VERSION);
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    SingleApplication app(argc, argv);
+    SingleApplication app(argc, argv, true, SingleApplication::User, SingleApplication::SecondaryNotification);
 
-    if (Settings::self()->getAddress().isEmpty()) {
-        Startup *start = new Startup();
-        QObject::connect( &app, &SingleApplication::instanceStarted, [ start ]() {
-            start->raise();
-            start->activateWindow();
-        });
-        start->show();
+    if (app.isSecondary()) {
+        if (app.arguments().length()==2) {
+            app.sendMessage(app.arguments().at(1).toUtf8());
+        }
+        return 0;
     } else {
-        MainWindow *mw = new MainWindow();
-        QObject::connect( &app, &SingleApplication::instanceStarted, [ mw ]() {
-            mw->raise();
-            mw->activateWindow();
-        });
-        mw->show();
-    }
+        if (Settings::self()->getAddress().isEmpty()) {
+            Startup *start = new Startup();
+            QObject::connect(&app, &SingleApplication::instanceStarted, [ start ]() {
+                start->raise();
+                start->activateWindow();
+            });
+            start->show();
+        } else {
+            MainWindow *mw = new MainWindow();
+            QObject::connect( &app, &SingleApplication::instanceStarted, [ mw ]() {
+                mw->raise();
+                mw->activateWindow();
+            });
+            QObject::connect(&app, &SingleApplication::receivedMessage, mw, &MainWindow::receivedMessage);
+            mw->show();
+        }
 
-    return app.exec();
+        return app.exec();
+    }
 }
