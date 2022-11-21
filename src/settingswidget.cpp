@@ -27,6 +27,7 @@
 #include "settings.h"
 #include <QtGui/QColor>
 #include <QtGui/QFontMetrics>
+#include <QtWidgets/QAction>
 
 SettingsWidget::SettingsWidget(QWidget *parent)
     : QWidget(parent)
@@ -57,6 +58,11 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     ui->zoom->setMinimum(0);
     ui->zoom->setMaximum((MainWindow::constMaxZoom-MainWindow::constMinZoom)/MainWindow::constZoomStep);
     ui->zoom->setSingleStep(1);
+
+    QAction *closeAct = new QAction(this);
+    closeAct->setShortcut(Qt::Key_Escape);
+    connect(closeAct, &QAction::triggered, this, &SettingsWidget::backClicked);
+    addAction(closeAct);
 }
 
 void SettingsWidget::setDark(bool dark) {
@@ -70,7 +76,7 @@ void SettingsWidget::setDark(bool dark) {
 }
 
 void SettingsWidget::backClicked() {
-    //Settings::self()->setZoom(ui->zoom->value()*MainWindow::constZoomStep);
+    Settings::self()->setZoom(ui->zoom->value()*MainWindow::constZoomStep);
     Settings::self()->setName(ui->serverName->text().trimmed());
     Settings::self()->setAddress(ui->serverAddress->text().trimmed());
     Settings::self()->setPort(ui->serverPort->value());

@@ -3,6 +3,8 @@
 1. Increment zoom in 5% steps, min 25% max 500%
 2. Update settings instance when change zoom via keyboard.
 3. When change zoom via keyboard show message (via skin).
+4. Ctrl+Shift+, opens settings page - consistent with other KDE apps.
+5. Esc closes settings page - consistent with MaterialSkin
 
 0.0.1
 -----

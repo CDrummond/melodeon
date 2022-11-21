@@ -121,6 +121,12 @@ MainWindow::MainWindow()
     zoomOutAct->setShortcut(QKeySequence::ZoomOut);
     connect(zoomOutAct, &QAction::triggered, this, &MainWindow::zoomOut);
     addAction(zoomOutAct);
+
+    QAction *settingsAct = new QAction(this);
+    settingsAct->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Comma);
+    connect(settingsAct, &QAction::triggered, this, &MainWindow::showSettings);
+    addAction(settingsAct);
+
     setMinimumSize(450, 500);
 }
 
