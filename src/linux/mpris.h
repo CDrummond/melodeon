@@ -24,7 +24,6 @@
 
 #include "config.h"
 #include "player.h"
-#include "status.h"
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
@@ -32,7 +31,7 @@
 #include <QtDBus/QDBusObjectPath>
 #include <QtWidgets/QApplication>
 
-class Mpris : public QObject {
+class Mpris : public Player {
     Q_OBJECT
 
     // org.mpris.MediaPlayer2.Player
@@ -62,15 +61,15 @@ class Mpris : public QObject {
     Q_PROPERTY( QStringList SupportedUriSchemes READ SupportedUriSchemes )
 
 public:
-    Mpris(Player *p);
+    Mpris(QObject *p);
 
     // org.mpris.MediaPlayer2.Player
-    void Next() { player->next(); }
-    void Previous() { player->prev(); }
-    void Pause() { player->pause(); }
-    void PlayPause() { status.playing ? player->pause() : player->play(); }
-    void Stop() { player->stop(); }
-    void Play() { player->play(); }
+    void Next() { next(); }
+    void Previous() { prev(); }
+    void Pause() { pause(); }
+    void PlayPause() { playPause(); }
+    void Stop() { stop(); }
+    void Play() { play(); }
     void Seek(qlonglong pos);
     void SetPosition(const QDBusObjectPath &trackId, qlonglong pos);
     void OpenUri(const QString &) { }
@@ -83,7 +82,7 @@ public:
     bool Shuffle() { return Status::ShuffleOff!=status.shuffle; }
     void SetShuffle(bool s);
     double Volume() const { return status.volume/100.0; }
-    void SetVolume(double v) { player->setVolume(v*100); }
+    void SetVolume(double v) { setVolume(v*100); }
     qlonglong Position();
     double MinimumRate() const { return 1.0; }
     double MaximumRate() const { return 1.0; }
@@ -106,18 +105,13 @@ public:
 public slots:
     void Raise() { } // TODO???
     void Quit() { QApplication::quit(); }
-    void statusUpdate(const Status &status);
-    void setCover(const QString &url);
+    void statusUpdate(const Status &status) override;
+    void setCover(const QString &url) override;
 
 private:
     void signalUpdate(const QString &property, const QVariant &value);
     void signalUpdate(const QVariantMap &map);
     QString currentTrackId() const;
-
-private:
-    Player *player;
-    Status status;
-    QString coverUrl;
 };
 
 #endif

@@ -61,7 +61,11 @@ qreal MainWindow::constZoomStep(0.05);
 
 MainWindow::MainWindow()
     : QMainWindow(nullptr) {
+#ifdef Q_OS_LINUX
+    player = new Mpris(this);
+#else
     player = new Player(this);
+#endif
     pageLoaded = false;
     determineDesktop();
     setupProfile();
@@ -80,14 +84,9 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::isDark, this, &MainWindow::setTheme);
     connect(settings, &SettingsWidget::close, this, &MainWindow::settingsClosed);
     connect(page, &WebEnginePage::player, player, &Player::update);
+    connect(page, &WebEnginePage::status, player, &Player::statusUpdate);
+    connect(page, &WebEnginePage::cover, player, &Player::setCover);
     connect(player, &Player::updateStatus, page, &WebEnginePage::updateStatus);
-
-#ifdef Q_OS_LINUX
-    mpris = new Mpris(player);
-    connect(page, &WebEnginePage::status, mpris, &Mpris::statusUpdate);
-    connect(page, &WebEnginePage::cover, mpris, &Mpris::setCover);
-#endif
-    connect(page, &WebEnginePage::status, this, &MainWindow::statusUpdate);
 
     stack->addWidget(settings);
     stack->addWidget(web);
@@ -190,25 +189,7 @@ void MainWindow::titleChanged(const QString &title) {
 }
 
 void MainWindow::receivedMessage(quint32 instanceId, QByteArray message) {
-    if (message=="play") {
-        player->play();
-    } else if (message=="pause") {
-        player->pause();
-    } else if (message=="playPause") {
-        if (isPlaying) {
-            player->pause();
-        } else {
-            player->play();
-        }
-    } else if (message=="prev") {
-        player->prev();
-    } else if (message=="next") {
-        player->next();
-    }
-}
-
-void MainWindow::statusUpdate(const Status &status) {
-    isPlaying = status.playing;
+    player->handleCommand(message);
 }
 
 void MainWindow::setTheme(bool dark) {

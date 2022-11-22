@@ -26,13 +26,9 @@
 
 class QStackedWidget;
 class QWebEngineView;
-class Player;
 class SettingsWidget;
 class WebEnginePage;
-#ifdef Q_OS_LINUX
-class Mpris;
-#endif
-struct Status;
+class Player;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -62,7 +58,6 @@ public slots:
     void appUrl(const QString &url);
     void titleChanged(const QString &title);
     void receivedMessage(quint32 instanceId, QByteArray message);
-    void statusUpdate(const Status &status);
 
 private slots:
     void setTheme(bool dark);
@@ -80,9 +75,6 @@ private:
 
 private:
     Player *player;
-#ifdef Q_OS_LINUX
-    Mpris *mpris;
-#endif
     Desktop desktop;
     QStackedWidget *stack;
     SettingsWidget *settings;
@@ -91,7 +83,6 @@ private:
     bool pageLoaded;
     QString currentUrl;
     QString urlTitle;
-    bool isPlaying;
 };
 
 #endif // MAINWINDOW_H

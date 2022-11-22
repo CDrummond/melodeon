@@ -34,9 +34,8 @@ static inline double microsecondsToSeconds(qlonglong t) {
     return t/1000000.0;
 }
 
-Mpris::Mpris(Player *p)
-    : QObject(p)
-    , player(p) {
+Mpris::Mpris(QObject *p)
+    : Player(p)  {
     new PlayerAdaptor(this);
     new MediaPlayer2Adaptor(this);
 
@@ -67,15 +66,15 @@ QString Mpris::LoopStatus() {
 }
 
 void Mpris::SetLoopStatus(const QString &s) {
-    player->setRepeat(s=="None" ? Status::RepeatOff : s=="Track" ? Status::RepeatSingle : Status::RepeatAll);
+    setRepeat(s=="None" ? Status::RepeatOff : s=="Track" ? Status::RepeatSingle : Status::RepeatAll);
 }
 
 void Mpris::SetShuffle(bool s) {
-    player->setShuffle(s ? Status::ShufflePlaylist : Status::ShuffleOff);
+    setShuffle(s ? Status::ShufflePlaylist : Status::ShuffleOff);
 }
 
 void Mpris::Seek(qlonglong pos) {
-    player->seekTo(microsecondsToSeconds(pos));
+    seekTo(microsecondsToSeconds(pos));
 }
 
 void Mpris::SetPosition(const QDBusObjectPath &trackId, qlonglong pos) {
@@ -115,10 +114,11 @@ QVariantMap Mpris::Metadata() const {
 }
 
 void Mpris::statusUpdate(const Status &stat) {
-    QVariantMap map;
+    qWarning() << "STATUS UPDATE";
     Status prevStatus = status;
+    QVariantMap map;
 
-    status = stat;
+    Player::statusUpdate(stat);
     if (stat.repeat!=prevStatus.repeat) {
          map.insert("LoopStatus", LoopStatus());
     }
@@ -151,15 +151,13 @@ void Mpris::statusUpdate(const Status &stat) {
         map.insert("Metadata", Metadata());
         signalUpdate(map);
     }
-    status = stat;
 }
 
 void Mpris::setCover(const QString &url) {
-    qWarning() << url;
     if (url==coverUrl) {
         return;
     }
-    coverUrl = url;
+    Player::setCover(url);
     signalUpdate("Metadata", Metadata());
 }
 

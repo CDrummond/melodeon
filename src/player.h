@@ -22,6 +22,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "status.h"
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -33,10 +34,13 @@ class Player : public QObject {
 public:
     Player(QObject *p);
 
+    void handleCommand(const QByteArray &cmd);
+
 public slots:
     void update(const QString &i, const QString &n);
     void play();
     void pause();
+    void playPause();
     void prev();
     void next();
     void stop();
@@ -44,6 +48,8 @@ public slots:
     void setRepeat(int val);
     void setShuffle(int val);
     void setVolume(int val);
+    virtual void statusUpdate(const Status &status);
+    virtual void setCover(const QString &url);
 
 signals:
     void updateStatus();
@@ -51,10 +57,14 @@ signals:
 private:
     void sendCommand(const QStringList &command);
 
+protected:
+    Status status;
+    QString coverUrl;
+
 private:
     QString id;
     QString name;
-    QNetworkAccessManager  *mgr;
+    QNetworkAccessManager *mgr;
 };
 
 #endif

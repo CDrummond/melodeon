@@ -34,6 +34,20 @@ Player::Player(QObject *p)
     , mgr(nullptr) {
 }
 
+void Player::handleCommand(const QByteArray &cmd) {
+    if (cmd=="play") {
+        play();
+    } else if (cmd=="pause") {
+        pause();
+    } else if (cmd=="playpause") {
+        playPause();
+    } else if (cmd=="prev") {
+        prev();
+    } else if (cmd=="next") {
+        next();
+    }
+}
+
 void Player::update(const QString &i, const QString &n) {
     id = i;
     name = n;
@@ -45,6 +59,14 @@ void Player::play() {
 
 void Player::pause() {
     sendCommand(QStringList() << "pause" << "1");
+}
+
+void Player::playPause() {
+    if (status.playing) {
+        pause();
+    } else {
+        play();
+    }
 }
 
 void Player::prev() {
@@ -73,6 +95,14 @@ void Player::setShuffle(int val) {
 
 void Player::setVolume(int val) {
     sendCommand(QStringList() << "mixer" << "volume" << QString::number(val));
+}
+
+void Player::statusUpdate(const Status &stat) {
+    status = stat;
+}
+
+void Player::setCover(const QString &url) {
+    coverUrl = url;
 }
 
 void Player::sendCommand(const QStringList &command) {

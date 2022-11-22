@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 
     if (app.isSecondary()) {
         if (app.arguments().length()==2) {
-            app.sendMessage(app.arguments().at(1).toUtf8());
+            app.sendMessage(app.arguments().at(1).toLower().toUtf8());
         }
         return 0;
     } else {
