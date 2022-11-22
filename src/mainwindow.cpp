@@ -80,9 +80,9 @@ MainWindow::MainWindow()
     connect(web, &QWebEngineView::titleChanged, this, &MainWindow::titleChanged);
     connect(web, &QWebEngineView::loadFinished, this, &MainWindow::loadFinished);
     connect(stack, &QStackedWidget::currentChanged, this, &MainWindow::stackChanged);
+    connect(settings, &SettingsWidget::close, this, &MainWindow::settingsClosed);
     connect(page, &WebEnginePage::appUrl, this, &MainWindow::appUrl);
     connect(page, &WebEnginePage::isDark, this, &MainWindow::setTheme);
-    connect(settings, &SettingsWidget::close, this, &MainWindow::settingsClosed);
     connect(page, &WebEnginePage::player, player, &Player::update);
     connect(page, &WebEnginePage::status, player, &Player::statusUpdate);
     connect(page, &WebEnginePage::cover, player, &Player::setCover);
