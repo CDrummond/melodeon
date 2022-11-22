@@ -86,7 +86,7 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::player, player, &Player::update);
     connect(page, &WebEnginePage::status, player, &Player::statusUpdate);
     connect(page, &WebEnginePage::cover, player, &Player::setCover);
-    connect(player, &Player::updateStatus, page, &WebEnginePage::updateStatus);
+    connect(player, &Player::runCommand, page, &WebEnginePage::runCommand);
 
     stack->addWidget(settings);
     stack->addWidget(web);

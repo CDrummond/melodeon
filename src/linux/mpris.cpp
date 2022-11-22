@@ -114,7 +114,6 @@ QVariantMap Mpris::Metadata() const {
 }
 
 void Mpris::statusUpdate(const Status &stat) {
-    qWarning() << "STATUS UPDATE";
     Status prevStatus = status;
     QVariantMap map;
 

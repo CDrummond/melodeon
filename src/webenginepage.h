@@ -36,7 +36,7 @@ public:
     void javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) override;
 
 public slots:
-    void updateStatus();
+    void runCommand(const QString &command);
 
 signals:
     void appUrl(const QString &url);

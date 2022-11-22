@@ -48,11 +48,13 @@ public slots:
     void setRepeat(int val);
     void setShuffle(int val);
     void setVolume(int val);
+    void incrementVolume();
+    void decrementVolume();
     virtual void statusUpdate(const Status &status);
     virtual void setCover(const QString &url);
 
 signals:
-    void updateStatus();
+    void runCommand(const QString &cmd);
 
 private:
     void sendCommand(const QStringList &command);

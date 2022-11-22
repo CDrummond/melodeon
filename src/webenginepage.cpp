@@ -72,10 +72,6 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Nav
     return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 }
 
-void WebEnginePage::updateStatus() {
-    runJavaScript("refreshStatus()");
-}
-
 void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) {
     Q_UNUSED(level);
     Q_UNUSED(lineNumber);
@@ -89,6 +85,10 @@ void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMe
     } else if (message.startsWith(constPlayerLog)) {
         handlePlayer(parse(message));
     }
+}
+
+void WebEnginePage::runCommand(const QString &command) {
+    runJavaScript(command);
 }
 
 QMap<QString, QString> WebEnginePage::parse(const QString &message) {

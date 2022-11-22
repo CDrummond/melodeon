@@ -45,6 +45,10 @@ void Player::handleCommand(const QByteArray &cmd) {
         prev();
     } else if (cmd=="next") {
         next();
+    } else if (cmd=="incvol" || cmd=="incrementvolume") {
+        incrementVolume();
+    } else if (cmd=="decvol" || cmd=="decrementvolume") {
+        decrementVolume();
     }
 }
 
@@ -97,6 +101,14 @@ void Player::setVolume(int val) {
     sendCommand(QStringList() << "mixer" << "volume" << QString::number(val));
 }
 
+void Player::incrementVolume() {
+    emit runCommand("incrementVolume()");
+}
+
+void Player::decrementVolume() {
+    emit runCommand("decrementVolume()");
+}
+
 void Player::statusUpdate(const Status &stat) {
     status = stat;
 }
@@ -132,7 +144,7 @@ void Player::sendCommand(const QStringList &command) {
     QByteArray data = QJsonDocument(req).toJson(QJsonDocument::Compact);
     QNetworkReply *reply = mgr->post(request, data);
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
-        emit updateStatus();
+        emit runCommand("refreshStatus()");
         reply->deleteLater();
     });
 }
