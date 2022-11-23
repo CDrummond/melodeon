@@ -31,6 +31,10 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setApplicationName(PROJECT_NAME);
     QCoreApplication::setApplicationVersion(PROJECT_VERSION);
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
     SingleApplication app(argc, argv, true, SingleApplication::User, SingleApplication::SecondaryNotification);
 
     if (app.isSecondary()) {
