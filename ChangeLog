@@ -7,6 +7,7 @@
 5. Esc closes settings page - consistent with MaterialSkin
 6. Allow sending commands to an instance by starting a second with play,
    pause, playPause, prev, or next.
+7. Add option to inhibit suspend whilst playing.
 
 0.0.1
 -----

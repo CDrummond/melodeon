@@ -110,7 +110,11 @@ void Player::decrementVolume() {
 }
 
 void Player::statusUpdate(const Status &stat) {
+    bool playStateChanged = stat.playing != status.playing;
     status = stat;
+    if (playStateChanged) {
+        emit playbackStateChanged(status.playing);
+    }
 }
 
 void Player::setCover(const QString &url) {

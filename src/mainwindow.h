@@ -29,6 +29,7 @@ class QWebEngineView;
 class SettingsWidget;
 class WebEnginePage;
 class Player;
+class PowerManagement;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -75,6 +76,7 @@ private:
 
 private:
     Player *player;
+    PowerManagement *powerManagement;
     Desktop desktop;
     QStackedWidget *stack;
     SettingsWidget *settings;

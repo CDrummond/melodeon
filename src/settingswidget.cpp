@@ -29,6 +29,11 @@
 #include <QtGui/QFontMetrics>
 #include <QtWidgets/QAction>
 
+#define REMOVE(w) \
+    w->setVisible(false); \
+    w->deleteLater(); \
+    w=0;
+
 SettingsWidget::SettingsWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::SettingsWidget)
@@ -37,6 +42,11 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     ColumnResizer* resizer = new ColumnResizer(this);
     resizer->addWidgetsFromLayout(ui->serverGroupBox->layout(), 0);
     resizer->addWidgetsFromLayout(ui->interfaceGroupBox->layout(), 0);
+#ifdef Q_OS_LINUX
+    resizer->addWidgetsFromLayout(ui->miscGroupBox->layout(), 0);
+#else
+    REMOVE(ui->miscGroupBox);
+#endif
     clearCache = false;
     connect(ui->backButton, &QPushButton::clicked, this, &SettingsWidget::backClicked);
     connect(ui->discoverServer, &QPushButton::clicked, this, &SettingsWidget::discoverClicked);
@@ -80,6 +90,9 @@ void SettingsWidget::backClicked() {
     Settings::self()->setName(ui->serverName->text().trimmed());
     Settings::self()->setAddress(ui->serverAddress->text().trimmed());
     Settings::self()->setPort(ui->serverPort->value());
+    if (ui->inhibitSuspend) {
+        Settings::self()->setInhibitSuspend(ui->inhibitSuspend->isChecked());
+    }
     Settings::self()->save();
     emit close(clearCache);
     clearCache = false;
@@ -119,4 +132,7 @@ void SettingsWidget::update() {
     ui->serverAddress->setText(Settings::self()->getAddress());
     ui->serverPort->setValue(Settings::self()->getPort());
     updateZoomPc(ui->zoom->value());
+    if (ui->inhibitSuspend) {
+        ui->inhibitSuspend->setChecked(Settings::self()->getInhibitSuspend());
+    }
 }

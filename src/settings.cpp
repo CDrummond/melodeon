@@ -105,6 +105,16 @@ bool Settings::getDark() {
     return getBool("dark", false);
 }
 
+void Settings::setInhibitSuspend(bool val) {
+    if (getInhibitSuspend()!=val) {
+        setValue("inhibitSuspend", val);
+        modified = true;
+    }
+}
+bool Settings::getInhibitSuspend() {
+    return getBool("inhibitSuspend", false);
+}
+
 QString Settings::getString(const QString &key, const QString &def) const {
     return contains(key) ? value(key).toString() : def;
 }

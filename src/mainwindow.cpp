@@ -28,6 +28,7 @@
 #include "webenginepage.h"
 #ifdef Q_OS_LINUX
 #include "mpris.h"
+#include "linuxpowermanagement.h"
 #endif
 #include <QtCore/QByteArray>
 #include <QtCore/QCoreApplication>
@@ -63,8 +64,10 @@ MainWindow::MainWindow()
     : QMainWindow(nullptr) {
 #ifdef Q_OS_LINUX
     player = new Mpris(this);
+    powerManagement = new LinuxPowerManagement(player);
 #else
     player = new Player(this);
+    powerManagement = nullptr;
 #endif
     pageLoaded = false;
     determineDesktop();
@@ -129,6 +132,9 @@ MainWindow::MainWindow()
     addAction(settingsAct);
 
     setMinimumSize(450, 500);
+    if (powerManagement) {
+        powerManagement->setInhibitSuspend(Settings::self()->getInhibitSuspend());
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -210,6 +216,9 @@ void MainWindow::setTheme(bool dark) {
 void MainWindow::settingsClosed(bool clearCache) {
     showPage(WEBVIEW_PAGE);
     web->setZoomFactor(Settings::self()->getZoom());
+    if (powerManagement) {
+        powerManagement->setInhibitSuspend(Settings::self()->getInhibitSuspend());
+    }
     if (clearCache || !pageLoaded) {
         web->stop();
         QWebEngineProfile::defaultProfile()->clearHttpCache();

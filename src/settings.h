@@ -46,6 +46,8 @@ public:
     QByteArray getState() const;
     void setDark(bool val);
     bool getDark();
+    void setInhibitSuspend(bool val);
+    bool getInhibitSuspend();
 
     void save();
 

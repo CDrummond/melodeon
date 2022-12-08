@@ -44,6 +44,7 @@ set(PROJECT_SOURCES
     src/main.cpp
     src/mainwindow.cpp
     src/player.cpp
+    src/powermanagement.cpp
     src/settings.cpp
     src/settingswidget.cpp
     src/settingswidget.ui
@@ -54,14 +55,18 @@ set(PROJECT_SOURCES
     src/3rdparty/columnresizer/columnresizer.cpp
 )
 
-include_directories(src src/3rdparty/columnresizer ${CMAKE_BINARY_DIR})
+include_directories(src src/3rdparty/columnresizer ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 if (UNIX AND NOT APPLE)
     include_directories(src/linux)
     set(PROJECT_SOURCES ${PROJECT_SOURCES}
         src/linux/mpris.cpp
+        src/linux/linuxpowermanagement.cpp
         )
     qt_add_dbus_adaptor(PROJECT_SOURCES src/linux/org.mpris.MediaPlayer2.Player.xml src/linux/mpris.h Mpris)
     qt_add_dbus_adaptor(PROJECT_SOURCES src/linux/org.mpris.MediaPlayer2.root.xml src/linux/mpris.h Mpris)
+    qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.freedesktop.login1.xml login1interface)
+    qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.freedesktop.PowerManagement.Inhibit.xml inhibitinterface)
+    qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.kde.Solid.PowerManagement.PolicyAgent.xml policyagentinterface)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

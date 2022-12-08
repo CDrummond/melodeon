@@ -35,6 +35,7 @@ public:
     Player(QObject *p);
 
     void handleCommand(const QByteArray &cmd);
+    bool isPlaying() const { return status.playing; }
 
 public slots:
     void update(const QString &i, const QString &n);
@@ -55,6 +56,7 @@ public slots:
 
 signals:
     void runCommand(const QString &cmd);
+    void playbackStateChanged(bool playing);
 
 private:
     void sendCommand(const QStringList &command);
