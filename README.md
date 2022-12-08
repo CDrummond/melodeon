@@ -12,3 +12,4 @@ Features
 1. Server auto-discovery
 2. MPRIS on Linux
 3. Configurable zoom level
+4. Inhibit suspend during playback
