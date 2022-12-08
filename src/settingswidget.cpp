@@ -86,7 +86,7 @@ void SettingsWidget::setDark(bool dark) {
 }
 
 void SettingsWidget::backClicked() {
-    Settings::self()->setZoom(ui->zoom->value()*MainWindow::constZoomStep);
+    Settings::self()->setZoom(MainWindow::constMinZoom+(ui->zoom->value()*MainWindow::constZoomStep));
     Settings::self()->setName(ui->serverName->text().trimmed());
     Settings::self()->setAddress(ui->serverAddress->text().trimmed());
     Settings::self()->setPort(ui->serverPort->value());
