@@ -42,7 +42,6 @@ private:
     void playbackStateChanged(bool playing) override;
 
 private:
-    bool inhibitSuspendWhilstPlaying;
     int cookie;
     QDBusUnixFileDescriptor descriptor;
     OrgKdeSolidPowerManagementPolicyAgentInterface *policy;

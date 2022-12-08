@@ -31,7 +31,6 @@
 
 LinuxPowerManagement::LinuxPowerManagement(Player *p)
     : PowerManagement(p)
-    , inhibitSuspendWhilstPlaying(false)
     , cookie(-1) {
     policy = new OrgKdeSolidPowerManagementPolicyAgentInterface(OrgKdeSolidPowerManagementPolicyAgentInterface::staticInterfaceName(),
                                                                 QLatin1String("/org/kde/Solid/PowerManagement/PolicyAgent"),
