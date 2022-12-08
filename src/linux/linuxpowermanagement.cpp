@@ -23,7 +23,6 @@
 #include "player.h"
 #include "inhibitinterface.h"
 #include "policyagentinterface.h"
-#include "upowerinterface.h"
 #include "login1interface.h"
 #include <QtCore/QString>
 #include <QtDBus/QDBusConnection>
