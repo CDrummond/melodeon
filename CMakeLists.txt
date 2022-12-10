@@ -66,7 +66,6 @@ if (UNIX AND NOT APPLE)
     qt_add_dbus_adaptor(PROJECT_SOURCES src/linux/org.mpris.MediaPlayer2.root.xml src/linux/mpris.h Mpris)
     qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.freedesktop.login1.xml login1interface)
     qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.freedesktop.PowerManagement.Inhibit.xml inhibitinterface)
-    qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.kde.Solid.PowerManagement.PolicyAgent.xml policyagentinterface)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

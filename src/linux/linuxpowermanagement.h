@@ -25,7 +25,6 @@
 #include "powermanagement.h"
 #include <QtDBus/QDBusUnixFileDescriptor>
 
-class OrgKdeSolidPowerManagementPolicyAgentInterface;
 class OrgFreedesktopPowerManagementInhibitInterface;
 class OrgFreedesktopLogin1ManagerInterface;
 class Player;
@@ -44,7 +43,6 @@ private:
 private:
     int cookie;
     QDBusUnixFileDescriptor descriptor;
-    OrgKdeSolidPowerManagementPolicyAgentInterface *policy;
     OrgFreedesktopPowerManagementInhibitInterface *inhibit;
     OrgFreedesktopLogin1ManagerInterface *login1;
 };

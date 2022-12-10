@@ -22,7 +22,6 @@
 #include "linuxpowermanagement.h"
 #include "player.h"
 #include "inhibitinterface.h"
-#include "policyagentinterface.h"
 #include "login1interface.h"
 #include <QtCore/QString>
 #include <QtDBus/QDBusConnection>
@@ -32,9 +31,6 @@
 LinuxPowerManagement::LinuxPowerManagement(Player *p)
     : PowerManagement(p)
     , cookie(-1) {
-    policy = new OrgKdeSolidPowerManagementPolicyAgentInterface(OrgKdeSolidPowerManagementPolicyAgentInterface::staticInterfaceName(),
-                                                                QLatin1String("/org/kde/Solid/PowerManagement/PolicyAgent"),
-                                                                QDBusConnection::sessionBus(), this);
     inhibit = new OrgFreedesktopPowerManagementInhibitInterface("org.freedesktop.PowerManagement",
                                                                 QLatin1String("/org/freedesktop/PowerManagement/Inhibit"),
                                                                 QDBusConnection::sessionBus(), this);
@@ -58,13 +54,7 @@ void LinuxPowerManagement::beginSuppressingSleep() {
     }
 
     QString reason=tr("LMS is playing a track");
-    QDBusReply<uint> reply;
-    if (policy->isValid()) {
-        reply = policy->AddInhibition((uint)1, QGuiApplication::applicationDisplayName(), reason);
-    } else {
-        // Fallback to the fd.o Inhibit interface
-        reply = inhibit->Inhibit(QGuiApplication::applicationDisplayName(), reason);
-    }
+    QDBusReply<uint> reply = inhibit->Inhibit(QGuiApplication::applicationDisplayName(), reason);
     cookie=reply.isValid() ? reply : -1;
 
     QString types=QStringLiteral("sleep");
@@ -79,12 +69,7 @@ void LinuxPowerManagement::beginSuppressingSleep() {
 
 void LinuxPowerManagement::stopSuppressingSleep() {
     if (-1!=cookie) {
-        if (policy->isValid()) {
-            policy->ReleaseInhibition(cookie);
-        } else {
-            // Fallback to the fd.o Inhibit interface
-            inhibit->UnInhibit(cookie);
-        }
+        inhibit->UnInhibit(cookie);
         cookie=-1;
     }
 
