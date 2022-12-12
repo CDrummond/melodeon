@@ -53,7 +53,7 @@ void LinuxPowerManagement::beginSuppressingSleep() {
         return;
     }
 
-    QString reason=tr("LMS is playing a track");
+    QString reason=tr("Music is playing");
     QDBusReply<uint> reply = inhibit->Inhibit(QGuiApplication::applicationDisplayName(), reason);
     cookie=reply.isValid() ? reply : -1;
 
