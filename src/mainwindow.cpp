@@ -221,7 +221,9 @@ void MainWindow::settingsClosed(bool clearCache) {
     }
     if (clearCache || !pageLoaded) {
         web->stop();
-        QWebEngineProfile::defaultProfile()->clearHttpCache();
+        if (clearCache) {
+            QWebEngineProfile::defaultProfile()->clearHttpCache();
+        }
         QString url = buildUrl();
         if (url!=currentUrl) {
             loadUrl(url);
