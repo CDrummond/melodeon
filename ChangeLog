@@ -1,4 +1,4 @@
-0.0.2
+0.1.0
 -----
 1. Increment zoom in 5% steps, min 25% max 500%
 2. Update settings instance when change zoom via keyboard.
