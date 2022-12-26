@@ -20,6 +20,7 @@
  */
 
 #include "webenginepage.h"
+#include "debug.h"
 #include "settings.h"
 #include "status.h"
 #include "themes.h"
@@ -61,6 +62,7 @@ void WebEnginePage::setDark(bool dark) {
 }
 
 bool WebEnginePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) {
+    DBUG << url << type << isMainFrame;
     if (url.scheme().startsWith("mska")) {
         emit appUrl(url.toString());
         return false;
@@ -73,9 +75,8 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Nav
 }
 
 void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) {
-    Q_UNUSED(level);
-    Q_UNUSED(lineNumber);
-    Q_UNUSED(sourceID);
+    DBUG_JS << level << lineNumber << sourceID << message;
+
     if (message.startsWith(constThemeLog)) {
         handleTheme(parse(message));
     } else if (message.startsWith(constStatusLog)) {

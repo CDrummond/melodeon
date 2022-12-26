@@ -20,6 +20,7 @@
  */
 
 #include "mainwindow.h"
+#include "debug.h"
 #include "player.h"
 #include "settings.h"
 #include "settingswidget.h"
@@ -195,6 +196,7 @@ void MainWindow::titleChanged(const QString &title) {
 }
 
 void MainWindow::receivedMessage(quint32 instanceId, QByteArray message) {
+    DBUG << message;
     player->handleCommand(message);
 }
 
@@ -281,6 +283,7 @@ void MainWindow::showPage(int index) {
 void MainWindow::loadUrl(const QString &url) {
     currentUrl = url;
     pageLoaded = false;
+    DBUG << url;
     web->load(QUrl(currentUrl));
     QTimer::singleShot(10000, this, &MainWindow::timeout);
 }
@@ -302,6 +305,18 @@ QString MainWindow::buildUrl() {
     if (KDE==desktop) {
         url+=QLatin1String("&desktop=KDE");
     }
+    if ((Debug::areas&Debug::JSON) || (Debug::areas&Debug::CometD)) {
+        url+=QLatin1String("&debug=");
+        if (Debug::areas&Debug::JSON) {
+            url+=QLatin1String("json");
+            if (Debug::areas&Debug::CometD) {
+                url+=QLatin1String(",cometd");
+            }
+        } else {
+            url+=QLatin1String("cometd");
+        }
+    }
+    DBUG << url;
     return url;
 }
 

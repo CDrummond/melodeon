@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(melodeon VERSION 0.1.0 LANGUAGES CXX)
+project(melodeon VERSION 0.1.1 LANGUAGES CXX)
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
@@ -41,6 +41,7 @@ set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleAp
 add_subdirectory(src/3rdparty/singleapplication)
 
 set(PROJECT_SOURCES
+    src/debug.cpp
     src/main.cpp
     src/mainwindow.cpp
     src/player.cpp

@@ -20,6 +20,7 @@
  */
 
 #include "config.h"
+#include "debug.h"
 #include "mainwindow.h"
 #include "settings.h"
 #include "startup.h"
@@ -43,6 +44,7 @@ int main(int argc, char *argv[]) {
         }
         return 0;
     } else {
+        Debug::init(app.arguments());
         if (Settings::self()->getAddress().isEmpty()) {
             Startup *start = new Startup();
             QObject::connect(&app, &SingleApplication::instanceStarted, [ start ]() {
