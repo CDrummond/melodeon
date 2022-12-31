@@ -20,12 +20,14 @@
  */
 
 #include "webenginepage.h"
+#include "tmpwebenginepage.h"
 #include "debug.h"
 #include "settings.h"
 #include "status.h"
 #include "themes.h"
 #include <QtGui/QDesktopServices>
 #include <QtWebEngineWidgets/QWebEngineProfile>
+#include <QtWebEngineWidgets/QWebEngineSettings>
 
 static const QLatin1String constThemeLog("MATERIAL-THEME");
 static const QLatin1String constStatusLog("MATERIAL-STATUS");
@@ -55,6 +57,8 @@ WebEnginePage::WebEnginePage(QObject *parent)
                          this->setFeaturePermission(origin, feature, QWebEnginePage::PermissionGrantedByUser);
                      });
     qRegisterMetaType<Status>("Status");
+    settings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, true);
+    settings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
 }
 
 void WebEnginePage::setDark(bool dark) {
@@ -86,6 +90,14 @@ void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMe
     } else if (message.startsWith(constPlayerLog)) {
         handlePlayer(parse(message));
     }
+}
+
+QWebEnginePage * WebEnginePage::createWindow(QWebEnginePage::WebWindowType type) {
+    DBUG << type;
+    if (QWebEnginePage::WebBrowserTab==type || QWebEnginePage::WebBrowserWindow==type) {
+        return new TmpWebEnginePage(this);
+    }
+    return nullptr;
 }
 
 void WebEnginePage::runCommand(const QString &command) {

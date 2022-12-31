@@ -1,6 +1,7 @@
 0.1.1
 -----
-1. Add debug commandline arg. --debug=app,jsonrpc,cometd
+1. Add debug commandline arg. --debug=app,json,cometd
+2. Correctly handle opening links in external browser.
 
 0.1.0
 -----

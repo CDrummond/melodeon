@@ -34,6 +34,7 @@ public:
     void setDark(bool dark);
     bool acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) override;
     void javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) override;
+    QWebEnginePage *createWindow(WebWindowType type) override;
 
 public slots:
     void runCommand(const QString &command);

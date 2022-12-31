@@ -52,6 +52,7 @@ set(PROJECT_SOURCES
     src/serverdiscovery.cpp
     src/startup.cpp
     src/themes.cpp
+    src/tmpwebenginepage.cpp
     src/webenginepage.cpp
     src/3rdparty/columnresizer/columnresizer.cpp
 )
