@@ -32,6 +32,9 @@ public:
     void setInhibitSuspend(bool i);
     bool willInhibitSuspend() const { return inhibitSuspendWhilstPlaying; }
 
+signals:
+    void resuming();
+
 protected:
     virtual void inhibitSuspend(bool i) = 0;
 

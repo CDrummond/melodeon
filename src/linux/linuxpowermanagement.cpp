@@ -23,6 +23,7 @@
 #include "player.h"
 #include "inhibitinterface.h"
 #include "login1interface.h"
+#include "upowerinterface.h"
 #include <QtCore/QString>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusPendingReply>
@@ -34,8 +35,11 @@ LinuxPowerManagement::LinuxPowerManagement(Player *p)
     inhibit = new OrgFreedesktopPowerManagementInhibitInterface("org.freedesktop.PowerManagement",
                                                                 QLatin1String("/org/freedesktop/PowerManagement/Inhibit"),
                                                                 QDBusConnection::sessionBus(), this);
+    upower = new OrgFreedesktopUPowerInterface(OrgFreedesktopUPowerInterface::staticInterfaceName(),
+                                                   QLatin1String("/org/freedesktop/UPower"), QDBusConnection::systemBus(), this);
     login1 = new OrgFreedesktopLogin1ManagerInterface("org.freedesktop.login1",
                                                       QLatin1String("/org/freedesktop/login1"), QDBusConnection::systemBus(), this);
+    connect(upower, &OrgFreedesktopUPowerInterface::Resuming, this, &PowerManagement::resuming);
 }
 
 void LinuxPowerManagement::inhibitSuspend(bool i) {

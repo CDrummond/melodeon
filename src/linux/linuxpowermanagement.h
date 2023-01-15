@@ -26,6 +26,7 @@
 #include <QtDBus/QDBusUnixFileDescriptor>
 
 class OrgFreedesktopPowerManagementInhibitInterface;
+class OrgFreedesktopUPowerInterface;
 class OrgFreedesktopLogin1ManagerInterface;
 class Player;
 
@@ -44,6 +45,7 @@ private:
     int cookie;
     QDBusUnixFileDescriptor descriptor;
     OrgFreedesktopPowerManagementInhibitInterface *inhibit;
+    OrgFreedesktopUPowerInterface *upower;
     OrgFreedesktopLogin1ManagerInterface *login1;
 };
 

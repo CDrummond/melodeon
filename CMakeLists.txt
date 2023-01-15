@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(melodeon VERSION 0.1.1 LANGUAGES CXX)
+project(melodeon VERSION 0.2.0 LANGUAGES CXX)
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
@@ -68,6 +68,7 @@ if (UNIX AND NOT APPLE)
     qt_add_dbus_adaptor(PROJECT_SOURCES src/linux/org.mpris.MediaPlayer2.root.xml src/linux/mpris.h Mpris)
     qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.freedesktop.login1.xml login1interface)
     qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.freedesktop.PowerManagement.Inhibit.xml inhibitinterface)
+    qt_add_dbus_interface(PROJECT_SOURCES src/linux/org.freedesktop.UPower.xml upowerinterface)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

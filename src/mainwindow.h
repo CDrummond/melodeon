@@ -59,6 +59,7 @@ public slots:
     void appUrl(const QString &url);
     void titleChanged(const QString &title);
     void receivedMessage(quint32 instanceId, QByteArray message);
+    void resuming();
 
 private slots:
     void setTheme(bool dark);

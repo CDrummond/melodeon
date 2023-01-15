@@ -135,6 +135,7 @@ MainWindow::MainWindow()
     setMinimumSize(450, 500);
     if (powerManagement) {
         powerManagement->setInhibitSuspend(Settings::self()->getInhibitSuspend());
+        connect(powerManagement, &PowerManagement::resuming, this, &MainWindow::resuming);
     }
 }
 
@@ -198,6 +199,18 @@ void MainWindow::titleChanged(const QString &title) {
 void MainWindow::receivedMessage(quint32 instanceId, QByteArray message) {
     DBUG << message;
     player->handleCommand(message);
+    QTimer::singleShot(500, web, &QWebEngineView::reload);
+}
+
+void MainWindow::resuming() {
+    DBUG;
+    if (WEBVIEW_PAGE==stack->currentIndex()) {
+        page->runCommand("refreshStatus");
+        // And 1/2 second later
+        QTimer::singleShot(500, [=]() {
+            page->runCommand("refreshStatus");
+        });
+    }
 }
 
 void MainWindow::setTheme(bool dark) {
