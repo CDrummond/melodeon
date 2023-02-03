@@ -144,7 +144,7 @@ MainWindow::MainWindow()
 void MainWindow::closeEvent(QCloseEvent *event) {
     Settings::self()->setGeometry(saveGeometry());
     Settings::self()->setState(saveState());
-    Settings::self()->setZoom(web->zoomFactor());
+    Settings::self()->setZoom(page->zoomFactor());
     Settings::self()->save();
     page->deleteLater();
     QMainWindow::closeEvent(event);
@@ -178,6 +178,7 @@ void MainWindow::loadFinished(bool ok) {
     DBUG << ok;
     if (ok) {
         pageLoaded = true;
+        page->setZoomFactor(Settings::self()->getZoom());
     } else {
         showPage(SETTINGS_PAGE);
     }
@@ -233,7 +234,7 @@ void MainWindow::setTheme(bool dark) {
 
 void MainWindow::settingsClosed(bool clearCache) {
     showPage(WEBVIEW_PAGE);
-    web->setZoomFactor(Settings::self()->getZoom());
+    page->setZoomFactor(Settings::self()->getZoom());
     if (powerManagement) {
         powerManagement->setInhibitSuspend(Settings::self()->getInhibitSuspend());
     }

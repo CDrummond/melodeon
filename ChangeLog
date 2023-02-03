@@ -4,6 +4,7 @@
 2. Correctly handle opening links in external browser.
 3. Refresh status when resuming from suspend.
 4. Add support for password proteced servers.
+5. Set page zoom level when loaded.
 
 0.1.0
 -----
