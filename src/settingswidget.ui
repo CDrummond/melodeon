@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>901</width>
-    <height>640</height>
+    <width>1051</width>
+    <height>1020</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,8 +116,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>880</width>
-        <height>814</height>
+        <width>1030</width>
+        <height>975</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -210,6 +210,29 @@
             </property>
            </widget>
           </item>
+          <item row="7" column="0" colspan="2">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE:&lt;/span&gt; Username and password are only required for password protected LMS servers.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE:&lt;/span&gt; Use the 'Discover' button to automatically discover LMS servers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>22</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
        </item>
@@ -278,6 +301,29 @@
              <string>Clear cache</string>
             </property>
            </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE: &lt;/span&gt;Use the 'Clear cache' button to clear the internal browser cache, forcing the skin to be reloaded.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>22</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -348,7 +394,7 @@
           </size>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE:&lt;/span&gt; This application requires that you have the 'Material Skin' plugin installed on your LMS server. However, it does not need to be set as the default skin.&lt;/p&gt;&lt;p&gt;Use the 'Discover' button to automatically discover LMS servers.&lt;/p&gt;&lt;p&gt;Use the 'Clear cache' button to clear the internal browser cache, forcing the skin to be reloaded.&lt;/p&gt;&lt;p&gt;Pressing the arrow button (top left) will close this settings page and apply all settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE:&lt;/span&gt; This application requires that you have the 'Material Skin' plugin installed on your LMS server. However, it does not need to be set as the default skin.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE: &lt;/span&gt;Pressing the arrow button (top left) will close this settings page and apply all settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
