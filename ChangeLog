@@ -3,7 +3,7 @@
 1. Add debug commandline arg. --debug=app,json,cometd
 2. Correctly handle opening links in external browser.
 3. Refresh status when resuming from suspend.
-4. Add support for password proteced servers.
+4. Add support for password protected servers.
 5. Set page zoom level when loaded.
 
 0.1.0
