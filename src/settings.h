@@ -38,6 +38,10 @@ public:
     QString getAddress() const;
     void setPort(const uint val);
     uint getPort() const;
+    void setUsername(const QString &val);
+    QString getUsername() const;
+    void setPassword(const QString &val);
+    QString getPassword() const;
     void setZoom(const qreal val);
     qreal getZoom() const;
     void setGeometry(const QByteArray &val);

@@ -74,6 +74,28 @@ void Settings::setZoom(const qreal val) {
     }
 }
 
+void Settings::setUsername(const QString &val) {
+    if (getUsername()!=val) {
+        setValue("username", val);
+        modified = true;
+    }
+}
+
+QString Settings::getUsername() const {
+    return getString("username", "");
+}
+
+void Settings::setPassword(const QString &val) {
+    if (getPassword()!=val) {
+        setValue("password", val);
+        modified = true;
+    }
+}
+
+QString Settings::getPassword() const {
+    return getString("password", "");
+}
+
 qreal Settings::getZoom() const {
     return getReal("zoom", 1.0);
 }

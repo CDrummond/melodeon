@@ -24,6 +24,7 @@
 
 #include <QtWidgets/QMainWindow>
 
+class QAuthenticator;
 class QStackedWidget;
 class QWebEngineView;
 class SettingsWidget;
@@ -65,6 +66,7 @@ private slots:
     void setTheme(bool dark);
     void settingsClosed(bool clearCache);
     void timeout();
+    void authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator);
 
 private:
     void determineDesktop();

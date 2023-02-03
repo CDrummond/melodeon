@@ -90,6 +90,8 @@ void SettingsWidget::backClicked() {
     Settings::self()->setName(ui->serverName->text().trimmed());
     Settings::self()->setAddress(ui->serverAddress->text().trimmed());
     Settings::self()->setPort(ui->serverPort->value());
+    Settings::self()->setUsername(ui->userName->text().trimmed());
+    Settings::self()->setPassword(ui->password->text().trimmed());
     if (ui->inhibitSuspend) {
         Settings::self()->setInhibitSuspend(ui->inhibitSuspend->isChecked());
     }
@@ -131,6 +133,8 @@ void SettingsWidget::update() {
     ui->serverName->setText(Settings::self()->getName());
     ui->serverAddress->setText(Settings::self()->getAddress());
     ui->serverPort->setValue(Settings::self()->getPort());
+    ui->userName->setText(Settings::self()->getUsername());
+    ui->password->setText(Settings::self()->getPassword());
     updateZoomPc(ui->zoom->value());
     if (ui->inhibitSuspend) {
         ui->inhibitSuspend->setChecked(Settings::self()->getInhibitSuspend());

@@ -42,6 +42,7 @@
 #include <QtGui/QKeySequence>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QScreen>
+#include <QtNetwork/QAuthenticator>
 #include <QtWebEngineWidgets/QWebEngineProfile>
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWidgets/QAction>
@@ -90,6 +91,7 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::player, player, &Player::update);
     connect(page, &WebEnginePage::status, player, &Player::statusUpdate);
     connect(page, &WebEnginePage::cover, player, &Player::setCover);
+    connect(page, &QWebEnginePage::authenticationRequired, this, &MainWindow::authenticationRequired);
     connect(player, &Player::runCommand, page, &WebEnginePage::runCommand);
 
     stack->addWidget(settings);
@@ -173,6 +175,7 @@ void MainWindow::zoomOut() {
 }
 
 void MainWindow::loadFinished(bool ok) {
+    DBUG << ok;
     if (ok) {
         pageLoaded = true;
     } else {
@@ -258,6 +261,12 @@ void MainWindow::timeout() {
         web->stop();
         showPage(SETTINGS_PAGE);
     }
+}
+
+void MainWindow::authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator) {
+    DBUG << requestUrl;
+    authenticator->setUser(Settings::self()->getUsername());
+    authenticator->setPassword(Settings::self()->getPassword());
 }
 
 void MainWindow::determineDesktop() {
