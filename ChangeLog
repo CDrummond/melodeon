@@ -1,6 +1,6 @@
 0.2.0
 -----
-1. Add debug commandline arg. --debug=app,json,cometd
+1. Add debug command line arg. --debug=app,json,cometd
 2. Correctly handle opening links in external browser.
 3. Refresh status when resuming from suspend.
 4. Add support for password protected servers.
