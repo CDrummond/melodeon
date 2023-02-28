@@ -1,3 +1,7 @@
+0.2.1
+-----
+1. Fix piCorePlayer settings pages being opened in external browser.
+
 0.2.0
 -----
 1. Add debug command line arg. --debug=app,json,cometd

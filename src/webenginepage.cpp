@@ -71,7 +71,7 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Nav
         emit appUrl(url.toString());
         return false;
     }
-    if (QWebEnginePage::NavigationTypeLinkClicked==type) {
+    if (QWebEnginePage::NavigationTypeLinkClicked==type && isMainFrame) {
         QDesktopServices::openUrl(url);
         return false;
     }
