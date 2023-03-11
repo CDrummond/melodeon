@@ -1,6 +1,7 @@
 0.2.1
 -----
 1. Fix piCorePlayer settings pages being opened in external browser.
+2. Don't explicitly disable scrollbars.
 
 0.2.0
 -----
