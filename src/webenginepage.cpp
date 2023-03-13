@@ -58,6 +58,7 @@ WebEnginePage::WebEnginePage(QObject *parent)
                      });
     qRegisterMetaType<Status>("Status");
     settings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, true);
+    settings()->setAttribute(QWebEngineSettings::PluginsEnabled, true);
 }
 
 void WebEnginePage::setDark(bool dark) {
