@@ -20,6 +20,7 @@
  */
 
 #include "debug.h"
+#include <QtCore/QDateTime>
 
 int Debug::areas = Debug::None;
 
@@ -36,4 +37,8 @@ void Debug::init(const QStringList &args) {
             }
         }
     }
+}
+
+QString Debug::prefix(const QString &clz, const QString &func) {
+    return "[" + QDateTime::currentDateTime().toString("dd.MM.yy hh.mm.ss.z") + " | " + clz + " | " + func + "]";
 }

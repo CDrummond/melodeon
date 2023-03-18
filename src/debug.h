@@ -35,10 +35,11 @@ enum Areas {
 
 extern int areas;
 extern void init(const QStringList &rgs);
+extern QString prefix(const QString &clz, const QString &func);
 }
 
-#define DBUG_CLASS(CLASS) if (Debug::areas&Debug::App) qDebug() << CLASS << __FUNCTION__
+#define DBUG_CLASS(CLASS) if (Debug::areas&Debug::App) qDebug() << Debug::prefix(CLASS, __FUNCTION__)
 #define DBUG DBUG_CLASS(metaObject()->className())
-#define DBUG_JS if (Debug::areas&(Debug::JSON|Debug::CometD)) qDebug() << metaObject()->className() << __FUNCTION__
+#define DBUG_JS if (Debug::areas&(Debug::JSON|Debug::CometD)) qDebug() << Debug::prefix(metaObject()->className(), __FUNCTION__)
 
 #endif
