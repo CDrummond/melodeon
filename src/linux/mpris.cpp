@@ -171,7 +171,7 @@ void Mpris::signalUpdate(const QVariantMap &map) {
     if (map.isEmpty()) {
         return;
     }
-    DBUG << "Update" << map;
+    DBUG << map;
     QDBusMessage signal = QDBusMessage::createSignal("/org/mpris/MediaPlayer2",
                                                      "org.freedesktop.DBus.Properties",
                                                      "PropertiesChanged");
