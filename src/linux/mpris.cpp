@@ -23,6 +23,7 @@
 #include "config.h"
 #include "playeradaptor.h"
 #include "rootadaptor.h"
+#include "../debug.h"
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 
@@ -170,6 +171,7 @@ void Mpris::signalUpdate(const QVariantMap &map) {
     if (map.isEmpty()) {
         return;
     }
+    DBUG << "Update" << map;
     QDBusMessage signal = QDBusMessage::createSignal("/org/mpris/MediaPlayer2",
                                                      "org.freedesktop.DBus.Properties",
                                                      "PropertiesChanged");
