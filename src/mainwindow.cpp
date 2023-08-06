@@ -328,7 +328,7 @@ QString MainWindow::buildUrl() {
         url+=QLatin1String("&altBtnLayout=true");
     }
     if (KDE==desktop) {
-        url+=QLatin1String("&desktop=KDE");
+        url+=QLatin1String("&defaultTheme=linux/dark/Breeze-Dark&themeColor=2a2e32");
     }
     if (GNOME==desktop) {
         url+=QLatin1String("&defaultTheme=linux/light/Adwaita&themeColor=fcfcfc");
