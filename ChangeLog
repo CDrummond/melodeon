@@ -4,7 +4,7 @@
 2. Set size policy of push buttons in settings dialog, so that they do not
    become full with certain styles.
 2. Improve appearance under GNOME; default to light Adwaita and don't try
-   to have settings pages colours reflect theme as doed not work.
+   to have settings pages colours reflect theme as does not work.
 
 0.2.1
 -----
