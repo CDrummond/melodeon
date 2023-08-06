@@ -223,13 +223,15 @@ void MainWindow::setTheme(bool dark) {
 #elif defined Q_OS_MAC
     // TODO
 #else
-    qApp->setProperty("KDE_COLOR_SCHEME_PATH",
-                      dark ? "/usr/share/color-schemes/BreezeDark.colors"
-                           : "/usr/share/color-schemes/BreezeLight.colors");
+    if (KDE==desktop) {
+        qApp->setProperty("KDE_COLOR_SCHEME_PATH",
+                          dark ? "/usr/share/color-schemes/BreezeDark.colors"
+                               : "/usr/share/color-schemes/BreezeLight.colors");
+        qApp->setPalette(dark ? Themes::constDark : Themes::constLight);
+        page->setDark(dark);
+        settings->setDark(dark);
+    }
 #endif
-    qApp->setPalette(dark ? Themes::constDark : Themes::constLight);
-    page->setDark(dark);
-    settings->setDark(dark);
 }
 
 void MainWindow::settingsClosed(bool clearCache) {
@@ -327,6 +329,9 @@ QString MainWindow::buildUrl() {
     }
     if (KDE==desktop) {
         url+=QLatin1String("&desktop=KDE");
+    }
+    if (GNOME==desktop) {
+        url+=QLatin1String("&defaultTheme=linux/light/Adwaita&themeColor=fcfcfc");
     }
     if ((Debug::areas&Debug::JSON) || (Debug::areas&Debug::CometD)) {
         url+=QLatin1String("&debug=");
