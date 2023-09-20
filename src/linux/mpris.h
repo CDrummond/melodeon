@@ -87,8 +87,8 @@ public:
     double MinimumRate() const { return 1.0; }
     double MaximumRate() const { return 1.0; }
     bool CanControl() const { return true; }
-    bool CanPlay() const { return status.count>0 && !status.playing; }
-    bool CanPause() const { return status.count>0 && status.playing; }
+    bool CanPlay() const { return status.count>0; }
+    bool CanPause() const { return status.count>0 ; }
     bool CanSeek() const { return status.count>0 && status.duration>=0; }
     bool CanGoNext() const { return status.count>0; }
     bool CanGoPrevious() const { return status.count>0; }
