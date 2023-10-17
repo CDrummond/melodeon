@@ -20,6 +20,7 @@
  */
 
 #include "mainwindow.h"
+#include "config.h"
 #include "debug.h"
 #include "player.h"
 #include "settings.h"
@@ -43,9 +44,17 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QScreen>
 #include <QtNetwork/QAuthenticator>
+#if QT_VER>5
+#include <QtWebEngineCore/QWebEngineProfile>
+#else
 #include <QtWebEngineWidgets/QWebEngineProfile>
+#endif
 #include <QtWebEngineWidgets/QWebEngineView>
+#if QT_VER>5
+#include <QtGui/QAction>
+#else
 #include <QtWidgets/QAction>
+#endif
 #include <QtWidgets/QStackedWidget>
 
 static const QString constSettingsUrl("mska://settings");
@@ -129,10 +138,12 @@ MainWindow::MainWindow()
     connect(zoomOutAct, &QAction::triggered, this, &MainWindow::zoomOut);
     addAction(zoomOutAct);
 
+#if QT_VER<6
     QAction *settingsAct = new QAction(this);
     settingsAct->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Comma);
     connect(settingsAct, &QAction::triggered, this, &MainWindow::showSettings);
     addAction(settingsAct);
+#endif
 
     setMinimumSize(450, 500);
     if (powerManagement) {

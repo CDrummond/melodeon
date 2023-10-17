@@ -21,13 +21,19 @@
 
 #include "webenginepage.h"
 #include "tmpwebenginepage.h"
+#include "config.h"
 #include "debug.h"
 #include "settings.h"
 #include "status.h"
 #include "themes.h"
 #include <QtGui/QDesktopServices>
+#if QT_VER>5
+#include <QtWebEngineCore/QWebEngineProfile>
+#include <QtWebEngineCore/QWebEngineSettings>
+#else
 #include <QtWebEngineWidgets/QWebEngineProfile>
 #include <QtWebEngineWidgets/QWebEngineSettings>
+#endif
 
 static const QLatin1String constThemeLog("MATERIAL-THEME");
 static const QLatin1String constStatusLog("MATERIAL-STATUS");

@@ -22,8 +22,14 @@
 #ifndef WEBENGINEPAGE_H
 #define WEBENGINEPAGE_H
 
+#include "config.h"
 #include <QtCore/QMap>
+#if QT_VER>5
+#include <QtWebEngineCore/QWebEnginePage>
+#else
 #include <QtWebEngineWidgets/QWebEnginePage>
+#endif
+
 
 class Status;
 class WebEnginePage : public QWebEnginePage {

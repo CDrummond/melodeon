@@ -22,7 +22,12 @@
 #ifndef TMPWEBENGINEPAGE_H
 #define TMPWEBENGINEPAGE_H
 
+#include "config.h"
+#if QT_VER>5
+#include <QtWebEngineCore/QWebEnginePage>
+#else
 #include <QtWebEngineWidgets/QWebEnginePage>
+#endif
 
 class TmpWebEnginePage : public QWebEnginePage {
     Q_OBJECT
