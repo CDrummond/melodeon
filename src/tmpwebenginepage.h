@@ -22,8 +22,8 @@
 #ifndef TMPWEBENGINEPAGE_H
 #define TMPWEBENGINEPAGE_H
 
-#include "config.h"
-#if QT_VER>5
+#include <QtCore/QtCore>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtWebEngineCore/QWebEnginePage>
 #else
 #include <QtWebEngineWidgets/QWebEnginePage>

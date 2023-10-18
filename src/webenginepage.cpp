@@ -21,13 +21,12 @@
 
 #include "webenginepage.h"
 #include "tmpwebenginepage.h"
-#include "config.h"
 #include "debug.h"
 #include "settings.h"
 #include "status.h"
 #include "themes.h"
 #include <QtGui/QDesktopServices>
-#if QT_VER>5
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtWebEngineCore/QWebEngineProfile>
 #include <QtWebEngineCore/QWebEngineSettings>
 #else

@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName(PROJECT_NAME);
     QCoreApplication::setApplicationName(PROJECT_NAME);
     QCoreApplication::setApplicationVersion(PROJECT_VERSION);
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif

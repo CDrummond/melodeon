@@ -22,9 +22,8 @@
 #ifndef WEBENGINEPAGE_H
 #define WEBENGINEPAGE_H
 
-#include "config.h"
 #include <QtCore/QMap>
-#if QT_VER>5
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtWebEngineCore/QWebEnginePage>
 #else
 #include <QtWebEngineWidgets/QWebEnginePage>

@@ -21,14 +21,13 @@
 
 #include "settingswidget.h"
 #include "ui_settingswidget.h"
-#include "config.h"
 #include "columnresizer.h"
 #include "mainwindow.h"
 #include "serverdiscovery.h"
 #include "settings.h"
 #include <QtGui/QColor>
 #include <QtGui/QFontMetrics>
-#if QT_VER>5
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtGui/QAction>
 #else
 #include <QtWidgets/QAction>
