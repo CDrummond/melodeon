@@ -1,6 +1,7 @@
 0.3.0
 -----
 1. Update source for Qt6 compatability.
+2. Add option to use custom titlebar.
 
 0.2.2
 -----

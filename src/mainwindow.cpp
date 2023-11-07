@@ -43,6 +43,12 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QScreen>
 #include <QtNetwork/QAuthenticator>
+#ifdef Q_OS_LINUX
+#include <QtCore/QEvent>
+#include <QtGui/QCursor>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QWindow>
+#endif
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtWebEngineCore/QWebEngineProfile>
 #else
@@ -60,6 +66,8 @@ static const QString constSettingsUrl("mska://settings");
 static const QString constQuitUrl("mska://quit");
 static const int constMaxCacheSize = 1024;
 static const QLatin1String constUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
+static const int constResizeBorderSize = 1;
+static const int constTitlebarHeight = 2;
 
 enum Pages {
     SETTINGS_PAGE = 0,
@@ -149,6 +157,14 @@ MainWindow::MainWindow()
         powerManagement->setInhibitSuspend(Settings::self()->getInhibitSuspend());
         connect(powerManagement, &PowerManagement::resuming, this, &MainWindow::resuming);
     }
+
+#ifdef Q_OS_LINUX
+    if (Settings::self()->getCustomTitlebar()) {
+        setWindowFlags(Qt::FramelessWindowHint);
+        setAttribute(Qt::WA_Hover);
+        stack->setContentsMargins(constResizeBorderSize, constResizeBorderSize+constTitlebarHeight, constResizeBorderSize, constResizeBorderSize);
+    }
+#endif
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -189,6 +205,9 @@ void MainWindow::loadFinished(bool ok) {
     if (ok) {
         pageLoaded = true;
         page->setZoomFactor(Settings::self()->getZoom());
+#ifdef Q_OS_LINUX
+        update();
+#endif
     } else {
         showPage(SETTINGS_PAGE);
     }
@@ -237,10 +256,10 @@ void MainWindow::setTheme(bool dark) {
         qApp->setProperty("KDE_COLOR_SCHEME_PATH",
                           dark ? "/usr/share/color-schemes/BreezeDark.colors"
                                : "/usr/share/color-schemes/BreezeLight.colors");
-        qApp->setPalette(dark ? Themes::constDark : Themes::constLight);
-        page->setDark(dark);
-        settings->setDark(dark);
     }
+    qApp->setPalette(dark ? Themes::constDark : Themes::constLight);
+    page->setDark(dark);
+    settings->setDark(dark);
 #endif
 }
 
@@ -281,6 +300,67 @@ void MainWindow::authenticationRequired(const QUrl &requestUrl, QAuthenticator *
     authenticator->setUser(Settings::self()->getUsername());
     authenticator->setPassword(Settings::self()->getPassword());
 }
+
+#ifdef Q_OS_LINUX
+void MainWindow::resizeOrMove(const QPointF &p) {
+    Qt::Edges edges = (Qt::Edges)0;
+    if (p.x() > width() - constResizeBorderSize) {
+        edges |= Qt::RightEdge;
+    }
+    if (p.x() < constResizeBorderSize) {
+        edges |= Qt::LeftEdge;
+    }
+    if (p.y() < constResizeBorderSize) {
+        edges |= Qt::TopEdge;
+    }
+    if (p.y() > height() - constResizeBorderSize) {
+        edges |= Qt::BottomEdge;
+    }
+
+    if (edges) {
+        windowHandle()->startSystemResize(edges);
+    } else if (p.x() > constResizeBorderSize && p.x() <= width() - constResizeBorderSize && p.y() >= constResizeBorderSize && p.y() <= constTitlebarHeight + constResizeBorderSize) {
+        windowHandle()->startSystemMove();
+    }
+}
+
+bool MainWindow::event(QEvent *event) {
+    switch (event->type()) {
+        case QEvent::HoverMove:
+            changeCursorShape(static_cast<QHoverEvent *>(event)->position());
+            return true;
+        case QEvent::MouseButtonPress:
+            /* Mouse press event for mouse click */
+            resizeOrMove(static_cast<QMouseEvent *>(event)->position());
+            return true;
+        case QEvent::TouchBegin:
+        case QEvent::TouchUpdate:
+            resizeOrMove(static_cast<QTouchEvent *>(event)->points().first().position());
+            return true;
+        case QEvent::TouchEnd:
+            return true;
+        default:
+            return QWidget::event(event);
+    }
+}
+
+void MainWindow::changeCursorShape(const QPointF &p) {
+    Qt::CursorShape shape =
+        p.x() < constResizeBorderSize && p.y() < constResizeBorderSize || p.x() >= width() - constResizeBorderSize && p.y() >= height() - constResizeBorderSize
+            ? Qt::SizeFDiagCursor
+        : p.x() >= width() - constResizeBorderSize && p.y() < constResizeBorderSize || p.x() < constResizeBorderSize && p.y() >= height() - constResizeBorderSize
+            ? Qt::SizeBDiagCursor
+        : p.x() < constResizeBorderSize || p.x() >= width() - constResizeBorderSize
+            ? Qt::SizeHorCursor
+        : p.y() < constResizeBorderSize || p.y() >= height() - constResizeBorderSize
+            ? Qt::SizeVerCursor
+        : Qt::ArrowCursor;
+
+    if (cursor().shape() != shape) {
+        setCursor(shape);
+    }
+}
+#endif
 
 void MainWindow::determineDesktop() {
 #if defined Q_OS_WIN

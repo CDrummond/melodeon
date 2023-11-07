@@ -50,6 +50,9 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     resizer->addWidgetsFromLayout(ui->miscGroupBox->layout(), 0);
 #else
     REMOVE(ui->miscGroupBox);
+    REMOVE(ui->customTitlebar);
+    REMOVE(ui->customTitlebarLabel);
+    REMOVE(ui->customTitlebarNote);
 #endif
     clearCache = false;
     connect(ui->backButton, &QPushButton::clicked, this, &SettingsWidget::backClicked);
@@ -99,6 +102,9 @@ void SettingsWidget::backClicked() {
     if (ui->inhibitSuspend) {
         Settings::self()->setInhibitSuspend(ui->inhibitSuspend->isChecked());
     }
+    if (ui->customTitlebar) {
+        Settings::self()->setCustomTitlebar(ui->customTitlebar->isChecked());
+    }
     Settings::self()->save();
     emit close(clearCache);
     clearCache = false;
@@ -142,5 +148,8 @@ void SettingsWidget::update() {
     updateZoomPc(ui->zoom->value());
     if (ui->inhibitSuspend) {
         ui->inhibitSuspend->setChecked(Settings::self()->getInhibitSuspend());
+    }
+    if (ui->customTitlebar) {
+        ui->customTitlebar->setChecked(Settings::self()->getCustomTitlebar());
     }
 }

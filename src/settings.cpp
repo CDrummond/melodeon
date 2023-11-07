@@ -137,6 +137,17 @@ bool Settings::getInhibitSuspend() {
     return getBool("inhibitSuspend", false);
 }
 
+void Settings::setCustomTitlebar(bool val) {
+    if (getCustomTitlebar()!=val) {
+        setValue("customTitlebar", val);
+        modified = true;
+    }
+}
+
+bool Settings::getCustomTitlebar() const {
+    return getBool("customTitlebar", false);
+}
+
 QString Settings::getString(const QString &key, const QString &def) const {
     return contains(key) ? value(key).toString() : def;
 }

@@ -68,6 +68,12 @@ private slots:
     void timeout();
     void authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator);
 
+#ifdef Q_OS_LINUX
+    void resizeOrMove(const QPointF &p);
+    bool event(QEvent *event) override;
+    void changeCursorShape(const QPointF &p);
+#endif
+
 private:
     void determineDesktop();
     void setupProfile();

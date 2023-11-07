@@ -52,6 +52,8 @@ public:
     bool getDark();
     void setInhibitSuspend(bool val);
     bool getInhibitSuspend();
+    void setCustomTitlebar(bool val);
+    bool getCustomTitlebar() const;
 
     void save();
 

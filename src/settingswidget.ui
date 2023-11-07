@@ -408,6 +408,30 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="customTitlebarLabel">
+            <property name="text">
+             <string>Window:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="customTitlebar">
+            <property name="text">
+             <string>Use custom titlebar and window controls</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QLabel" name="customTitlebarNote">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NOTE: &lt;/span&gt;A restart is required if you change titlebar and window controls option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
