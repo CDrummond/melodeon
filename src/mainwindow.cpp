@@ -28,6 +28,7 @@
 #include "status.h"
 #include "themes.h"
 #include "webenginepage.h"
+#include "windowbuttons.h"
 #ifdef Q_OS_LINUX
 #include "mpris.h"
 #include "linuxpowermanagement.h"
@@ -44,6 +45,7 @@
 #include <QtGui/QKeySequence>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QScreen>
+#include <QtGui/QWindow>
 #include <QtNetwork/QAuthenticator>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -72,6 +74,11 @@ enum Pages {
 qreal MainWindow::constMinZoom(0.25);
 qreal MainWindow::constMaxZoom(5.0);
 qreal MainWindow::constZoomStep(0.05);
+
+static bool useConstomToolbar = false;
+bool MainWindow::customWindowbar() {
+    return useConstomToolbar;
+}
 
 MainWindow::MainWindow()
     : QMainWindow(nullptr) {
@@ -103,6 +110,7 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::status, player, &Player::statusUpdate);
     connect(page, &WebEnginePage::cover, player, &Player::setCover);
     connect(page, &QWebEnginePage::authenticationRequired, this, &MainWindow::authenticationRequired);
+    connect(page, &WebEnginePage::titlebarPressed, this, &MainWindow::titlebarPressed);
     connect(player, &Player::runCommand, page, &WebEnginePage::runCommand);
 
     stack->addWidget(settings);
@@ -157,9 +165,11 @@ MainWindow::MainWindow()
         setWindowFlags(Qt::FramelessWindowHint);
         stack->setContentsMargins(0, 0, 0, 0);
         edges[0] = new Edge(Qt::LeftEdge, 2, this);
-        edges[1] = new Edge(Qt::TopEdge, 8, this);
+        edges[1] = new Edge(Qt::TopEdge, 3, this);
         edges[2] = new Edge(Qt::RightEdge, 2, this);
-        edges[3] = new Edge(Qt::BottomEdge, 4, this);
+        edges[3] = new Edge(Qt::BottomEdge, 3, this);
+        controls = new WindowButtons(this);
+        useConstomToolbar = true;
     }
 }
 
@@ -295,77 +305,17 @@ void MainWindow::authenticationRequired(const QUrl &requestUrl, QAuthenticator *
     authenticator->setPassword(Settings::self()->getPassword());
 }
 
-/*
-void MainWindow::resizeOrMove(const QPointF &p) {
-    Qt::Edges edges;
-    if (p.x() >= width() - constResizeBorders.right()) {
-        edges |= Qt::RightEdge;
-    }
-    if (p.x() <= constResizeBorders.left()) {
-        edges |= Qt::LeftEdge;
-    }
-    if (p.y() <= constResizeBorders.top()) {
-        edges |= Qt::TopEdge;
-    }
-    if (p.y() >= height() - constResizeBorders.bottom()) {
-        edges |= Qt::BottomEdge;
-    }
-
-    if (edges) {
-        windowHandle()->startSystemResize(edges);
-    } else if (p.x() > constResizeBorders.left() && p.x() <= width() - constResizeBorders.right() && p.y() >= constResizeBorders.top() && p.y() <= constTitlebarHeight + constResizeBorders.top()) {
+void MainWindow::titlebarPressed(bool toggleMax) {
+    if (toggleMax) {
+        if (isMaximized()) {
+            showNormal();
+        } else {
+            showMaximized();
+        }
+    } else {
         windowHandle()->startSystemMove();
     }
 }
-
-bool MainWindow::event(QEvent *event) {
-    switch (event->type()) {
-        case QEvent::HoverMove:
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            changeCursorShape(static_cast<QHoverEvent *>(event)->position());
-#else
-            changeCursorShape(static_cast<QHoverEvent *>(event)->pos());
-#endif
-            return true;
-        case QEvent::MouseButtonPress:
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            resizeOrMove(static_cast<QMouseEvent *>(event)->position());
-#else
-            resizeOrMove(static_cast<QMouseEvent *>(event)->pos());
-#endif
-            return true;
-        case QEvent::TouchBegin:
-        case QEvent::TouchUpdate:
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            resizeOrMove(static_cast<QTouchEvent *>(event)->points().first().position());
-#else
-            resizeOrMove(static_cast<QTouchEvent *>(event)->touchPoints().first().pos());
-#endif
-            return true;
-        case QEvent::TouchEnd:
-            return true;
-        default:
-            return QWidget::event(event);
-    }
-}
-
-void MainWindow::changeCursorShape(const QPointF &p) {
-    Qt::CursorShape shape =
-        p.x() < constResizeBorders.left() && p.y() < constResizeBorders.top() || p.x() >= width() - constResizeBorders.right() && p.y() >= height() - constResizeBorders.bottom()
-            ? Qt::SizeFDiagCursor
-        : p.x() >= width() - constResizeBorders.right() && p.y() < constResizeBorders.top() || p.x() < constResizeBorders.left() && p.y() >= height() - constResizeBorders.bottom()
-            ? Qt::SizeBDiagCursor
-        : p.x() < constResizeBorders.left() || p.x() >= width() - constResizeBorders.right()
-            ? Qt::SizeHorCursor
-        : p.y() < constResizeBorders.top() || p.y() >= height() - constResizeBorders.bottom()
-            ? Qt::SizeVerCursor
-        : Qt::ArrowCursor;
-
-    if (cursor().shape() != shape) {
-        setCursor(shape);
-    }
-}
-*/
 
 bool MainWindow::event(QEvent *event) {
     if (QEvent::Resize==event->type()) {
@@ -373,6 +323,7 @@ bool MainWindow::event(QEvent *event) {
         edges[1]->update();
         edges[2]->update();
         edges[3]->update();
+        controls->update();
     }
     return QWidget::event(event);
 }
@@ -429,6 +380,9 @@ QString MainWindow::buildUrl() {
 #endif
                   QLatin1String("&appSettings=")+constSettingsUrl +
                   QLatin1String("&appQuit=")+constQuitUrl;
+    if (Settings::self()->getCustomTitlebar()) {
+        url+="&nativeTitlebar=c";
+    }
     if (KDE==desktop || Windows==desktop) {
         url+=QLatin1String("&altBtnLayout=true");
     }

@@ -19,26 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef EDGE_H
-#define EDGE_H
+#ifndef WINDOWBUTTONS_H
+#define WINDOWBUTTONS_H
 
 #include <QtWidgets/QWidget>
 
-class Edge : public QWidget {
+class QToolButton;
+
+class WindowButtons : public QWidget {
+    Q_OBJECT
+
 public:
-    Edge(Qt::Edges e, int sz, QWidget *p);
+    WindowButtons(QWidget *p);
 
-    bool event(QEvent *ev) override;
+    static int space();
     void update();
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
-    void resizeOrMoveWindow(const QPointF &p);
-    void changeCursorShape(const QPointF &p);
-
-private:
-    Qt::Edges edge;
-    int size;
+    QToolButton *min;
+    QToolButton *max;
+    QToolButton *close;
 };
-
 #endif

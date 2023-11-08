@@ -38,6 +38,7 @@ static const QLatin1String constThemeLog("MATERIAL-THEME");
 static const QLatin1String constStatusLog("MATERIAL-STATUS");
 static const QLatin1String constCoverLog("MATERIAL-COVER");
 static const QLatin1String constPlayerLog("MATERIAL-PLAYER");
+static const QLatin1String constTitlebarLog("MATERIAL-TITLEBAR");
 static const QLatin1String constName("NAME");
 static const QLatin1String constPlaying("PLAYING");
 static const QLatin1String constCount("COUNT");
@@ -52,6 +53,7 @@ static const QLatin1String constUrl("URL");
 static const QLatin1String constShuffle("SHUFFLE");
 static const QLatin1String constRepeat("REPEAT");
 static const QLatin1String constVolume("VOLUME");
+static const QLatin1String constOp("OP");
 
 WebEnginePage::WebEnginePage(QObject *parent)
     : QWebEnginePage(QWebEngineProfile::defaultProfile(), parent) {
@@ -94,6 +96,8 @@ void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMe
         handleCover(parse(message));
     } else if (message.startsWith(constPlayerLog)) {
         handlePlayer(parse(message));
+    } else if (message.startsWith(constTitlebarLog)) {
+        handleTitlebar(parse(message));
     }
 }
 
@@ -158,4 +162,7 @@ void WebEnginePage::handlePlayer(const QMap<QString, QString> &params) {
     emit player(params[constId], params[constName]);
 }
 
+void WebEnginePage::handleTitlebar(const QMap<QString, QString> &params) {
+    emit titlebarPressed(params[constOp]=="MAX");
+}
 // TODO: Auth request? void QWebEnginePage::authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator)

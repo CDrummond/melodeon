@@ -37,7 +37,9 @@ Edge::Edge(Qt::Edges e, int sz, QWidget *p)
 }
 
 bool Edge::event(QEvent *ev) {
-    qWarning() << edge << ev->type();
+    if (QEvent::Paint!=ev->type() && QEvent::WindowActivate!=ev->type()&& QEvent::WindowDeactivate!=ev->type()) {
+        qWarning() << edge << ev->type();
+    }
 
     switch (ev->type()) {
         case QEvent::Enter:

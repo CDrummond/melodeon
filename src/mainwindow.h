@@ -32,6 +32,7 @@ class WebEnginePage;
 class Player;
 class PowerManagement;
 class Edge;
+class WindowButtons;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -47,6 +48,8 @@ public:
     static qreal constMinZoom;
     static qreal constMaxZoom;
     static qreal constZoomStep;
+
+    static bool customWindowbar();
 
     explicit MainWindow();
     void closeEvent(QCloseEvent *event) override;
@@ -68,6 +71,7 @@ private slots:
     void settingsClosed(bool clearCache);
     void timeout();
     void authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator);
+    void titlebarPressed(bool toggleMax);
 
 private:
     //void resizeOrMove(const QPointF &p);
@@ -93,6 +97,7 @@ private:
     QString currentUrl;
     QString urlTitle;
     Edge *edges[4];
+    WindowButtons *controls;
 };
 
 #endif // MAINWINDOW_H
