@@ -303,7 +303,7 @@ void MainWindow::authenticationRequired(const QUrl &requestUrl, QAuthenticator *
 
 #ifdef Q_OS_LINUX
 void MainWindow::resizeOrMove(const QPointF &p) {
-    Qt::Edges edges = (Qt::Edges)0;
+    Qt::Edges edges;
     if (p.x() > width() - constResizeBorderSize) {
         edges |= Qt::RightEdge;
     }
@@ -327,15 +327,26 @@ void MainWindow::resizeOrMove(const QPointF &p) {
 bool MainWindow::event(QEvent *event) {
     switch (event->type()) {
         case QEvent::HoverMove:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             changeCursorShape(static_cast<QHoverEvent *>(event)->position());
+#else
+            changeCursorShape(static_cast<QHoverEvent *>(event)->pos());
+#endif
             return true;
         case QEvent::MouseButtonPress:
-            /* Mouse press event for mouse click */
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             resizeOrMove(static_cast<QMouseEvent *>(event)->position());
+#else
+            resizeOrMove(static_cast<QMouseEvent *>(event)->pos());
+#endif
             return true;
         case QEvent::TouchBegin:
         case QEvent::TouchUpdate:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             resizeOrMove(static_cast<QTouchEvent *>(event)->points().first().position());
+#else
+            resizeOrMove(static_cast<QTouchEvent *>(event)->touchPoints().first().pos());
+#endif
             return true;
         case QEvent::TouchEnd:
             return true;
