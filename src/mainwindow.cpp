@@ -63,8 +63,6 @@ static const QString constSettingsUrl("mska://settings");
 static const QString constQuitUrl("mska://quit");
 static const int constMaxCacheSize = 1024;
 static const QLatin1String constUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
-static const QMargins constResizeBorders(1, 1, 1, 1);
-static const int constTitlebarHeight = 4;
 
 enum Pages {
     SETTINGS_PAGE = 0,
@@ -157,9 +155,7 @@ MainWindow::MainWindow()
 
     if (Settings::self()->getCustomTitlebar()) {
         setWindowFlags(Qt::FramelessWindowHint);
-        QMargins tbar(constResizeBorders);
-        tbar.setTop(tbar.top()+constTitlebarHeight);
-        stack->setContentsMargins(tbar);
+        stack->setContentsMargins(0, 0, 0, 0);
         edges[0] = new Edge(Qt::LeftEdge, this);
         edges[1] = new Edge(Qt::TopEdge, this);
         edges[2] = new Edge(Qt::RightEdge, this);
