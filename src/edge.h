@@ -35,7 +35,7 @@ public:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
-    void resizeWindow(const QPointF &p);
+    void resizeOrMoveWindow(const QPointF &p);
     void changeCursorShape(const QPointF &p);
 
 private:

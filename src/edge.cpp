@@ -53,17 +53,17 @@ bool Edge::event(QEvent *ev) {
             break;
         case QEvent::MouseButtonPress:
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            resizeWindow(static_cast<QMouseEvent *>(ev)->position());
+            resizeOrMoveWindow(static_cast<QMouseEvent *>(ev)->position());
 #else
-            resizeWindow(static_cast<QMouseEvent *>(ev)->pos());
+            resizeOrMoveWindow(static_cast<QMouseEvent *>(ev)->pos());
 #endif
             return true;
         case QEvent::TouchBegin:
         case QEvent::TouchUpdate:
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            resizeWindow(static_cast<QTouchEvent *>(ev)->points().first().position());
+            resizeOrMoveWindow(static_cast<QTouchEvent *>(ev)->points().first().position());
 #else
-            resizeWindow(static_cast<QTouchEvent *>(ev)->touchPoints().first().pos());
+            resizeOrMoveWindow(static_cast<QTouchEvent *>(ev)->touchPoints().first().pos());
 #endif
             return true;
         case QEvent::TouchEnd:
@@ -105,8 +105,12 @@ void Edge::mouseDoubleClickEvent(QMouseEvent *event) {
     }
 }
 
-void Edge::resizeWindow(const QPointF &p) {
+void Edge::resizeOrMoveWindow(const QPointF &p) {
     Qt::Edges edges = edge;
+    if (edge==Qt::TopEdge && p.y()>2 && p.x()>size && p.x()<width()-size) {
+        qobject_cast<QWidget *>(parent())->windowHandle()->startSystemMove();
+        return;
+    }
     if (edge==Qt::TopEdge || edge==Qt::BottomEdge) {
         if (p.x() >= width() - size) {
             edges |= Qt::RightEdge;
@@ -128,7 +132,9 @@ void Edge::resizeWindow(const QPointF &p) {
 void Edge::changeCursorShape(const QPointF &p) {
     qWarning() << edge << p;
         Qt::CursorShape shape =
-        p.x()<0 || p.y()<0 || p.x()>width() || p.y()>height()
+        edge==Qt::TopEdge && p.y()>2 && p.x()>size && p.x()<width()-size
+            ? Qt::SizeAllCursor
+        : p.x()<0 || p.y()<0 || p.x()>width() || p.y()>height()
             ? Qt::ArrowCursor
         : p.x() < size && p.y() < size || p.x() >= width() - size && p.y() >= height() - size
             ? Qt::SizeFDiagCursor
