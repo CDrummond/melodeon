@@ -28,15 +28,11 @@
 
 #include <QtCore/QDebug>
 
-static int constSize = 4;
-
-Edge::Edge(Qt::Edges e, QWidget *p)
+Edge::Edge(Qt::Edges e, int sz, QWidget *p)
     : QWidget(p)
-    , edge(e) {
+    , edge(e)
+    , size(sz) {
     //setAttribute(Qt::WA_Hover);
-    QPalette pal = palette();
-    pal.setColor(QPalette::Window, QColor(255, 0, 0));
-    setPalette(pal);
     update();
 }
 
@@ -81,20 +77,20 @@ void Edge::update() {
 qWarning() << ps;
     switch (edge) {
         case Qt::LeftEdge:
-            resize(constSize, ps.height());
+            resize(size, ps.height());
             move(0, 0);
             break;
         case Qt::TopEdge:
-            resize(ps.width()-(2*constSize), constSize);
-            move(constSize, 0);
+            resize(ps.width()-(2*size), size);
+            move(size, 0);
             break;
         case Qt::RightEdge:
-            resize(constSize, ps.height());
-            move(ps.width()-constSize, 0);
+            resize(size, ps.height());
+            move(ps.width()-size, 0);
             break;
         case Qt::BottomEdge:
-            resize(ps.width()-(2*constSize), constSize);
-            move(constSize, ps.height()-constSize);
+            resize(ps.width()-(2*size), size);
+            move(size, ps.height()-size);
     }
 }
 
@@ -112,17 +108,17 @@ void Edge::mouseDoubleClickEvent(QMouseEvent *event) {
 void Edge::resizeWindow(const QPointF &p) {
     Qt::Edges edges = edge;
     if (edge==Qt::TopEdge || edge==Qt::BottomEdge) {
-        if (p.x() >= width() - constSize) {
+        if (p.x() >= width() - size) {
             edges |= Qt::RightEdge;
         }
-        if (p.x() <= constSize) {
+        if (p.x() <= size) {
             edges |= Qt::LeftEdge;
         }
     } else {
-        if (p.y() <= constSize) {
+        if (p.y() <= size) {
             edges |= Qt::TopEdge;
         }
-        if (p.y() >= height() - constSize) {
+        if (p.y() >= height() - size) {
             edges |= Qt::BottomEdge;
         }
     }
@@ -134,13 +130,13 @@ void Edge::changeCursorShape(const QPointF &p) {
         Qt::CursorShape shape =
         p.x()<0 || p.y()<0 || p.x()>width() || p.y()>height()
             ? Qt::ArrowCursor
-        : p.x() < constSize && p.y() < constSize || p.x() >= width() - constSize && p.y() >= height() - constSize
+        : p.x() < size && p.y() < size || p.x() >= width() - size && p.y() >= height() - size
             ? Qt::SizeFDiagCursor
-        : p.x() >= width() - constSize && p.y() < constSize || p.x() < constSize && p.y() >= height() - constSize
+        : p.x() >= width() - size && p.y() < size || p.x() < size && p.y() >= height() - size
             ? Qt::SizeBDiagCursor
-        : p.x() < constSize || p.x() >= width() - constSize
+        : p.x() < size || p.x() >= width() - size
             ? Qt::SizeHorCursor
-        : p.y() < constSize || p.y() >= height() - constSize
+        : p.y() < size || p.y() >= height() - size
             ? Qt::SizeVerCursor
         : Qt::ArrowCursor;
 

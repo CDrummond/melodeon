@@ -28,7 +28,7 @@ class Edge : public QWidget {
     Q_OBJECT
 
 public:
-    Edge(Qt::Edges e, QWidget *p);
+    Edge(Qt::Edges e, int sz, QWidget *p);
 
     bool event(QEvent *ev) override;
     void update();
@@ -40,6 +40,7 @@ private:
 
 private:
     Qt::Edges edge;
+    int size;
 };
 
 #endif

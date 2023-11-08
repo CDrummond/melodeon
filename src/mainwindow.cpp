@@ -156,10 +156,10 @@ MainWindow::MainWindow()
     if (Settings::self()->getCustomTitlebar()) {
         setWindowFlags(Qt::FramelessWindowHint);
         stack->setContentsMargins(0, 0, 0, 0);
-        edges[0] = new Edge(Qt::LeftEdge, this);
-        edges[1] = new Edge(Qt::TopEdge, this);
-        edges[2] = new Edge(Qt::RightEdge, this);
-        edges[3] = new Edge(Qt::BottomEdge, this);
+        edges[0] = new Edge(Qt::LeftEdge, 2, this);
+        edges[1] = new Edge(Qt::TopEdge, 8, this);
+        edges[2] = new Edge(Qt::RightEdge, 2, this);
+        edges[3] = new Edge(Qt::BottomEdge, 4, this);
     }
 }
 
