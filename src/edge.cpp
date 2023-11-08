@@ -98,6 +98,17 @@ qWarning() << ps;
     }
 }
 
+void Edge::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (edge==Qt::TopEdge) {
+        QWidget *pw = qobject_cast<QWidget *>(parent());
+        if (pw->isMaximized()) {
+            pw->showNormal();
+        } else {
+            pw->showMaximized();
+        }
+    }
+}
+
 void Edge::resizeWindow(const QPointF &p) {
     Qt::Edges edges = edge;
     if (edge==Qt::TopEdge || edge==Qt::BottomEdge) {

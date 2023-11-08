@@ -32,6 +32,7 @@ public:
 
     bool event(QEvent *ev) override;
     void update();
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
     void resizeWindow(const QPointF &p);
