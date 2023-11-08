@@ -24,11 +24,8 @@
 #include <QtCore/QEvent>
 #include <QtGui/QCursor>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QColor>
-#include <QtGui/QPalette>
 #include <QtGui/QWindow>
 
-#include <QtGui/QPainter>
 #include <QtCore/QDebug>
 
 static int constSize = 4;
@@ -48,7 +45,6 @@ bool Edge::event(QEvent *ev) {
 
     switch (ev->type()) {
         case QEvent::Enter:
-        case QEvent::Leave:
         case QEvent::HoverMove:
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             changeCursorShape(static_cast<QHoverEvent *>(ev)->position());
@@ -78,27 +74,6 @@ bool Edge::event(QEvent *ev) {
             return true;
     }
     return QWidget::event(ev);
-}
-
-void Edge::paintEvent(QPaintEvent *e)
-{
-    QPainter p(this);
-    QSize sz=size();
-    QColor col;
-    switch (edge) {
-        case Qt::LeftEdge:
-            col=QColor(255, 0, 0);
-            break;
-        case Qt::TopEdge:
-            col=QColor(0, 255, 0);
-            break;
-        case Qt::RightEdge:
-            col=QColor(0, 0, 255);
-            break;
-        case Qt::BottomEdge:
-            col=QColor(255, 255, 0);
-    }
-    p.fillRect(0, 0, sz.width(), sz.height(), col);
 }
 
 void Edge::update() {

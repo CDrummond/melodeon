@@ -31,7 +31,6 @@ public:
     Edge(Qt::Edges e, QWidget *p);
 
     bool event(QEvent *ev) override;
-    void paintEvent(QPaintEvent *e) override;
     void update();
 
 private:
