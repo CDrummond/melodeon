@@ -31,6 +31,7 @@ class SettingsWidget;
 class WebEnginePage;
 class Player;
 class PowerManagement;
+class Edge;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -68,13 +69,10 @@ private slots:
     void timeout();
     void authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator);
 
-#ifdef Q_OS_LINUX
-    void resizeOrMove(const QPointF &p);
-    bool event(QEvent *event) override;
-    void changeCursorShape(const QPointF &p);
-#endif
-
 private:
+    //void resizeOrMove(const QPointF &p);
+    bool event(QEvent *event) override;
+    //void changeCursorShape(const QPointF &p);
     void determineDesktop();
     void setupProfile();
     void showPage(int index);
@@ -94,6 +92,7 @@ private:
     bool pageLoaded;
     QString currentUrl;
     QString urlTitle;
+    Edge *edges[4];
 };
 
 #endif // MAINWINDOW_H

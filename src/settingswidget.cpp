@@ -50,9 +50,6 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     resizer->addWidgetsFromLayout(ui->miscGroupBox->layout(), 0);
 #else
     REMOVE(ui->miscGroupBox);
-    REMOVE(ui->customTitlebar);
-    REMOVE(ui->customTitlebarLabel);
-    REMOVE(ui->customTitlebarNote);
 #endif
     clearCache = false;
     connect(ui->backButton, &QPushButton::clicked, this, &SettingsWidget::backClicked);

@@ -42,6 +42,7 @@ add_subdirectory(src/3rdparty/singleapplication)
 
 set(PROJECT_SOURCES
     src/debug.cpp
+    src/edge.cpp
     src/main.cpp
     src/mainwindow.cpp
     src/player.cpp

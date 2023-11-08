@@ -21,6 +21,7 @@
 
 #include "mainwindow.h"
 #include "debug.h"
+#include "edge.h"
 #include "player.h"
 #include "settings.h"
 #include "settingswidget.h"
@@ -33,6 +34,7 @@
 #endif
 #include <QtCore/QByteArray>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
 #include <QtCore/QList>
 #include <QtCore/QSet>
 #include <QtCore/QSettings>
@@ -43,12 +45,7 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QScreen>
 #include <QtNetwork/QAuthenticator>
-#ifdef Q_OS_LINUX
-#include <QtCore/QEvent>
-#include <QtGui/QCursor>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWindow>
-#endif
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtWebEngineCore/QWebEngineProfile>
 #else
@@ -66,8 +63,8 @@ static const QString constSettingsUrl("mska://settings");
 static const QString constQuitUrl("mska://quit");
 static const int constMaxCacheSize = 1024;
 static const QLatin1String constUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
-static const int constResizeBorderSize = 1;
-static const int constTitlebarHeight = 2;
+static const QMargins constResizeBorders(1, 1, 1, 1);
+static const int constTitlebarHeight = 4;
 
 enum Pages {
     SETTINGS_PAGE = 0,
@@ -158,13 +155,16 @@ MainWindow::MainWindow()
         connect(powerManagement, &PowerManagement::resuming, this, &MainWindow::resuming);
     }
 
-#ifdef Q_OS_LINUX
     if (Settings::self()->getCustomTitlebar()) {
         setWindowFlags(Qt::FramelessWindowHint);
-        setAttribute(Qt::WA_Hover);
-        stack->setContentsMargins(constResizeBorderSize, constResizeBorderSize+constTitlebarHeight, constResizeBorderSize, constResizeBorderSize);
+        QMargins tbar(constResizeBorders);
+        tbar.setTop(tbar.top()+constTitlebarHeight);
+        stack->setContentsMargins(tbar);
+        edges[0] = new Edge(Qt::LeftEdge, this);
+        edges[1] = new Edge(Qt::TopEdge, this);
+        edges[2] = new Edge(Qt::RightEdge, this);
+        edges[3] = new Edge(Qt::BottomEdge, this);
     }
-#endif
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -205,9 +205,7 @@ void MainWindow::loadFinished(bool ok) {
     if (ok) {
         pageLoaded = true;
         page->setZoomFactor(Settings::self()->getZoom());
-#ifdef Q_OS_LINUX
         update();
-#endif
     } else {
         showPage(SETTINGS_PAGE);
     }
@@ -301,25 +299,25 @@ void MainWindow::authenticationRequired(const QUrl &requestUrl, QAuthenticator *
     authenticator->setPassword(Settings::self()->getPassword());
 }
 
-#ifdef Q_OS_LINUX
+/*
 void MainWindow::resizeOrMove(const QPointF &p) {
     Qt::Edges edges;
-    if (p.x() > width() - constResizeBorderSize) {
+    if (p.x() >= width() - constResizeBorders.right()) {
         edges |= Qt::RightEdge;
     }
-    if (p.x() < constResizeBorderSize) {
+    if (p.x() <= constResizeBorders.left()) {
         edges |= Qt::LeftEdge;
     }
-    if (p.y() < constResizeBorderSize) {
+    if (p.y() <= constResizeBorders.top()) {
         edges |= Qt::TopEdge;
     }
-    if (p.y() > height() - constResizeBorderSize) {
+    if (p.y() >= height() - constResizeBorders.bottom()) {
         edges |= Qt::BottomEdge;
     }
 
     if (edges) {
         windowHandle()->startSystemResize(edges);
-    } else if (p.x() > constResizeBorderSize && p.x() <= width() - constResizeBorderSize && p.y() >= constResizeBorderSize && p.y() <= constTitlebarHeight + constResizeBorderSize) {
+    } else if (p.x() > constResizeBorders.left() && p.x() <= width() - constResizeBorders.right() && p.y() >= constResizeBorders.top() && p.y() <= constTitlebarHeight + constResizeBorders.top()) {
         windowHandle()->startSystemMove();
     }
 }
@@ -357,13 +355,13 @@ bool MainWindow::event(QEvent *event) {
 
 void MainWindow::changeCursorShape(const QPointF &p) {
     Qt::CursorShape shape =
-        p.x() < constResizeBorderSize && p.y() < constResizeBorderSize || p.x() >= width() - constResizeBorderSize && p.y() >= height() - constResizeBorderSize
+        p.x() < constResizeBorders.left() && p.y() < constResizeBorders.top() || p.x() >= width() - constResizeBorders.right() && p.y() >= height() - constResizeBorders.bottom()
             ? Qt::SizeFDiagCursor
-        : p.x() >= width() - constResizeBorderSize && p.y() < constResizeBorderSize || p.x() < constResizeBorderSize && p.y() >= height() - constResizeBorderSize
+        : p.x() >= width() - constResizeBorders.right() && p.y() < constResizeBorders.top() || p.x() < constResizeBorders.left() && p.y() >= height() - constResizeBorders.bottom()
             ? Qt::SizeBDiagCursor
-        : p.x() < constResizeBorderSize || p.x() >= width() - constResizeBorderSize
+        : p.x() < constResizeBorders.left() || p.x() >= width() - constResizeBorders.right()
             ? Qt::SizeHorCursor
-        : p.y() < constResizeBorderSize || p.y() >= height() - constResizeBorderSize
+        : p.y() < constResizeBorders.top() || p.y() >= height() - constResizeBorders.bottom()
             ? Qt::SizeVerCursor
         : Qt::ArrowCursor;
 
@@ -371,7 +369,17 @@ void MainWindow::changeCursorShape(const QPointF &p) {
         setCursor(shape);
     }
 }
-#endif
+*/
+
+bool MainWindow::event(QEvent *event) {
+    if (QEvent::Resize==event->type()) {
+        edges[0]->update();
+        edges[1]->update();
+        edges[2]->update();
+        edges[3]->update();
+    }
+    return QWidget::event(event);
+}
 
 void MainWindow::determineDesktop() {
 #if defined Q_OS_WIN
