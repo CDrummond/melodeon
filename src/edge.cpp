@@ -33,7 +33,7 @@ Edge::Edge(Qt::Edges e, int sz, QWidget *p)
     : QWidget(p)
     , edge(e)
     , size(sz) {
-    //setAttribute(Qt::WA_Hover);
+    setAttribute(Qt::WA_Hover);
     update();
 }
 
