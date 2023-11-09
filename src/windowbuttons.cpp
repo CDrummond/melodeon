@@ -33,9 +33,6 @@ static void configButton(QToolButton *b, const QColor &color, const char *text) 
     b->setText(text);
     QPalette pal = b->palette();
     pal.setColor(QPalette::Button, color);
-    QColor textColor = pal.color(QPalette::ButtonText);
-    textColor.setAlphaF(0.5);
-    pal.setColor(QPalette::ButtonText, textColor);
     b->setPalette(pal);
 }
 
@@ -46,9 +43,9 @@ WindowButtons::WindowButtons(QWidget *p)
     max = new QToolButton(this);
     close = new QToolButton(this);
 
-    configButton(min, Qt::yellow, "-");
-    configButton(max, Qt::green, "+");
-    configButton(close, Qt::red, "x");
+    configButton(min, QColor(255, 153, 0), "-");
+    configButton(max, QColor(51, 204, 51), "+");
+    configButton(close, QColor(255, 12, 12), "x");
 
     lay->setSpacing(constSpacing);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
