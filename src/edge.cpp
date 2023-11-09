@@ -27,8 +27,6 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWindow>
 
-#include <QtCore/QDebug>
-
 Edge::Edge(Qt::Edges e, int sz, QWidget *p)
     : QWidget(p)
     , edge(e)
@@ -38,10 +36,6 @@ Edge::Edge(Qt::Edges e, int sz, QWidget *p)
 }
 
 bool Edge::event(QEvent *ev) {
-    if (QEvent::Paint!=ev->type() && QEvent::WindowActivate!=ev->type()&& QEvent::WindowDeactivate!=ev->type()) {
-        qWarning() << edge << ev->type();
-    }
-
     switch (ev->type()) {
         case QEvent::Enter:
         case QEvent::HoverMove:
@@ -77,7 +71,6 @@ bool Edge::event(QEvent *ev) {
 
 void Edge::update() {
     QSize ps = qobject_cast<QWidget *>(parent())->size();
-qWarning() << ps;
     switch (edge) {
         case Qt::LeftEdge:
             resize(size, ps.height());
@@ -133,7 +126,6 @@ void Edge::resizeOrMoveWindow(const QPointF &p) {
 }
 
 void Edge::changeCursorShape(const QPointF &p) {
-    qWarning() << edge << p;
         Qt::CursorShape shape =
         edge==Qt::TopEdge && p.y()>2 && p.x()>size && p.x()<width()-size
             ? Qt::SizeAllCursor

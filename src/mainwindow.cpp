@@ -351,7 +351,6 @@ void MainWindow::setupProfile() {
     profile->setHttpCacheMaximumSize(constMaxCacheSize*1024*1024);
     profile->setHttpUserAgent(constUserAgent);
     profile->setHttpCacheType(QWebEngineProfile::DiskHttpCache);
-    qWarning() << "NAME" << profile->storageName();
 }
 
 void MainWindow::showPage(int index) {

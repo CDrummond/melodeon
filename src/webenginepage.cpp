@@ -86,7 +86,6 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Nav
 
 void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) {
     DBUG_JS << level << lineNumber << sourceID << message;
-qWarning() << message;
     if (message.startsWith(constThemeLog)) {
         handleTheme(parse(message));
     } else if (message.startsWith(constStatusLog)) {
