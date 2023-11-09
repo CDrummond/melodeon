@@ -27,10 +27,8 @@
 #include "themes.h"
 #include <QtGui/QDesktopServices>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <QtWebEngineCore/QWebEngineProfile>
 #include <QtWebEngineCore/QWebEngineSettings>
 #else
-#include <QtWebEngineWidgets/QWebEngineProfile>
 #include <QtWebEngineWidgets/QWebEngineSettings>
 #endif
 
@@ -55,12 +53,13 @@ static const QLatin1String constRepeat("REPEAT");
 static const QLatin1String constVolume("VOLUME");
 static const QLatin1String constOp("OP");
 
-WebEnginePage::WebEnginePage(QObject *parent)
-    : QWebEnginePage(QWebEngineProfile::defaultProfile(), parent) {
+WebEnginePage::WebEnginePage(QWebEngineProfile *profile, QObject *parent)
+    : QWebEnginePage(profile, parent) {
     QObject::connect(this, &QWebEnginePage::featurePermissionRequested,
                      [&] (const QUrl &origin, QWebEnginePage::Feature feature) {
-                         if (feature != QWebEnginePage::Notifications)
+                         if (feature != QWebEnginePage::Notifications) {
                              return;
+                         }
                          this->setFeaturePermission(origin, feature, QWebEnginePage::PermissionGrantedByUser);
                      });
     qRegisterMetaType<Status>("Status");
@@ -87,7 +86,7 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Nav
 
 void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) {
     DBUG_JS << level << lineNumber << sourceID << message;
-
+qWarning() << message;
     if (message.startsWith(constThemeLog)) {
         handleTheme(parse(message));
     } else if (message.startsWith(constStatusLog)) {

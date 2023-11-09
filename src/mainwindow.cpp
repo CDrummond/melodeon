@@ -97,7 +97,7 @@ MainWindow::MainWindow()
     stack = new QStackedWidget(this);
     settings = new SettingsWidget(this);
     web = new QWebEngineView(stack);
-    page = new WebEnginePage(web);
+    page = new WebEnginePage(profile, web);
     setTheme(Settings::self()->getDark());
     web->setPage(page);
     loadUrl(buildUrl());
@@ -189,7 +189,7 @@ void MainWindow::showSettings() {
 
 void MainWindow::reload() {
     web->stop();
-    QWebEngineProfile::defaultProfile()->clearHttpCache();
+    profile->clearHttpCache();
     QTimer::singleShot(500, web, &QWebEngineView::reload);
 }
 
@@ -277,7 +277,7 @@ void MainWindow::settingsClosed(bool clearCache) {
     if (clearCache || !pageLoaded) {
         web->stop();
         if (clearCache) {
-            QWebEngineProfile::defaultProfile()->clearHttpCache();
+            profile->clearHttpCache();
         }
         QString url = buildUrl();
         if (url!=currentUrl) {
@@ -347,8 +347,11 @@ void MainWindow::determineDesktop() {
 }
 
 void MainWindow::setupProfile() {
-    QWebEngineProfile::defaultProfile()->setHttpCacheMaximumSize(constMaxCacheSize*1024*1024);
-    QWebEngineProfile::defaultProfile()->setHttpUserAgent(constUserAgent);
+    profile = new QWebEngineProfile("Melodeon", this);
+    profile->setHttpCacheMaximumSize(constMaxCacheSize*1024*1024);
+    profile->setHttpUserAgent(constUserAgent);
+    profile->setHttpCacheType(QWebEngineProfile::DiskHttpCache);
+    qWarning() << "NAME" << profile->storageName();
 }
 
 void MainWindow::showPage(int index) {

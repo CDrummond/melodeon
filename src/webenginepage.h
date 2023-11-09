@@ -31,10 +31,11 @@
 
 
 class Status;
+
 class WebEnginePage : public QWebEnginePage {
     Q_OBJECT
 public:
-    explicit WebEnginePage(QObject *parent = nullptr);
+    explicit WebEnginePage(QWebEngineProfile *profile, QObject *parent = nullptr);
 
     void setDark(bool dark);
     bool acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) override;

@@ -27,6 +27,7 @@
 class QAuthenticator;
 class QStackedWidget;
 class QWebEngineView;
+class QWebEngineProfile;
 class SettingsWidget;
 class WebEnginePage;
 class Player;
@@ -92,6 +93,7 @@ private:
     QStackedWidget *stack;
     SettingsWidget *settings;
     WebEnginePage *page;
+    QWebEngineProfile *profile;
     QWebEngineView *web;
     bool pageLoaded;
     QString currentUrl;
