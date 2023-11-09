@@ -43,6 +43,7 @@ private slots:
     void clearCacheClicked();
     void serverDiscovered(const QString &name, const QString &addr, quint16 port);
     void updateZoomPc(int val);
+    bool eventFilter(QObject *watched, QEvent *e) override;
 
 signals:
     void close(bool clearCache);

@@ -82,6 +82,8 @@ bool MainWindow::customWindowbar() {
 
 MainWindow::MainWindow()
     : QMainWindow(nullptr) {
+    useConstomToolbar = Settings::self()->getCustomTitlebar();
+
 #ifdef Q_OS_LINUX
     player = new Mpris(this);
     powerManagement = new LinuxPowerManagement(player);
@@ -161,7 +163,7 @@ MainWindow::MainWindow()
         connect(powerManagement, &PowerManagement::resuming, this, &MainWindow::resuming);
     }
 
-    if (Settings::self()->getCustomTitlebar()) {
+    if (useConstomToolbar) {
         setWindowFlags(Qt::FramelessWindowHint);
         stack->setContentsMargins(0, 0, 0, 0);
         edges[0] = new Edge(Qt::LeftEdge, 2, this);
@@ -169,7 +171,6 @@ MainWindow::MainWindow()
         edges[2] = new Edge(Qt::RightEdge, 2, this);
         edges[3] = new Edge(Qt::BottomEdge, 3, this);
         controls = new WindowButtons(this);
-        useConstomToolbar = true;
     }
 }
 

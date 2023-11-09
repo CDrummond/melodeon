@@ -23,6 +23,7 @@
 #include "config.h"
 #include <QtCore/QEvent>
 #include <QtGui/QCursor>
+#include <QtGui/QGuiApplication>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWindow>
 
@@ -110,7 +111,7 @@ void Edge::mouseDoubleClickEvent(QMouseEvent *event) {
 void Edge::resizeOrMoveWindow(const QPointF &p) {
     Qt::Edges edges = edge;
     if (edge==Qt::TopEdge && p.y()>2 && p.x()>size && p.x()<width()-size) {
-        qobject_cast<QWidget *>(parent())->windowHandle()->startSystemMove();
+        QGuiApplication::focusWindow()->startSystemMove();
         return;
     }
     if (edge==Qt::TopEdge || edge==Qt::BottomEdge) {
@@ -128,7 +129,7 @@ void Edge::resizeOrMoveWindow(const QPointF &p) {
             edges |= Qt::BottomEdge;
         }
     }
-    qobject_cast<QWidget *>(parent())->windowHandle()->startSystemResize(edges);
+    QGuiApplication::focusWindow()->startSystemResize(edges);
 }
 
 void Edge::changeCursorShape(const QPointF &p) {

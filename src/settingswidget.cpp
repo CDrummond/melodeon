@@ -27,6 +27,7 @@
 #include "settings.h"
 #include <QtGui/QColor>
 #include <QtGui/QFontMetrics>
+#include <QtGui/QWindow>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtGui/QAction>
 #else
@@ -77,6 +78,9 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     closeAct->setShortcut(Qt::Key_Escape);
     connect(closeAct, &QAction::triggered, this, &SettingsWidget::backClicked);
     addAction(closeAct);
+    if (MainWindow::customWindowbar()) {
+        ui->toolbar->installEventFilter(this);
+    }
 }
 
 void SettingsWidget::setDark(bool dark) {
@@ -149,4 +153,11 @@ void SettingsWidget::update() {
     if (ui->customTitlebar) {
         ui->customTitlebar->setChecked(Settings::self()->getCustomTitlebar());
     }
+}
+
+bool SettingsWidget::eventFilter(QObject *watched, QEvent *e) {
+    if (ui->toolbar==watched && (QEvent::MouseButtonPress==e->type() || QEvent::TouchBegin==e->type())) {
+        QGuiApplication::focusWindow()->startSystemMove();
+    }
+    return QWidget::eventFilter(watched, e);
 }
