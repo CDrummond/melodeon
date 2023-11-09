@@ -32,8 +32,12 @@ class WindowButtons : public QWidget {
 public:
     WindowButtons(QWidget *p);
 
-    static int space();
     void update();
+
+private slots:
+    void minimizeWindow();
+    void maximizeWindow();
+    void closeWindow();
 
 private:
     QToolButton *min;

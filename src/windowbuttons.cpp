@@ -22,13 +22,21 @@
 #include "windowbuttons.h"
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QToolButton>
+#include <QtGui/QPalette>
 
 static const int constSpacing = 2;
 static const int constButtonSize = 16;
 
-static void configButton(QToolButton *b) {
-    b->setFixedSize(constButtonSize, constButtonSize);
+static void configButton(QToolButton *b, const QColor &color, const char *text) {
+    b->setFixedSize(constButtonSize*2, constButtonSize);
     b->setAutoRaise(true);
+    b->setText(text);
+    QPalette pal = b->palette();
+    pal.setColor(QPalette::Button, color);
+    QColor textColor = pal.color(QPalette::ButtonText);
+    textColor.setAlphaF(0.5);
+    pal.setColor(QPalette::ButtonText, textColor);
+    b->setPalette(pal);
 }
 
 WindowButtons::WindowButtons(QWidget *p)
@@ -38,9 +46,9 @@ WindowButtons::WindowButtons(QWidget *p)
     max = new QToolButton(this);
     close = new QToolButton(this);
 
-    configButton(min);
-    configButton(max);
-    configButton(close);
+    configButton(min, Qt::yellow, "-");
+    configButton(max, Qt::green, "+");
+    configButton(close, Qt::red, "x");
 
     lay->setSpacing(constSpacing);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -52,14 +60,30 @@ WindowButtons::WindowButtons(QWidget *p)
     lay->addWidget(max);
     lay->addWidget(close);
     setLayout(lay);
-    setFixedSize((3*constButtonSize) + (2*constSpacing), constButtonSize);
-}
-
-int WindowButtons::space() {
-    return (3*constButtonSize) + (4*constSpacing);
+    setFixedSize((3*constButtonSize*2) + (2*constSpacing), constButtonSize);
+    connect(min, &QToolButton::clicked, this, &WindowButtons::minimizeWindow);
+    connect(max, &QToolButton::clicked, this, &WindowButtons::maximizeWindow);
+    connect(close, &QToolButton::clicked, this, &WindowButtons::closeWindow);
 }
 
 void WindowButtons::update() {
     QSize ps = qobject_cast<QWidget *>(parent())->size();
     move(ps.width()-width(), 0);
+}
+
+void WindowButtons::minimizeWindow() {
+    qobject_cast<QWidget *>(parent())->showMinimized();
+}
+
+void WindowButtons::maximizeWindow() {
+    QWidget *p = qobject_cast<QWidget *>(parent());
+    if (p->isMaximized()) {
+        p->showNormal();
+    } else {
+        p->showMaximized();
+    }
+}
+
+void WindowButtons::closeWindow() {
+    qobject_cast<QWidget *>(parent())->close();
 }
