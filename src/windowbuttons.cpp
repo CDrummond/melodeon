@@ -43,7 +43,11 @@ WindowButtons::WindowButtons(QWidget *p)
     configButton(close);
 
     lay->setSpacing(constSpacing);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     lay->setMargin(0);
+#else
+    lay->setContentsMargins(0, 0, 0, 0);
+#endif
     lay->addWidget(min);
     lay->addWidget(max);
     lay->addWidget(close);
