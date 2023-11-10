@@ -39,6 +39,7 @@ public:
 
 private slots:
     void backClicked();
+    void quitClicked();
     void discoverClicked();
     void clearCacheClicked();
     void serverDiscovered(const QString &name, const QString &addr, quint16 port);
@@ -47,6 +48,7 @@ private slots:
 
 signals:
     void close(bool clearCache);
+    void quit();
 
 private:
     Ui::SettingsWidget *ui;

@@ -52,6 +52,7 @@ signals:
     void status(const Status &status);
     void cover(const QString &url);
     void titlebarPressed(bool toggleMax);
+    void windowControlPressed(const QString &name);
 
 private:
     QMap<QString, QString> parse(const QString &message);
@@ -60,6 +61,7 @@ private:
     void handleCover(const QMap<QString, QString> &params);
     void handlePlayer(const QMap<QString, QString> &params);
     void handleTitlebar(const QMap<QString, QString> &params);
+    void handleWindowControls(const QMap<QString, QString> &params);
 };
 
 #endif // WEBENGINEPAGE_H

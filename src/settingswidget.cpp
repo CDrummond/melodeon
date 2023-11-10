@@ -62,7 +62,16 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     f.setBold(true);
     ui->backButton->setFont(f);
     ui->backButton->setMaximumWidth(ui->toolbar->height()+4);
-    ui->backButton->setMinimumHeight(ui->toolbar->height());
+
+    if (MainWindow::customWindowbar()) {
+        ui->quitButton->setText(QString("X"));
+        ui->quitButton->setFont(f);
+        ui->quitButton->setMaximumWidth(ui->toolbar->height()+4);
+        connect(ui->quitButton, &QPushButton::clicked, this, &SettingsWidget::quitClicked);
+        ui->toolbar->installEventFilter(this);
+    } else {
+        REMOVE(ui->quitButton);
+    }
 
     f = font();
     f.setFixedPitch(true);
@@ -78,9 +87,6 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     closeAct->setShortcut(Qt::Key_Escape);
     connect(closeAct, &QAction::triggered, this, &SettingsWidget::backClicked);
     addAction(closeAct);
-    if (MainWindow::customWindowbar()) {
-        ui->toolbar->installEventFilter(this);
-    }
 }
 
 void SettingsWidget::setDark(bool dark) {
@@ -91,6 +97,10 @@ void SettingsWidget::setDark(bool dark) {
     ui->toolbar->setBackgroundRole(QPalette::Window);
     ui->backButton->setPalette(pal);
     ui->backButton->setBackgroundRole(QPalette::Window);
+    if (ui->quitButton) {
+        ui->quitButton->setPalette(pal);
+        ui->quitButton->setBackgroundRole(QPalette::Window);
+    }
 }
 
 void SettingsWidget::backClicked() {
@@ -109,6 +119,10 @@ void SettingsWidget::backClicked() {
     Settings::self()->save();
     emit close(clearCache);
     clearCache = false;
+}
+
+void SettingsWidget::quitClicked() {
+    emit quit();
 }
 
 void SettingsWidget::discoverClicked() {

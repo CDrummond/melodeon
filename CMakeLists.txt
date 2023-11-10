@@ -55,7 +55,6 @@ set(PROJECT_SOURCES
     src/themes.cpp
     src/tmpwebenginepage.cpp
     src/webenginepage.cpp
-    src/windowbuttons.cpp
     src/3rdparty/columnresizer/columnresizer.cpp
 )
 

@@ -28,7 +28,6 @@
 #include "status.h"
 #include "themes.h"
 #include "webenginepage.h"
-#include "windowbuttons.h"
 #ifdef Q_OS_LINUX
 #include "mpris.h"
 #include "linuxpowermanagement.h"
@@ -106,6 +105,7 @@ MainWindow::MainWindow()
     connect(web, &QWebEngineView::loadFinished, this, &MainWindow::loadFinished);
     connect(stack, &QStackedWidget::currentChanged, this, &MainWindow::stackChanged);
     connect(settings, &SettingsWidget::close, this, &MainWindow::settingsClosed);
+    connect(settings, &SettingsWidget::quit, this, &MainWindow::quit);
     connect(page, &WebEnginePage::appUrl, this, &MainWindow::appUrl);
     connect(page, &WebEnginePage::isDark, this, &MainWindow::setTheme);
     connect(page, &WebEnginePage::player, player, &Player::update);
@@ -113,6 +113,7 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::cover, player, &Player::setCover);
     connect(page, &QWebEnginePage::authenticationRequired, this, &MainWindow::authenticationRequired);
     connect(page, &WebEnginePage::titlebarPressed, this, &MainWindow::titlebarPressed);
+    connect(page, &WebEnginePage::windowControlPressed, this, &MainWindow::windowControlPressed);
     connect(player, &Player::runCommand, page, &WebEnginePage::runCommand);
 
     stack->addWidget(settings);
@@ -170,7 +171,6 @@ MainWindow::MainWindow()
         edges[1] = new Edge(Qt::TopEdge, 3, this);
         edges[2] = new Edge(Qt::RightEdge, 2, this);
         edges[3] = new Edge(Qt::BottomEdge, 3, this);
-        controls = new WindowButtons(this);
     }
 }
 
@@ -318,13 +318,30 @@ void MainWindow::titlebarPressed(bool toggleMax) {
     }
 }
 
+void MainWindow::windowControlPressed(const QString &name) {
+    if ("min"==name) {
+        showMinimized();
+    } else if ("max"==name) {
+        if (isMaximized()) {
+            showNormal();
+        } else {
+            showMaximized();
+        }
+    } else if ("close"==name) {
+        close();
+    }
+}
+
+void MainWindow::quit() {
+    close();
+}
+
 bool MainWindow::event(QEvent *event) {
-    if (QEvent::Resize==event->type()) {
+    if (useConstomToolbar && QEvent::Resize==event->type()) {
         edges[0]->update();
         edges[1]->update();
         edges[2]->update();
         edges[3]->update();
-        controls->update();
     }
     return QWidget::event(event);
 }
@@ -383,18 +400,22 @@ QString MainWindow::buildUrl() {
 #endif
                   QLatin1String("&appSettings=")+constSettingsUrl +
                   QLatin1String("&appQuit=")+constQuitUrl;
-    if (Settings::self()->getCustomTitlebar()) {
-        url+="&nativeTitlebar=c";
+    if (useConstomToolbar) {
+        url+="&nativeTitlebar=c&nativeWindowControls=c";
     }
     if (KDE==desktop || Windows==desktop) {
         url+=QLatin1String("&altBtnLayout=true");
     }
     if (KDE==desktop) {
         url+=QLatin1String("&defaultTheme=linux/dark/Breeze-Dark&themeColor=2a2e32");
+    } else if (GNOME==desktop) {
+        if (useConstomToolbar) {
+            url+=QLatin1String("&defaultTheme=linux/dark/Adwaita-Dark&themeColor=2c2c2c");
+        } else {
+            url+=QLatin1String("&defaultTheme=linux/light/Adwaita&themeColor=fcfcfc");
+        }
     }
-    if (GNOME==desktop) {
-        url+=QLatin1String("&defaultTheme=linux/light/Adwaita&themeColor=fcfcfc");
-    }
+
     if ((Debug::areas&Debug::JSON) || (Debug::areas&Debug::CometD)) {
         url+=QLatin1String("&debug=");
         if (Debug::areas&Debug::JSON) {

@@ -33,7 +33,6 @@ class WebEnginePage;
 class Player;
 class PowerManagement;
 class Edge;
-class WindowButtons;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -73,6 +72,8 @@ private slots:
     void timeout();
     void authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator);
     void titlebarPressed(bool toggleMax);
+    void windowControlPressed(const QString &name);
+    void quit();
 
 private:
     //void resizeOrMove(const QPointF &p);
@@ -99,7 +100,6 @@ private:
     QString currentUrl;
     QString urlTitle;
     Edge *edges[4];
-    WindowButtons *controls;
 };
 
 #endif // MAINWINDOW_H
