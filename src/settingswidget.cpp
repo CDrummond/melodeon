@@ -92,7 +92,7 @@ SettingsWidget::SettingsWidget(QWidget *parent)
 void SettingsWidget::setDark(bool dark) {
     QPalette pal(palette());
     pal.setColor(QPalette::Window, dark ? QColor(20, 20, 20) : QColor(220, 220, 220));
-    pal.setColor(QPalette::Button, pal.color(QPalette::Button));
+    pal.setColor(QPalette::Button, pal.color(QPalette::Window));
     ui->toolbar->setPalette(pal);
     ui->toolbar->setBackgroundRole(QPalette::Window);
     ui->backButton->setPalette(pal);
