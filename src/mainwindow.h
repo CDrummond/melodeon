@@ -71,8 +71,7 @@ private slots:
     void settingsClosed(bool clearCache);
     void timeout();
     void authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator);
-    void titlebarPressed(bool toggleMax);
-    void windowControlPressed(const QString &name);
+    void titlebarPressed(const QString &name);
     void quit();
 
 private:

@@ -37,7 +37,6 @@ static const QLatin1String constStatusLog("MATERIAL-STATUS");
 static const QLatin1String constCoverLog("MATERIAL-COVER");
 static const QLatin1String constPlayerLog("MATERIAL-PLAYER");
 static const QLatin1String constTitlebarLog("MATERIAL-TITLEBAR");
-static const QLatin1String constWindowControlsLog("MATERIAL-WINDOWCONTROLS");
 static const QLatin1String constName("NAME");
 static const QLatin1String constPlaying("PLAYING");
 static const QLatin1String constCount("COUNT");
@@ -52,7 +51,6 @@ static const QLatin1String constUrl("URL");
 static const QLatin1String constShuffle("SHUFFLE");
 static const QLatin1String constRepeat("REPEAT");
 static const QLatin1String constVolume("VOLUME");
-static const QLatin1String constOp("OP");
 
 WebEnginePage::WebEnginePage(QWebEngineProfile *profile, QObject *parent)
     : QWebEnginePage(profile, parent) {
@@ -97,8 +95,6 @@ void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMe
         handlePlayer(parse(message));
     } else if (message.startsWith(constTitlebarLog)) {
         handleTitlebar(parse(message));
-    } else if (message.startsWith(constWindowControlsLog)) {
-        handleWindowControls(parse(message));
     }
 }
 
@@ -164,11 +160,7 @@ void WebEnginePage::handlePlayer(const QMap<QString, QString> &params) {
 }
 
 void WebEnginePage::handleTitlebar(const QMap<QString, QString> &params) {
-    emit titlebarPressed(params[constOp]=="MAX");
-}
-
-void WebEnginePage::handleWindowControls(const QMap<QString, QString> &params) {
-    emit windowControlPressed(params[constName]);
+    emit titlebarPressed(params[constName]);
 }
 
 // TODO: Auth request? void QWebEnginePage::authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator)

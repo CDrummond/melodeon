@@ -113,7 +113,6 @@ MainWindow::MainWindow()
     connect(page, &WebEnginePage::cover, player, &Player::setCover);
     connect(page, &QWebEnginePage::authenticationRequired, this, &MainWindow::authenticationRequired);
     connect(page, &WebEnginePage::titlebarPressed, this, &MainWindow::titlebarPressed);
-    connect(page, &WebEnginePage::windowControlPressed, this, &MainWindow::windowControlPressed);
     connect(player, &Player::runCommand, page, &WebEnginePage::runCommand);
 
     stack->addWidget(settings);
@@ -306,19 +305,7 @@ void MainWindow::authenticationRequired(const QUrl &requestUrl, QAuthenticator *
     authenticator->setPassword(Settings::self()->getPassword());
 }
 
-void MainWindow::titlebarPressed(bool toggleMax) {
-    if (toggleMax) {
-        if (isMaximized()) {
-            showNormal();
-        } else {
-            showMaximized();
-        }
-    } else {
-        windowHandle()->startSystemMove();
-    }
-}
-
-void MainWindow::windowControlPressed(const QString &name) {
+void MainWindow::titlebarPressed(const QString &name) {
     if ("min"==name) {
         showMinimized();
     } else if ("max"==name) {
@@ -329,6 +316,8 @@ void MainWindow::windowControlPressed(const QString &name) {
         }
     } else if ("close"==name) {
         close();
+    } else if ("move"==name) {
+        windowHandle()->startSystemMove();
     }
 }
 
@@ -401,7 +390,7 @@ QString MainWindow::buildUrl() {
                   QLatin1String("&appSettings=")+constSettingsUrl +
                   QLatin1String("&appQuit=")+constQuitUrl;
     if (useConstomToolbar) {
-        url+="&nativeTitlebar=c&nativeWindowControls=c";
+        url+="&nativeTitlebar=c";
     }
     if (KDE==desktop || Windows==desktop) {
         url+=QLatin1String("&altBtnLayout=true");
