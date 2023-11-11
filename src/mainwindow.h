@@ -75,9 +75,7 @@ private slots:
     void quit();
 
 private:
-    //void resizeOrMove(const QPointF &p);
     bool event(QEvent *event) override;
-    //void changeCursorShape(const QPointF &p);
     void determineDesktop();
     void setupProfile();
     void showPage(int index);
