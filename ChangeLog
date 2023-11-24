@@ -1,3 +1,7 @@
+0.3.1
+-----
+1. Force "xcb" platform when running under GNOME.
+
 0.3.0
 -----
 1. Update source for Qt6 compatibility.

@@ -26,8 +26,16 @@
 #include "startup.h"
 #include "singleapplication.h"
 #include <QtCore/QCoreApplication>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
+#ifdef Q_OS_LINUX
+    QList<QByteArray> xdgDesktop = qgetenv("XDG_CURRENT_DESKTOP").toLower().split(':');
+    QSet<QByteArray> de = QSet<QByteArray>(xdgDesktop.cbegin(), xdgDesktop.cend());
+    if (de.contains("gnome")) {
+        setenv("QT_QPA_PLATFORM", "xcb", 1);
+    }
+#endif
     QCoreApplication::setOrganizationName(PROJECT_NAME);
     QCoreApplication::setApplicationName(PROJECT_NAME);
     QCoreApplication::setApplicationVersion(PROJECT_VERSION);
