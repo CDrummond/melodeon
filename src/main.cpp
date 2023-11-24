@@ -67,7 +67,18 @@ int main(int argc, char *argv[]) {
                 mw->activateWindow();
             });
             QObject::connect(&app, &SingleApplication::receivedMessage, mw, &MainWindow::receivedMessage);
-            mw->show();
+
+            bool maximised = false;
+            for (const auto &arg: app.arguments()) {
+                if (arg.startsWith("--startmax")) {
+                    maximised = true;
+                }
+            }
+            if (maximised) {
+                mw->showMaximized();
+            } else {
+                mw->show();
+            }
         }
 
         return app.exec();

@@ -25,16 +25,19 @@
 int Debug::areas = Debug::None;
 
 void Debug::init(const QStringList &args) {
-    if (2==args.length() && args.at(1).startsWith("--debug")) {
-        QStringList parts = args.at(1).mid(8).split(",");
-        for (const auto &part: parts) {
-            if (part=="app") {
-                areas|=Debug::App;
-            } else if (part=="json") {
-                areas|=Debug::JSON;
-            } else if (part=="cometd") {
-                areas|=Debug::CometD;
+    for (const auto &arg: args) {
+        if (arg.startsWith("--debug")) {
+            QStringList parts = args.at(1).mid(8).split(",");
+            for (const auto &part: parts) {
+                if (part=="app") {
+                    areas|=Debug::App;
+                } else if (part=="json") {
+                    areas|=Debug::JSON;
+                } else if (part=="cometd") {
+                    areas|=Debug::CometD;
+                }
             }
+            break;
         }
     }
 }
