@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=Melodeon
-GenericName=LMS Controller
-Comment=Listen to music via LMS
+GenericName=Luyrion Controller
+Comment=Listen to music via Lyrion
 Icon=melodeon
 Exec=melodeon
 Categories=Qt;KDE;AudioVideo;Player;
