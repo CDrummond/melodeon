@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Melodeon
-GenericName=Luyrion Controller
+GenericName=Lyrion Controller
 Comment=Listen to music via Lyrion
 Icon=melodeon
 Exec=melodeon
