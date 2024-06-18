@@ -17,7 +17,7 @@ set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
 set(CPACK_SOURCE_IGNORE_FILES  "/.svn/;/.git/;.gitignore;.github/;.project;CMakeLists.txt.user;/screenshots/;/build/")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_STRIP_FILES YES)
-include(CPack)
+
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -32,6 +32,14 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Network Widgets WebEngineWidgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Widgets WebEngineWidgets REQUIRED)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS libqt6core6t64 libqt6gui6t64 libqt6network6t64 libqt6widgets6t64 libqt6webenginewidgets6 libqt6webenginecore6)
+else()
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS libqt5core5t64 libqt5gui5t64 libqt5network5t64 libqt5widgets5t64 libqt5webenginewidgets5 libqt5webenginecore5 libqt5webengine5)
+endif()
+
+include(CPack)
 
 if (UNIX AND NOT APPLE)
     find_package(Qt${QT_VERSION_MAJOR} COMPONENTS DBus REQUIRED)

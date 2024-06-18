@@ -1,6 +1,7 @@
 0.4.1
 -----
 1. Fix typo in desktop file.
+2. Add dependencies to deb file.
 
 0.4.0
 -----
