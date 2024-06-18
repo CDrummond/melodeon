@@ -34,9 +34,9 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Network Widgets WebEngineWidgets R
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Widgets WebEngineWidgets REQUIRED)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS libqt6core6t64 libqt6gui6t64 libqt6network6t64 libqt6widgets6t64 libqt6webenginewidgets6 libqt6webenginecore6)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6core6t64, libqt6gui6t64, libqt6network6t64, libqt6widgets6t64, libqt6webenginewidgets6, libqt6webenginecore6")
 else()
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS libqt5core5t64 libqt5gui5t64 libqt5network5t64 libqt5widgets5t64 libqt5webenginewidgets5 libqt5webenginecore5 libqt5webengine5)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5core5t64, libqt5gui5t64, libqt5network5t64, libqt5widgets5t64, libqt5webenginewidgets5, libqt5webenginecore5, libqt5webengine5")
 endif()
 
 include(CPack)
