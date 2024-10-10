@@ -97,6 +97,7 @@ private:
     QString currentUrl;
     QString urlTitle;
     Edge *edges[4];
+    bool wasMaximised;
 };
 
 #endif // MAINWINDOW_H

@@ -82,6 +82,7 @@ bool MainWindow::customWindowbar() {
 MainWindow::MainWindow()
     : QMainWindow(nullptr) {
     useConstomToolbar = Settings::self()->getCustomTitlebar();
+    wasMaximised = false;
 
 #ifdef Q_OS_LINUX
     player = new Mpris(this);
@@ -211,6 +212,8 @@ void MainWindow::loadFinished(bool ok) {
     if (ok) {
         pageLoaded = true;
         page->setZoomFactor(Settings::self()->getZoom());
+        wasMaximised = isMaximized();
+        page->setMaximized(wasMaximised);
         update();
     } else {
         showPage(SETTINGS_PAGE);
@@ -331,6 +334,11 @@ bool MainWindow::event(QEvent *event) {
         edges[1]->update();
         edges[2]->update();
         edges[3]->update();
+        bool nowMaximized = isMaximized();
+        if (nowMaximized!=wasMaximised) {
+            wasMaximised = nowMaximized;
+            page->setMaximized(wasMaximised);
+        }
     }
     return QWidget::event(event);
 }
@@ -390,7 +398,7 @@ QString MainWindow::buildUrl() {
                   QLatin1String("&appSettings=")+constSettingsUrl +
                   QLatin1String("&appQuit=")+constQuitUrl;
     if (useConstomToolbar) {
-        url+="&nativeTitlebar=c";
+        url+="&nativeTitlebar=c&tbarBtns=7";
     }
     if (KDE==desktop || Windows==desktop) {
         url+=QLatin1String("&altBtnLayout=true");

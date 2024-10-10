@@ -42,6 +42,8 @@ public:
     void javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID) override;
     QWebEnginePage *createWindow(WebWindowType type) override;
 
+    void setMaximized(bool isMaximized);
+
 public slots:
     void runCommand(const QString &command);
 

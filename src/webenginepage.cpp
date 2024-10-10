@@ -110,6 +110,10 @@ void WebEnginePage::runCommand(const QString &command) {
     runJavaScript(command);
 }
 
+void WebEnginePage::setMaximized(bool isMaximized) {
+    runJavaScript(QLatin1String("bus.$emit('windowMaximized', ") + QLatin1String(isMaximized ? "true" : "false")+QLatin1String(");"));
+}
+
 QMap<QString, QString> WebEnginePage::parse(const QString &message) {
     QMap<QString, QString> map;
     QStringList lines = message.split("\n", Qt::SkipEmptyParts);
