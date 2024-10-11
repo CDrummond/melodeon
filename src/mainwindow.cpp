@@ -398,7 +398,7 @@ QString MainWindow::buildUrl() {
                   QLatin1String("&appSettings=")+constSettingsUrl +
                   QLatin1String("&appQuit=")+constQuitUrl;
     if (useConstomToolbar) {
-        url+="&nativeTitlebar=c&tbarBtns=7";
+        url+="&nativeTitlebar=c";
     }
     if (KDE==desktop || Windows==desktop) {
         url+=QLatin1String("&altBtnLayout=true");
