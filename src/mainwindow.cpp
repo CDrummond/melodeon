@@ -391,7 +391,7 @@ QString MainWindow::buildUrl() {
                   Settings::self()->getAddress() +
                   QLatin1Char(':') +
                   QString::number(Settings::self()->getPort()) +
-                  QLatin1String("/material/?hide=mediaControls,scale&download=false&nativeTheme=c") +
+                  QLatin1String("/material/?hide=mediaControls,scale&download=false&nativeTheme=c&dontTrapBack") +
 #ifdef Q_OS_LINUX
                   QLatin1String("&nativeStatus=c&nativePlayer=c&nativeCover=c") +
 #endif
