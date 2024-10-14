@@ -3,6 +3,7 @@
 1. Update skin's titlebar buttons to reflect maximized state.
 2. Add GNOME symbolic icon.
 3. Add 1 pixel border if using custom titlebar and not maximized.
+4. Update dependencies for Ubuntu 24.10
 
 0.4.1
 -----
