@@ -254,6 +254,7 @@ void MainWindow::resuming() {
 }
 
 void MainWindow::setTheme(bool dark) {
+    Edge::setDark(dark);
 #if defined Q_OS_WIN
     // TODO
 #elif defined Q_OS_MAC

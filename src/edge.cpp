@@ -29,7 +29,14 @@
 #include <QtGui/QWindow>
 #include <QtGui/QPainter>
 
-static const QColor constEdgeColor(128, 128, 128, 112);
+static const QColor constDarkEdgeColor(64, 64, 64);
+static const QColor constLightEdgeColor(192, 192, 192);
+
+static bool isDark = true;
+
+void Edge::setDark(bool d) {
+    isDark = d;
+}
 
 Edge::Edge(Qt::Edges e, int sz, QWidget *p)
     : QWidget(p)
@@ -46,8 +53,7 @@ bool Edge::event(QEvent *ev) {
                 QPainter p;
                 QRect r(rect());
                 p.begin(this);
-                p.fillRect(r, Qt::transparent);
-                p.setPen(constEdgeColor);
+                p.setPen(isDark ? constDarkEdgeColor : constLightEdgeColor);
                 switch (edge) {
                     case Qt::LeftEdge:
                         p.drawLine(r.topLeft(), r.bottomLeft());

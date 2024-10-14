@@ -28,6 +28,8 @@ class Edge : public QWidget {
 public:
     Edge(Qt::Edges e, int sz, QWidget *p);
 
+    static void setDark(bool d);
+
     bool event(QEvent *ev) override;
     void update();
     void mouseDoubleClickEvent(QMouseEvent *event) override;
