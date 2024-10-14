@@ -29,7 +29,7 @@
 #include <QtGui/QWindow>
 #include <QtGui/QPainter>
 
-static const QColor constEdgeColor(128, 128, 128, 128);
+static const QColor constEdgeColor(128, 128, 128, 112);
 
 Edge::Edge(Qt::Edges e, int sz, QWidget *p)
     : QWidget(p)
@@ -43,9 +43,10 @@ bool Edge::event(QEvent *ev) {
     switch (ev->type()) {
         case QEvent::Paint:
             if (!parentWidget()->isMaximized()) {
-                QPainter p(this);
+                QPainter p;
                 QRect r(rect());
                 p.begin(this);
+                p.fillRect(r, Qt::transparent);
                 p.setPen(constEdgeColor);
                 switch (edge) {
                     case Qt::LeftEdge:
