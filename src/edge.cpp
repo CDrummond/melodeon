@@ -21,11 +21,15 @@
 
 #include "edge.h"
 #include "config.h"
+#include "settings.h"
 #include <QtCore/QEvent>
 #include <QtGui/QCursor>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWindow>
+#include <QtGui/QPainter>
+
+static const QColor constEdgeColor(128, 128, 128, 128);
 
 Edge::Edge(Qt::Edges e, int sz, QWidget *p)
     : QWidget(p)
@@ -37,6 +41,32 @@ Edge::Edge(Qt::Edges e, int sz, QWidget *p)
 
 bool Edge::event(QEvent *ev) {
     switch (ev->type()) {
+        case QEvent::Paint:
+            if (!parentWidget()->isMaximized()) {
+                QPainter p(this);
+                QRect r(rect());
+                p.begin(this);
+                p.setPen(constEdgeColor);
+                switch (edge) {
+                    case Qt::LeftEdge:
+                        p.drawLine(r.topLeft(), r.bottomLeft());
+                        p.drawLine(r.x()+1, r.y(), r.x()+2, r.y());
+                        p.drawLine(r.x()+1, r.bottom(), r.x()+2, r.bottom());
+                        break;
+                    case Qt::TopEdge:
+                        p.drawLine(r.topLeft(), r.topRight());
+                        break;
+                    case Qt::RightEdge:
+                        p.drawLine(r.topRight(), r.bottomRight());
+                        p.drawLine(r.right()-2, r.y(), r.right()-1, r.y());
+                        p.drawLine(r.right()-2, r.bottom(), r.right()-1, r.bottom());
+                        break;
+                    case Qt::BottomEdge:
+                        p.drawLine(r.bottomLeft(), r.bottomRight());
+                }
+                p.end();
+            }
+            break;
         case QEvent::Enter:
         case QEvent::HoverMove:
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -77,16 +107,16 @@ void Edge::update() {
             move(0, 0);
             break;
         case Qt::TopEdge:
-            resize(ps.width()-(2*size), size);
-            move(size, 0);
+            resize(ps.width()-(2*(size-1)), size);
+            move(size-1, 0);
             break;
         case Qt::RightEdge:
             resize(size, ps.height());
             move(ps.width()-size, 0);
             break;
         case Qt::BottomEdge:
-            resize(ps.width()-(2*size), size);
-            move(size, ps.height()-size);
+            resize(ps.width()-(2*(size-1)), size);
+            move(size-1, ps.height()-size);
     }
 }
 
