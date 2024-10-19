@@ -330,7 +330,7 @@ void MainWindow::quit() {
 }
 
 bool MainWindow::event(QEvent *event) {
-    if (useConstomToolbar && QEvent::Resize==event->type()) {
+    if (useConstomToolbar && (QEvent::Resize==event->type() || QEvent::WindowStateChange==event->type())) {
         edges[0]->update();
         edges[1]->update();
         edges[2]->update();
