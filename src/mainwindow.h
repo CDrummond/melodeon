@@ -22,6 +22,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QtCore/QSize>
 #include <QtWidgets/QMainWindow>
 
 class QAuthenticator;
@@ -98,6 +99,7 @@ private:
     QString urlTitle;
     Edge *edges[4];
     bool wasMaximised;
+    QSize windowSize;
 };
 
 #endif // MAINWINDOW_H

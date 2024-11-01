@@ -61,7 +61,6 @@
 #include <QtWidgets/QStackedWidget>
 
 static const QString constSettingsUrl("mska://settings");
-static const QString constQuitUrl("mska://quit");
 static const int constMaxCacheSize = 1024;
 static const QLatin1String constUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
 
@@ -121,18 +120,12 @@ MainWindow::MainWindow()
     setCentralWidget(stack);
     showPage(WEBVIEW_PAGE);
 
-    QByteArray geo = Settings::self()->getGeometry();
-    if (geo.isEmpty()) {
+    windowSize = Settings::self()->getWindowSize();
+    if (windowSize.isEmpty()) {
         QSize screenSize = qApp->screens()[0]->size();
-        resize(qMin(screenSize.width()-64, 1024), qMin(screenSize.height()-64, 768));
-    } else {
-        restoreGeometry(geo);
+        windowSize=QSize(qMax(screenSize.width()-64, 1024), qMax(screenSize.height()-64, 768));
     }
-
-    QByteArray state = Settings::self()->getState();
-    if (!state.isEmpty()) {
-        restoreGeometry(state);
-    }
+    resize(windowSize);
 
     web->setZoomFactor(Settings::self()->getZoom());
 
@@ -175,9 +168,9 @@ MainWindow::MainWindow()
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    Settings::self()->setGeometry(saveGeometry());
-    Settings::self()->setState(saveState());
     Settings::self()->setZoom(page->zoomFactor());
+    Settings::self()->setMaximized(isMaximized());
+    Settings::self()->setWindowSize(windowSize);
     Settings::self()->save();
     page->deleteLater();
     QMainWindow::closeEvent(event);
@@ -224,9 +217,7 @@ void MainWindow::stackChanged(int index) {
 }
 
 void MainWindow::appUrl(const QString &url) {
-    if (url==constQuitUrl) {
-        close();
-    } else if (url==constSettingsUrl) {
+    if (url==constSettingsUrl) {
         showPage(SETTINGS_PAGE);
     }
 }
@@ -336,6 +327,9 @@ bool MainWindow::event(QEvent *event) {
         edges[2]->update();
         edges[3]->update();
         bool nowMaximized = isMaximized();
+        if (!nowMaximized) {
+            windowSize = size();
+        }
         if (nowMaximized!=wasMaximised) {
             wasMaximised = nowMaximized;
             page->setMaximized(wasMaximised);
@@ -396,8 +390,7 @@ QString MainWindow::buildUrl() {
 #ifdef Q_OS_LINUX
                   QLatin1String("&nativeStatus=c&nativePlayer=c&nativeCover=c") +
 #endif
-                  QLatin1String("&appSettings=")+constSettingsUrl +
-                  QLatin1String("&appQuit=")+constQuitUrl;
+                  QLatin1String("&appSettings=")+constSettingsUrl;
     if (useConstomToolbar) {
         url+="&nativeTitlebar=c";
     }

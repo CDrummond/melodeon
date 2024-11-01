@@ -24,6 +24,7 @@
 
 #include <QtCore/QByteArray>
 #include <QtCore/QSettings>
+#include <QtCore/QSize>
 
 class Settings : public QSettings {
     Settings();
@@ -44,14 +45,15 @@ public:
     QString getPassword() const;
     void setZoom(const qreal val);
     qreal getZoom() const;
-    void setGeometry(const QByteArray &val);
-    QByteArray getGeometry() const;
-    void setState(const QByteArray &val);
-    QByteArray getState() const;
+    void setWindowSize(const QSize &val);
+    QSize getWindowSize() const;
+    void setMaximized(bool val);
+    bool getMaximized() const;
+
     void setDark(bool val);
-    bool getDark();
+    bool getDark() const;
     void setInhibitSuspend(bool val);
-    bool getInhibitSuspend();
+    bool getInhibitSuspend() const;
     void setCustomTitlebar(bool val);
     bool getCustomTitlebar() const;
 
@@ -62,7 +64,7 @@ private:
     uint getUInt(const QString &key, const uint def) const;
     qreal getReal(const QString &key, const qreal def) const;
     bool getBool(const QString &key, const bool def) const;
-    QByteArray getByteArray(const QString &key, const QByteArray &def) const;
+    QSize getSize(const QString &key, const QSize &def) const;
 
 private:
     bool modified;

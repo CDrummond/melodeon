@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
                     maximised = true;
                 }
             }
-            if (maximised) {
+            if (maximised || Settings::self()->getMaximized()) {
                 mw->showMaximized();
             } else {
                 mw->show();

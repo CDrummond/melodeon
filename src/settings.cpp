@@ -100,20 +100,26 @@ qreal Settings::getZoom() const {
     return getReal("zoom", 1.0);
 }
 
-void Settings::setGeometry(const QByteArray &val) {
-    setValue("geometry", val);
+void Settings::setWindowSize(const QSize &val) {
+    if (getWindowSize()!=val) {
+        setValue("windowSize", val);
+        modified = true;
+    }
 }
 
-QByteArray Settings::getGeometry() const {
-    return getByteArray("geometry", QByteArray());
+QSize Settings::getWindowSize() const {
+    return getSize("windowSize", QSize());
 }
 
-void Settings::setState(const QByteArray &val) {
-    setValue("state", val);
+void Settings::setMaximized(bool val) {
+    if (getMaximized()!=val) {
+        setValue("maximized", val);
+        modified = true;
+    }
 }
 
-QByteArray Settings::getState() const {
-    return getByteArray("state", QByteArray());
+bool Settings::getMaximized() const {
+    return getBool("maximized", false);
 }
 
 void Settings::setDark(bool val) {
@@ -123,7 +129,7 @@ void Settings::setDark(bool val) {
     }
 }
 
-bool Settings::getDark() {
+bool Settings::getDark() const {
     return getBool("dark", false);
 }
 
@@ -133,7 +139,7 @@ void Settings::setInhibitSuspend(bool val) {
         modified = true;
     }
 }
-bool Settings::getInhibitSuspend() {
+bool Settings::getInhibitSuspend() const {
     return getBool("inhibitSuspend", false);
 }
 
@@ -164,8 +170,8 @@ bool Settings::getBool(const QString &key, const bool def) const {
     return contains(key) ? value(key).toBool() : def;
 }
 
-QByteArray Settings::getByteArray(const QString &key, const QByteArray &def) const {
-    return contains(key) ? value(key).toByteArray() : def;
+QSize Settings::getSize(const QString &key, const QSize &def) const {
+    return contains(key) ? value(key).toSize() : def;
 }
 
 void Settings::save() {
