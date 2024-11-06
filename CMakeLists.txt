@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(melodeon VERSION 0.4.3 LANGUAGES CXX)
+project(melodeon VERSION 0.4.4 LANGUAGES CXX)
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
@@ -18,7 +18,6 @@ set(CPACK_SOURCE_IGNORE_FILES  "/.svn/;/.git/;.gitignore;.github/;.project;CMake
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_STRIP_FILES YES)
 
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -30,13 +29,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Network Widgets WebEngineWidgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Widgets WebEngineWidgets REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Network Svg Widgets WebEngineWidgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Svg Widgets WebEngineWidgets REQUIRED)
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6core6, libqt6gui6, libqt6network6, libqt6widgets6, libqt6webenginewidgets6, libqt6webenginecore6")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6core6, libqt6gui6, libqt6network6, libqt6svg6, libqt6widgets6, libqt6webenginewidgets6, libqt6webenginecore6")
 else()
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5core5t64, libqt5gui5t64, libqt5network5t64, libqt5widgets5t64, libqt5webenginewidgets5, libqt5webenginecore5, libqt5webengine5")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5core5t64, libqt5gui5t64, libqt5network5t64, libqt5svg5t64, libqt5widgets5t64, libqt5webenginewidgets5, libqt5webenginecore5, libqt5webengine5")
 endif()
 
 include(CPack)
@@ -60,10 +59,12 @@ set(PROJECT_SOURCES
     src/settingswidget.ui
     src/serverdiscovery.cpp
     src/startup.cpp
+    src/svgicon.cpp
     src/themes.cpp
     src/tmpwebenginepage.cpp
     src/webenginepage.cpp
     src/3rdparty/columnresizer/columnresizer.cpp
+    melodeon.qrc
 )
 
 include_directories(src src/3rdparty/columnresizer ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
@@ -89,13 +90,13 @@ endif()
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::Svg
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::WebEngineWidgets
     SingleApplication::SingleApplication)
 
 if (UNIX AND NOT APPLE)
-    target_link_libraries(${EXECUTABLE_NAME} PRIVATE
-        Qt${QT_VERSION_MAJOR}::DBus)
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::DBus)
 endif()
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES

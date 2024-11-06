@@ -7,7 +7,7 @@ Cloning
 Build
 -----
 1. cd melodeon
-2. sudo apt install cmake g++ qt6-base-dev qt6-webengine-dev
+2. sudo apt install cmake g++ qt6-base-dev qt6-svg-dev qt6-webengine-dev
 3. mkdir build
 4. cd build
 5. cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release

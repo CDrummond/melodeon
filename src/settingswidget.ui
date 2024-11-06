@@ -82,9 +82,6 @@
         <property name="autoFillBackground">
          <bool>true</bool>
         </property>
-        <property name="text">
-         <string>...</string>
-        </property>
         <property name="flat">
          <bool>true</bool>
         </property>
@@ -134,9 +131,6 @@
         </property>
         <property name="autoFillBackground">
          <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>...</string>
         </property>
         <property name="flat">
          <bool>true</bool>

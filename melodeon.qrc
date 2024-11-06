@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+  <file alias="back.svg">images/back.svg</file>
+  <file alias="close.svg">images/close.svg</file>
+ </qresource>
+</RCC>

@@ -25,6 +25,7 @@
 #include "mainwindow.h"
 #include "serverdiscovery.h"
 #include "settings.h"
+#include "svgicon.h"
 #include <QtGui/QColor>
 #include <QtGui/QFontMetrics>
 #include <QtGui/QWindow>
@@ -38,6 +39,9 @@
     w->setVisible(false); \
     w->deleteLater(); \
     w=0;
+
+static QColor constDark(20, 20, 20);
+static QColor constLight(220, 220, 220);
 
 SettingsWidget::SettingsWidget(QWidget *parent)
     : QWidget(parent)
@@ -57,23 +61,21 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     connect(ui->discoverServer, &QPushButton::clicked, this, &SettingsWidget::discoverClicked);
     connect(ui->clearCache, &QPushButton::clicked, this, &SettingsWidget::clearCacheClicked);
     connect(ui->zoom, &QSlider::valueChanged, this, &SettingsWidget::updateZoomPc);
-    ui->backButton->setText(QString("\u2190"));
-    QFont f = font();
-    f.setBold(true);
-    ui->backButton->setFont(f);
-    ui->backButton->setMaximumWidth(ui->toolbar->height()+4);
+    ui->backButton->setIcon(SvgIcon::icon(":back.svg", constLight, constLight));
+    ui->backButton->setIconSize(QSize(24, 24));
+    ui->backButton->setMaximumWidth(ui->toolbar->height());
 
     if (MainWindow::customWindowbar()) {
-        ui->quitButton->setText(QString("X"));
-        ui->quitButton->setFont(f);
-        ui->quitButton->setMaximumWidth(ui->toolbar->height()+4);
+        ui->quitButton->setIcon(SvgIcon::icon(":close.svg", constLight, constLight));
+        ui->quitButton->setIconSize(QSize(24, 24));
+        ui->quitButton->setMaximumWidth(ui->toolbar->height());
         connect(ui->quitButton, &QPushButton::clicked, this, &SettingsWidget::quitClicked);
         ui->toolbar->installEventFilter(this);
     } else {
         REMOVE(ui->quitButton);
     }
 
-    f = font();
+    QFont f = font();
     f.setFixedPitch(true);
     QFontMetrics fm(f);
     ui->zoomPc->setFont(f);
@@ -91,15 +93,18 @@ SettingsWidget::SettingsWidget(QWidget *parent)
 
 void SettingsWidget::setDark(bool dark) {
     QPalette pal(palette());
-    pal.setColor(QPalette::Window, dark ? QColor(20, 20, 20) : QColor(220, 220, 220));
+    QColor iconColor = dark ? constLight : constDark;
+    pal.setColor(QPalette::Window, dark ? constDark : constLight);
     pal.setColor(QPalette::Button, pal.color(QPalette::Window));
     ui->toolbar->setPalette(pal);
     ui->toolbar->setBackgroundRole(QPalette::Window);
     ui->backButton->setPalette(pal);
     ui->backButton->setBackgroundRole(QPalette::Window);
+    ui->backButton->setIcon(SvgIcon::icon(":back.svg", iconColor, iconColor));
     if (ui->quitButton) {
         ui->quitButton->setPalette(pal);
         ui->quitButton->setBackgroundRole(QPalette::Window);
+        ui->quitButton->setIcon(SvgIcon::icon(":close.svg", iconColor, iconColor));
     }
 }
 
