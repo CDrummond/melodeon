@@ -321,18 +321,20 @@ void MainWindow::quit() {
 }
 
 bool MainWindow::event(QEvent *event) {
-    if (useConstomToolbar && (QEvent::Resize==event->type() || QEvent::WindowStateChange==event->type())) {
-        edges[0]->update();
-        edges[1]->update();
-        edges[2]->update();
-        edges[3]->update();
+    if (QEvent::Resize==event->type() || QEvent::WindowStateChange==event->type()) {
         bool nowMaximized = isMaximized();
         if (!nowMaximized) {
             windowSize = size();
         }
-        if (nowMaximized!=wasMaximised) {
-            wasMaximised = nowMaximized;
-            page->setMaximized(wasMaximised);
+        if (useConstomToolbar) {
+            edges[0]->update();
+            edges[1]->update();
+            edges[2]->update();
+            edges[3]->update();
+            if (nowMaximized!=wasMaximised) {
+                wasMaximised = nowMaximized;
+                page->setMaximized(wasMaximised);
+            }
         }
     }
     return QWidget::event(event);
