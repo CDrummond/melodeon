@@ -26,6 +26,7 @@
 #include "startup.h"
 #include "singleapplication.h"
 #include <QtCore/QCoreApplication>
+#include <QtCore/QTimer>
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
@@ -75,7 +76,8 @@ int main(int argc, char *argv[]) {
                 }
             }
             if (maximised || Settings::self()->getMaximized()) {
-                mw->showMaximized();
+                mw->showNormal();
+                QTimer::singleShot(0, mw, SLOT(showMaximized()));
             } else {
                 mw->show();
             }
