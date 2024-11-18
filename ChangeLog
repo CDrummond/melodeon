@@ -1,6 +1,9 @@
 0.4.4
 -----
 1. Use SVG icons in settings dialog toolbar.
+2. If run under GNOME invoke gsettings to know whether to add min/max to
+   titlebar buttons. Currently only "close" (standard GNOME) or
+   "min,max/close" (Ubuntu) supported.
 
 0.4.3
 -----

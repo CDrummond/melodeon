@@ -100,6 +100,7 @@ private:
     Edge *edges[4];
     bool wasMaximised;
     QSize windowSize;
+    QString tbarBtns;
 };
 
 #endif // MAINWINDOW_H

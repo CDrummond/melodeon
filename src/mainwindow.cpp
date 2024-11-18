@@ -36,6 +36,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QEvent>
 #include <QtCore/QList>
+#include <QtCore/QProcess>
 #include <QtCore/QSet>
 #include <QtCore/QSettings>
 #include <QtCore/QSize>
@@ -406,6 +407,29 @@ QString MainWindow::buildUrl() {
             url+=QLatin1String("&defaultTheme=linux/dark/Adwaita-Dark&themeColor=2c2c2c");
         } else {
             url+=QLatin1String("&defaultTheme=linux/light/Adwaita&themeColor=fcfcfc");
+        }
+        if (tbarBtns.isEmpty()) {
+            QProcess gsettings;
+            gsettings.startCommand(QLatin1String("gsettings get org.gnome.desktop.wm.preferences button-layout"));
+            gsettings.waitForFinished(500);
+            QString out = QString(gsettings.readAllStandardOutput());
+            QStringList values = out.simplified().remove(":").remove("'").split(",");
+            QStringList btns;
+            for (auto val: values) {
+                if (val==QLatin1String("minimize")) {
+                    btns.append("min");
+                } else if (val==QLatin1String("maximize")) {
+                    btns.append("max");
+                } else if (val==QLatin1String("close")) {
+                    btns.append(val);
+                }
+            }
+            if (btns.isEmpty() || btns.size()!=1 || btns.at(0)!="close") {
+                tbarBtns="min,max,close";
+            } else {
+                tbarBtns="close";
+            }
+            url+=QLatin1String("&tbarBtns=")+tbarBtns;
         }
     }
 
