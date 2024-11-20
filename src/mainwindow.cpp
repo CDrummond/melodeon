@@ -74,14 +74,14 @@ qreal MainWindow::constMinZoom(0.25);
 qreal MainWindow::constMaxZoom(5.0);
 qreal MainWindow::constZoomStep(0.05);
 
-static bool useConstomToolbar = false;
+static bool useCustomTitlebar = false;
 bool MainWindow::customWindowbar() {
-    return useConstomToolbar;
+    return useCustomTitlebar;
 }
 
 MainWindow::MainWindow()
     : QMainWindow(nullptr) {
-    useConstomToolbar = Settings::self()->getCustomTitlebar();
+    useCustomTitlebar = Settings::self()->getCustomTitlebar();
     wasMaximised = false;
 
 #ifdef Q_OS_LINUX
@@ -158,7 +158,7 @@ MainWindow::MainWindow()
         connect(powerManagement, &PowerManagement::resuming, this, &MainWindow::resuming);
     }
 
-    if (useConstomToolbar) {
+    if (useCustomTitlebar) {
         setWindowFlags(Qt::FramelessWindowHint);
         stack->setContentsMargins(0, 0, 0, 0);
         edges[0] = new Edge(Qt::LeftEdge, 2, this);
@@ -327,7 +327,7 @@ bool MainWindow::event(QEvent *event) {
         if (!nowMaximized) {
             windowSize = size();
         }
-        if (useConstomToolbar) {
+        if (useCustomTitlebar) {
             edges[0]->update();
             edges[1]->update();
             edges[2]->update();
@@ -394,7 +394,7 @@ QString MainWindow::buildUrl() {
                   QLatin1String("&nativeStatus=c&nativePlayer=c&nativeCover=c") +
 #endif
                   QLatin1String("&appSettings=")+constSettingsUrl;
-    if (useConstomToolbar) {
+    if (useCustomTitlebar) {
         url+="&nativeTitlebar=c";
     }
     if (KDE==desktop || Windows==desktop) {
@@ -403,33 +403,37 @@ QString MainWindow::buildUrl() {
     if (KDE==desktop) {
         url+=QLatin1String("&defaultTheme=linux/dark/Breeze-Dark&themeColor=2a2e32");
     } else if (GNOME==desktop) {
-        if (useConstomToolbar) {
+        if (useCustomTitlebar) {
             url+=QLatin1String("&defaultTheme=linux/dark/Adwaita-Dark&themeColor=2c2c2c");
         } else {
             url+=QLatin1String("&defaultTheme=linux/light/Adwaita&themeColor=fcfcfc");
         }
-        if (tbarBtns.isEmpty()) {
-            QProcess gsettings;
-            gsettings.startCommand(QLatin1String("gsettings get org.gnome.desktop.wm.preferences button-layout"));
-            gsettings.waitForFinished(500);
-            QString out = QString(gsettings.readAllStandardOutput());
-            QStringList values = out.simplified().remove(":").remove("'").split(",");
-            QStringList btns;
-            for (auto val: values) {
-                if (val==QLatin1String("minimize")) {
-                    btns.append("min");
-                } else if (val==QLatin1String("maximize")) {
-                    btns.append("max");
-                } else if (val==QLatin1String("close")) {
-                    btns.append(val);
+        if (useCustomTitlebar) {
+            if (tbarBtns.isEmpty()) {
+                QProcess gsettings;
+                gsettings.startCommand(QLatin1String("gsettings get org.gnome.desktop.wm.preferences button-layout"));
+                gsettings.waitForFinished(500);
+                QString out = QString(gsettings.readAllStandardOutput());
+                QStringList values = out.simplified().remove(":").remove("'").split(",");
+                QStringList btns;
+                for (auto val: values) {
+                    if (val==QLatin1String("minimize")) {
+                        btns.append("min");
+                    } else if (val==QLatin1String("maximize")) {
+                        btns.append("max");
+                    } else if (val==QLatin1String("close")) {
+                        btns.append(val);
+                    }
+                }
+                if (btns.isEmpty() || btns.size()!=1 || btns.at(0)!="close") {
+                    tbarBtns="min,max,close";
+                } else {
+                    tbarBtns="close";
                 }
             }
-            if (btns.isEmpty() || btns.size()!=1 || btns.at(0)!="close") {
-                tbarBtns="min,max,close";
-            } else {
-                tbarBtns="close";
+            if (tbarBtns.isEmpty()) {
+                url+=QLatin1String("&tbarBtns=")+tbarBtns;
             }
-            url+=QLatin1String("&tbarBtns=")+tbarBtns;
         }
     }
 
