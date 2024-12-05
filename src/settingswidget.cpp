@@ -34,6 +34,7 @@
 #else
 #include <QtWidgets/QAction>
 #endif
+#include <QtWidgets/QStyle>
 
 #define REMOVE(w) \
     w->setVisible(false); \
@@ -105,6 +106,15 @@ void SettingsWidget::setDark(bool dark) {
         ui->quitButton->setPalette(pal);
         ui->quitButton->setBackgroundRole(QPalette::Window);
         ui->quitButton->setIcon(SvgIcon::icon(":close.svg", iconColor, iconColor));
+    }
+
+    if ("fusion"==QApplication::style()->objectName()) {
+        QString groupBoxStyle=QLatin1String("QGroupBox{font-weight:bold;background-color:#") +
+                              QLatin1String(dark ? "282828" : "ebebeb") +
+                              QLatin1String(";margin-top:3ex;padding:0px 4px 4px 4px;border-radius:6px}QGroupBox::title{subcontrol-origin:margin;padding:3px;}");
+        ui->serverGroupBox->setStyleSheet(groupBoxStyle);
+        ui->interfaceGroupBox->setStyleSheet(groupBoxStyle);
+        ui->miscGroupBox->setStyleSheet(groupBoxStyle);
     }
 }
 
