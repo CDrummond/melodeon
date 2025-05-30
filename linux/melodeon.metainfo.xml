@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.cdrummond.melodeon</id>
+  
+  <name>Melodeon</name>
+  <summary>Simple QWebEngine wrapper for MaterialSkin UI on Lyrion Music Server</summary>
+  
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+  
+  <description>
+    <p>
+      This application requires MaterialSkin to be installed on LMS but does not need to be set as the default skin.
+    </p>
+    <p>
+      Features: -
+    </p>
+    <p>
+      1. Server auto-discovery 2. MPRIS on Linux 3. Configurable zoom level 4. Inhibit suspend during playback
+    </p>
+  </description>
+
+  <developer id="io.github.cdrummmond">
+    <name>Craig Drummond</name>
+  </developer>
+
+  <content_rating type="oars-1.0" />
+
+  <url type="homepage">https://github.com/CDrummond/melodeon</url>
+  <url type="bugtracker">https://github.com/CDrummond/melodeon/issues</url>
+  <url type="vcs-browser">https://github.com/CDrummond/melodeon</url>
+
+  <launchable type="desktop-id">melodeon.desktop</launchable>
+
+  <releases>
+    <release version="0.4.4" date="2024-12-07">
+      <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.4.4</url>
+      <description>
+        <ul>
+          <li>Use SVG icons in settings dialog toolbar.</li>
+          <li>If run under GNOME invoke gsettings to know whether to add min/max to titlebar buttons. Currently only "close" (standard GNOME) or "min,max/close" (Ubuntu) supported.</li>
+          <li>Tweak appearance of group-boxes if using Fusion style.</li>
+        </ul>
+     </description>
+    </release>
+  </releases>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/CDrummond/melodeon/master/screenshots/now_playing.png</image>
+      <caption>Now playing screen</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/CDrummond/melodeon/master/screenshots/library.png</image>
+      <caption>Album view</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/CDrummond/melodeon/master/screenshots/settings.png</image>
+      <caption>Settings</caption>
+    </screenshot>
+  </screenshots>
+</component>
