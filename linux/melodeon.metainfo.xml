@@ -13,11 +13,14 @@
       This application requires MaterialSkin to be installed on LMS but does not need to be set as the default skin.
     </p>
     <p>
-      Features: -
+      Features:
     </p>
-    <p>
-      1. Server auto-discovery 2. MPRIS on Linux 3. Configurable zoom level 4. Inhibit suspend during playback
-    </p>
+    <ul>
+	    <li>Server auto-discovery</li>
+	    <li>MPRIS on Linux</li>
+	    <li>Configurable zoom level</li>
+	    <li>Inhibit suspend during playback</li>
+    </ul>
   </description>
 
   <developer id="io.github.cdrummmond">
