@@ -12,6 +12,7 @@ macro (update_iconcache ICON_THEME)
 endmacro (update_iconcache)
     
 install(FILES melodeon.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+install(FILES melodeon.metainfo.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo)
 install(FILES ../images/melodeon.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps)
 install(FILES ../images/melodeon-symbolic.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/symbolic/apps)
 update_iconcache(hicolor)
