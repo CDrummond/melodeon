@@ -36,6 +36,14 @@
   <launchable type="desktop-id">melodeon.desktop</launchable>
 
   <releases>
+    <release version="0.4.5" date="2025-05-30">
+      <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.4.5</url>
+      <description>
+        <ul>
+          <li>Update version for flatpak.</li>
+        </ul>
+     </description>
+    </release>
     <release version="0.4.4" date="2024-12-07">
       <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.4.4</url>
       <description>
