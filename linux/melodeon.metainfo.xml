@@ -10,7 +10,7 @@
   
   <description>
     <p>
-      Simple QWebEngine wrapper for MaterialSkin on LMS. This application requires MaterialSkin to be installed on LMS but does not need to be set as the default skin.
+      This application requires MaterialSkin to be installed on LMS but does not need to be set as the default skin.
     </p>
     <p>
       Features: -
@@ -47,15 +47,15 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/CDrummond/melodeon/refs/heads/master/screenshots/now_playing.png</image>
+      <image>https://raw.githubusercontent.com/CDrummond/melodeon/master/screenshots/now_playing.png</image>
       <caption>Now playing screen</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/CDrummond/melodeon/refs/heads/master/screenshots/library.png</image>
+      <image>https://raw.githubusercontent.com/CDrummond/melodeon/master/screenshots/library.png</image>
       <caption>Album view</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/CDrummond/melodeon/refs/heads/master/screenshots/settings.png</image>
+      <image>https://raw.githubusercontent.com/CDrummond/melodeon/master/screenshots/settings.png</image>
       <caption>Settings</caption>
     </screenshot>
   </screenshots>
