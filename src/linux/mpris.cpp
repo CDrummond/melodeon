@@ -40,7 +40,7 @@ Mpris::Mpris(QObject *p)
     new PlayerAdaptor(this);
     new MediaPlayer2Adaptor(this);
 
-    QDBusConnection::sessionBus().registerService(QLatin1String("org.mpris.MediaPlayer2.%1").arg(PROJECT_NAME));
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.mpris.MediaPlayer2.%1").arg(FREEDESKTOP_NAME));
     QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this, QDBusConnection::ExportAdaptors);
 }
 
