@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(melodeon VERSION 0.4.5 LANGUAGES CXX)
+set(FREEDESKTOP_NAME "io.github.cdrummond.${PROJECT_NAME}")
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
