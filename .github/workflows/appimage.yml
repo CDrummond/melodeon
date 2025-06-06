@@ -17,6 +17,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake g++ qt6-base-dev qt6-webengine-dev libgl1-mesa-dev libxkbcommon-dev libqt6svg6-dev libvulkan-dev qt6-webengine-dev-tools
+          git submodule update --init --recursive
       - name: configure
         run: cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
       - name: build
