@@ -32,15 +32,14 @@ AppDir:
     - libqt6svg6
     - libqt6webenginewidgets6
     - libxcb-xkb1
+    - qt6-base-dev
 #    - libqt6webenginecore6-bin
 #    - libqt6webenginecore6
 #    - libxkbcommon0
 #    - libxcb-cursor0
-#    - qt6-base-dev
 #    - qt6-webengine-dev
 #    - libgl1-mesa-dev
 #    - libxkbcommon-dev
-#    - libqt6svg6-dev ##
 #    - libvulkan-dev
 #    - qt6-webengine-dev-tools
   files:
