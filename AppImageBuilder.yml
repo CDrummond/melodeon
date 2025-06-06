@@ -33,7 +33,7 @@ AppDir:
     - libqt6webenginewidgets6
     - libxcb-xkb1
     - qt6-base-dev
-#    - libqt6webenginecore6-bin
+    - libqt6webenginecore6-bin
 #    - libqt6webenginecore6
 #    - libxkbcommon0
 #    - libxcb-cursor0
