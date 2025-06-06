@@ -35,6 +35,7 @@ AppDir:
 #    - qt6-base-dev
     - libqt6webenginecore6-bin
     - libxkbcommon-x11-0
+    - qt6-qpa-plugins
 #    - libqt6webenginecore6
 #    - libxkbcommon0
 #    - libxcb-cursor0
