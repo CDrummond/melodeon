@@ -29,6 +29,7 @@ AppDir:
     - sourceline: deb http://security.ubuntu.com/ubuntu jammy-security multiverse
     include:
     - libc6:amd64
+    - libqt6svg6
 #    - libqt6webenginecore6-bin
 #    - libqt6webenginewidgets6
 #    - libqt6webenginecore6
