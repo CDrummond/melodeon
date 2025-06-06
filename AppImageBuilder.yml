@@ -1,7 +1,7 @@
 # appimage-builder recipe see https://appimage-builder.readthedocs.io for details
 version: 1
 AppDir:
-  path: /home/agriffit/git/melodeon/build/AppDir
+  path: ./AppDir
   app_info:
     id: io.github.cdrummond.melodeon
     name: Melodeon
