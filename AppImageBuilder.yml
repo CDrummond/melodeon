@@ -1,5 +1,7 @@
 # appimage-builder recipe see https://appimage-builder.readthedocs.io for details
 version: 1
+script:
+  - which mksquashfs || apt install squashfs-tools
 AppDir:
   path: ./AppDir
   app_info:
