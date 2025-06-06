@@ -2,7 +2,6 @@
 version: 1
 script:
   - which mksquashfs || apt install squashfs-tools
-  - mv AppDir/share/applications/melodeon.desktop AppDir/share/applications/io.github.cdrummond.melodeon.desktop
 AppDir:
   path: ./AppDir
   app_info:
