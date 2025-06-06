@@ -1,0 +1,52 @@
+# appimage-builder recipe see https://appimage-builder.readthedocs.io for details
+version: 1
+AppDir:
+  path: /home/agriffit/git/melodeon/build/AppDir
+  app_info:
+    id: io.github.cdrummond.melodeon
+    name: Melodeon
+    icon: melodeon
+    version: 0.4.5
+    exec: usr/bin/melodeon
+    exec_args: $@
+  apt:
+    arch:
+    - amd64
+    allow_unauthenticated: true
+    sources:
+    - sourceline: deb http://gb.archive.ubuntu.com/ubuntu/ jammy main restricted
+    - sourceline: deb http://gb.archive.ubuntu.com/ubuntu/ jammy-updates main restricted
+    - sourceline: deb http://gb.archive.ubuntu.com/ubuntu/ jammy universe
+    - sourceline: deb http://gb.archive.ubuntu.com/ubuntu/ jammy-updates universe
+    - sourceline: deb http://gb.archive.ubuntu.com/ubuntu/ jammy multiverse
+    - sourceline: deb http://gb.archive.ubuntu.com/ubuntu/ jammy-updates multiverse
+    - sourceline: deb http://gb.archive.ubuntu.com/ubuntu/ jammy-backports main restricted
+        universe multiverse
+    - sourceline: deb http://security.ubuntu.com/ubuntu jammy-security main restricted
+    - sourceline: deb http://security.ubuntu.com/ubuntu jammy-security universe
+    - sourceline: deb http://security.ubuntu.com/ubuntu jammy-security multiverse
+    include:
+    - libc6:amd64
+#    - libqt6webenginecore6-bin
+#    - libqt6webenginewidgets6
+#    - libqt6webenginecore6
+#    - libxkbcommon0
+#    - libxcb-cursor0
+#    - qt6-base-dev
+#    - qt6-webengine-dev
+#    - libgl1-mesa-dev
+#    - libxkbcommon-dev
+#    - libqt6svg6-dev ##
+#    - libvulkan-dev
+#    - qt6-webengine-dev-tools
+  files:
+    include: []
+    exclude:
+    - usr/share/man
+    - usr/share/doc/*/README.*
+    - usr/share/doc/*/changelog.*
+    - usr/share/doc/*/NEWS.*
+    - usr/share/doc/*/TODO.*
+AppImage:
+  arch: x86_64
+  update-information: guess
