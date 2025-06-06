@@ -31,7 +31,7 @@ AppDir:
     - libc6:amd64
     - libqt6svg6
     - libqt6webenginewidgets6
-    - xkb-data
+    - libxcb-xkb
 #    - libqt6webenginecore6-bin
 #    - libqt6webenginecore6
 #    - libxkbcommon0
