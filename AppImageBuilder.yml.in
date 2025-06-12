@@ -8,7 +8,7 @@ AppDir:
     id: io.github.cdrummond.melodeon
     name: Melodeon
     icon: melodeon
-    version: 0.4.6
+    version: @@VERSION@@
     exec: usr/bin/melodeon
     exec_args: $@
   apt:
