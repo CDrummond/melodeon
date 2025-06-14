@@ -29,7 +29,7 @@ jobs:
       - name: Build AppImage
         uses: AppImageCrafters/build-appimage-action@master
         env:
-          UPDATE_INFO: gh-releases-zsync|agriffit79|melodeon|latest|Melodeon*x86_64.AppImage.zsync
+          UPDATE_INFO: gh-releases-zsync|CDrummond|melodeon|latest|Melodeon*x86_64.AppImage.zsync
         with:
           recipe: AppImageBuilder.yml
       - uses: actions/upload-artifact@v4
