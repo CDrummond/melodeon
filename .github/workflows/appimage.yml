@@ -1,0 +1,38 @@
+name: C/C++ AppImage
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-appimage-x86:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ qt6-base-dev qt6-webengine-dev libgl1-mesa-dev libxkbcommon-dev libqt6svg6-dev libvulkan-dev qt6-webengine-dev-tools squashfs-tools libxml2-utils
+          git submodule update --init --recursive
+      - name: configure
+        run: cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+      - name: build
+        run: make -j`nproc` install DESTDIR=AppDir && mv AppDir/usr/share/applications/melodeon.desktop AppDir/usr/share/applications/io.github.cdrummond.melodeon.desktop
+      - name: Populate app version
+        run: |
+          sed s"/@@VERSION@@/$(xmllint linux/melodeon.metainfo.xml --xpath '/component/releases/release[1]/@version' | cut -d '"' -f 2)/" AppImageBuilder.yml.in > AppImageBuilder.yml
+          grep version AppImageBuilder.yml
+      - name: Build AppImage
+        uses: AppImageCrafters/build-appimage-action@master
+        env:
+          UPDATE_INFO: gh-releases-zsync|CDrummond|melodeon|latest|Melodeon*x86_64.AppImage.zsync
+        with:
+          recipe: AppImageBuilder.yml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AppImage
+          path: './*.AppImage*'
