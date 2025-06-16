@@ -1,10 +1,8 @@
 name: C/C++ AppImage
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  release:
+    types: [create]
 
 jobs:
   build-appimage-x86:
