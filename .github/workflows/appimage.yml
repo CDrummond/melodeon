@@ -1,8 +1,6 @@
 name: C/C++ AppImage
 
-on:
-  release:
-    types: [created]
+on: workflow_dispatach
 
 jobs:
   build-appimage-x86:
