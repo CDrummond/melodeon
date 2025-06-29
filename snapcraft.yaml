@@ -1,0 +1,48 @@
+name: melodeon 
+base: core22
+adopt-info: melodeon
+icon: images/melodeon.svg
+
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+
+grade: stable
+confinement: strict
+
+build-packages:
+  - libqt6printsupport6
+  - libcups2-dev
+
+parts:
+  melodeon:
+    source-type: local
+    source: .
+    parse-info:
+      - usr/share/metainfo/melodeon.metainfo.xml
+    plugin: cmake
+    cmake-parameters:
+      - -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+
+plugs:
+  shared-memory:
+    private: true
+
+apps:
+  melodeon:
+    command: /usr/bin/melodeon
+    desktop: usr/share/applications/melodeon.desktop
+    environment:
+      QTWEBENGINE_DISABLE_SANDBOX: 1
+    extensions:
+      - kde-neon-6
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - network
+      - shared-memory
+      - x11
+    slots:
+      - mpris
