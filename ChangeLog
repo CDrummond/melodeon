@@ -1,6 +1,7 @@
 0.4.6
 -----
 1. Remove Qt5 support.
+2. Change D-Bus name for Flathub compliance.
 
 0.4.5
 -----

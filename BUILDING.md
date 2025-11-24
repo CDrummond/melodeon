@@ -29,7 +29,7 @@ Create Snap package
 -------------------
 
 These steps assume you do not have Docker installed as it may conflict with lxd which is used by snapcraft.
-Also, enure you have plenty of spare disk space, the build process can easily consume 10-20G under /var.
+Also, ensure you have plenty of spare disk space, the build process can easily consume 10-20G under /var.
 
 1. Perform cloning steps 1-3.
 2. `sudo snap install snapcraft --classic`
