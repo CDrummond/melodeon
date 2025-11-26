@@ -1,3 +1,7 @@
+0.5.1
+-----
+1. Update version for flatpak.
+
 0.5.0
 -----
 1. Remove Qt5 support.

@@ -36,8 +36,16 @@
   <launchable type="desktop-id">melodeon.desktop</launchable>
 
   <releases>
-    <release version="0.4.6" date="2025-11-23">
-      <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.4.6</url>
+    <release version="0.5.1" date="2025-11-26">
+      <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.5.1</url>
+      <description>
+        <ul>
+          <li>Update version for flatpak.</li>
+        </ul>
+     </description>
+    </release>
+    <release version="0.5.0" date="2025-11-25">
+      <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.5.0</url>
       <description>
         <ul>
           <li>Remove Qt5 supoport.</li>
