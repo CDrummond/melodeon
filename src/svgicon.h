@@ -1,7 +1,7 @@
 /*
  * Melodeon - LMS Controller
  *
- * Copyright (c) 2022-2024 Craig Drummond <craig.p.drummond@gmail.com>
+ * Copyright (c) 2022-2026 Craig Drummond <craig.p.drummond@gmail.com>
  *
  * ----
  *
