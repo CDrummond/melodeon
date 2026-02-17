@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(melodeon VERSION 0.5.1 LANGUAGES CXX)
+project(melodeon VERSION 0.5.2 LANGUAGES CXX)
 set(FREEDESKTOP_NAME "io.github.cdrummond.${PROJECT_NAME}")
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 

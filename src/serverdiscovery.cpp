@@ -44,7 +44,7 @@ void ServerDiscovery::start() {
     if (nullptr==socket) {
         DBUG << "Send discovery packet";
         socket = new QUdpSocket(this);
-        if (!socket->bind(QHostAddress::Any, 0)) {
+        if (!socket->bind(QHostAddress("0.0.0.0"), 0)) {
             DBUG << "Failed to bind UDP socket";
             socket->deleteLater();
             socket = nullptr;
@@ -54,9 +54,8 @@ void ServerDiscovery::start() {
         socket->setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption, QVariant(256));
         connect(socket, &QUdpSocket::readyRead, this, &ServerDiscovery::readPendingDatagrams);
         char data[] = { 'e', 'I', 'P', 'A', 'D', 0, 'N', 'A', 'M', 'E', 0, 'J', 'S', 'O', 'N', 0 };
-        QNetworkDatagram datagram(QByteArray(data, 16), QHostAddress::Broadcast, 3483);
-        QTimer::singleShot(25000, this, &ServerDiscovery::stop);
-        socket->writeDatagram(datagram);
+        socket->writeDatagram(data, 16, QHostAddress::Broadcast, 3483);
+        QTimer::singleShot(2000, this, &ServerDiscovery::stop);
     }
 }
 
