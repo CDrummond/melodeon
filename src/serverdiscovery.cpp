@@ -20,7 +20,9 @@
  */
 
 #include "serverdiscovery.h"
+#include "debug.h"
 #include <QtCore/QTimer>
+#include <QtCore/QVariant>
 #include <QtNetwork/QNetworkDatagram>
 #include <QtNetwork/QUdpSocket>
 
@@ -38,17 +40,28 @@ ServerDiscovery::ServerDiscovery(QObject *p)
 }
 
 void ServerDiscovery::start() {
+    DBUG << "Start";
     if (nullptr==socket) {
+        DBUG << "Send discovery packet";
         socket = new QUdpSocket(this);
+        if (!socket->bind(QHostAddress::Any, 0)) {
+            DBUG << "Failed to bind UDP socket";
+            socket->deleteLater();
+            socket = nullptr;
+            return;
+        }
+
+        socket->setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption, QVariant(256));
         connect(socket, &QUdpSocket::readyRead, this, &ServerDiscovery::readPendingDatagrams);
         char data[] = { 'e', 'I', 'P', 'A', 'D', 0, 'N', 'A', 'M', 'E', 0, 'J', 'S', 'O', 'N', 0 };
         QNetworkDatagram datagram(QByteArray(data, 16), QHostAddress::Broadcast, 3483);
-        QTimer::singleShot(1500, this, &ServerDiscovery::stop);
+        QTimer::singleShot(25000, this, &ServerDiscovery::stop);
         socket->writeDatagram(datagram);
     }
 }
 
 void ServerDiscovery::stop() {
+    DBUG << "Stop";
     if (nullptr!=socket) {
         disconnect(socket, nullptr, nullptr, nullptr);
         socket->abort();
@@ -59,12 +72,17 @@ void ServerDiscovery::stop() {
 }
 
 void ServerDiscovery::readPendingDatagrams() {
+    DBUG << "Read";
     if (nullptr!=socket && socket->hasPendingDatagrams()) {
         QNetworkDatagram datagram = socket->receiveDatagram();
+        QByteArray data = datagram.data();
+        // Validate packet format - must start with 'E'
+        if (data.isEmpty() || data[0] != 'E') {
+            return;
+        }
         QString addr = QHostAddress(datagram.senderAddress().toIPv4Address()).toString();
         QString name;
         QString port;
-        QByteArray data = datagram.data();
         for(int i=1; i < data.length() && (name.isEmpty() || port.isEmpty());) {
             if (i + 5 > data.length()) {
                 break;
@@ -82,6 +100,7 @@ void ServerDiscovery::readPendingDatagrams() {
             }
             i += len;
         }
+        DBUG << name << addr << port;
         if (!name.isEmpty() && !addr.isEmpty() && !port.isEmpty()) {
             emit server(name, addr, port.toUInt());
         }
