@@ -213,7 +213,12 @@ void MainWindow::appUrl(const QString &url) {
 }
 
 void MainWindow::titleChanged(const QString &title) {
-    urlTitle = title.contains("Logitech") ? title : QString();
+    urlTitle = title.endsWith(" - Lyrion Music Server")
+        ? title.left(title.length() - 22)
+        : title.contains(" - Logitech Music Server")
+            ? title.left(title.length() - 23)
+            : QString();
+    DBUG << title << urlTitle;
     setTitle();
 }
 
@@ -378,7 +383,7 @@ QString MainWindow::buildUrl() {
                   Settings::self()->getAddress() +
                   QLatin1Char(':') +
                   QString::number(Settings::self()->getPort()) +
-                  QLatin1String("/material/?hide=mediaControls,scale&download=false&nativeTheme=c&dontTrapBack") +
+                  QLatin1String("/material/?hide=mediaControls,scale&download=false&nativeTheme=c&dontTrapBack=true&setTitle=true") +
 #ifdef Q_OS_LINUX
                   QLatin1String("&nativeStatus=c&nativePlayer=c&nativeCover=c") +
 #endif
@@ -442,9 +447,12 @@ QString MainWindow::buildUrl() {
 }
 
 void MainWindow::setTitle() {
-    QString title = WEBVIEW_PAGE==stack->currentIndex() && !urlTitle.isEmpty() ? urlTitle : "Melodeon";
+    QString title("Melodeon");
     if (!Settings::self()->getName().isEmpty()) {
         title+=" (" + Settings::self()->getName() + ")";
+    }
+    if (WEBVIEW_PAGE==stack->currentIndex() && !urlTitle.isEmpty()) {
+        title+= " :: " + urlTitle;
     }
     setWindowTitle(title);
 }
