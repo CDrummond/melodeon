@@ -1,7 +1,8 @@
-0.5.2
+0.6.0
 -----
 1. Fix server discovery.
 2. Show song 'title - artist' in window titlebar.
+3. Add support for 'Share' feature of Material Skin.
 
 0.5.1
 -----

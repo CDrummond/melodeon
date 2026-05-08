@@ -25,7 +25,13 @@
 #include "settings.h"
 #include "status.h"
 #include "themes.h"
+#include <QtCore/QByteArray>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QStandardPaths>
+#include <QtGui/QClipboard>
 #include <QtGui/QDesktopServices>
+#include <QtGui/QGuiApplication>
 #include <QtWebEngineCore/QWebEngineSettings>
 
 static const QLatin1String constThemeLog("MATERIAL-THEME");
@@ -33,6 +39,7 @@ static const QLatin1String constStatusLog("MATERIAL-STATUS");
 static const QLatin1String constCoverLog("MATERIAL-COVER");
 static const QLatin1String constPlayerLog("MATERIAL-PLAYER");
 static const QLatin1String constTitlebarLog("MATERIAL-TITLEBAR");
+static const QLatin1String constShareLog("MATERIAL-NPSHARE");
 static const QLatin1String constName("NAME");
 static const QLatin1String constPlaying("PLAYING");
 static const QLatin1String constCount("COUNT");
@@ -47,6 +54,10 @@ static const QLatin1String constUrl("URL");
 static const QLatin1String constShuffle("SHUFFLE");
 static const QLatin1String constRepeat("REPEAT");
 static const QLatin1String constVolume("VOLUME");
+static const QLatin1String constFilename("FILENAME");
+static const QLatin1String constClipboard("C");
+static const QLatin1String constDownload("D");
+static const QLatin1String constPngDataPrefix("data:image/png;base64,");
 
 WebEnginePage::WebEnginePage(QWebEngineProfile *profile, QObject *parent)
     : QWebEnginePage(profile, parent) {
@@ -91,6 +102,8 @@ void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMe
         handlePlayer(parse(message));
     } else if (message.startsWith(constTitlebarLog)) {
         handleTitlebar(parse(message));
+    }  else if (message.startsWith(constShareLog)) {
+        handleShare(parse(message));
     }
 }
 
@@ -161,6 +174,44 @@ void WebEnginePage::handlePlayer(const QMap<QString, QString> &params) {
 
 void WebEnginePage::handleTitlebar(const QMap<QString, QString> &params) {
     emit titlebarPressed(params[constName]);
+}
+
+void WebEnginePage::handleShare(const QMap<QString, QString> &params) {
+    QByteArray decoded;
+    QString filename = nullptr;
+    if (!params[constDownload].isEmpty() && params[constDownload].startsWith(constPngDataPrefix)) {
+        decoded = QByteArray::fromBase64(params[constDownload].mid(constPngDataPrefix.length()).toUtf8());
+        filename = params[constFilename];
+    } else if (!params[constClipboard].isEmpty() && params[constClipboard].startsWith(constPngDataPrefix)) {
+        decoded = QByteArray::fromBase64(params[constClipboard].mid(constPngDataPrefix.length()).toUtf8());
+    }
+
+    if (decoded.isEmpty()) {
+        runJavaScript(QLatin1String("bus.$emit('showError', undefined, 'Failed to decode data.');"));
+    } else {
+        if (!filename.isEmpty()) {
+            QString path = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation)+"/"+filename;
+            DBUG << path;
+            if (QFileInfo(path).exists()) {
+                runJavaScript(QLatin1String("bus.$emit('showMessage', '") + filename + " already downloaded.');");
+            } else {
+                QFile f(path);
+                if (f.open(QIODevice::WriteOnly)) {
+                    f.write(decoded);
+                    f.close();
+                    runJavaScript(QLatin1String("bus.$emit('showMessage', 'Downloaded ") + filename + "');");
+                }
+            }
+        } else {
+            QImage image = QImage::fromData(decoded);
+            if (image.isNull()) {
+                runJavaScript(QLatin1String("bus.$emit('showError', undefined, 'Failed to decode image.');"));
+            } else {
+                QGuiApplication::clipboard()->setImage(image, QClipboard::Clipboard);
+                runJavaScript(QLatin1String("bus.$emit('showMessage', 'Added to clipboard.');"));
+            }
+        }
+    }
 }
 
 // TODO: Auth request? void QWebEnginePage::authenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator)

@@ -57,6 +57,7 @@ private:
     void handleCover(const QMap<QString, QString> &params);
     void handlePlayer(const QMap<QString, QString> &params);
     void handleTitlebar(const QMap<QString, QString> &params);
+    void handleShare(const QMap<QString, QString> &params);
 };
 
 #endif // WEBENGINEPAGE_H

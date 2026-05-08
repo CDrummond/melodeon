@@ -36,12 +36,13 @@
   <launchable type="desktop-id">melodeon.desktop</launchable>
 
   <releases>
-    <release version="0.5.2" date="2026-XX-XX">
-      <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.5.2</url>
+    <release version="0.6.0" date="2026-XX-XX">
+      <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.6.0</url>
       <description>
         <ul>
-	        <li>Fix server discovery.</li>
+          <li>Fix server discovery.</li>
           <li>Show song 'title - artist' in window titlebar.</li>
+          <li>Add support for 'Share' feature of Material Skin.</li>
         </ul>
       </description>
     </release>
