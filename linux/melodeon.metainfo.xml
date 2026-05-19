@@ -36,7 +36,7 @@
   <launchable type="desktop-id">melodeon.desktop</launchable>
 
   <releases>
-    <release version="0.6.0" date="2026-XX-XX">
+    <release version="0.6.0" date="2026-05-19">
       <url type="details">https://github.com/CDrummond/melodeon/releases/tag/0.6.0</url>
       <description>
         <ul>
