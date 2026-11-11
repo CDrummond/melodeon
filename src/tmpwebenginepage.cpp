@@ -23,8 +23,8 @@
 #include "debug.h"
 #include <QtGui/QDesktopServices>
 
-TmpWebEnginePage::TmpWebEnginePage(QObject *parent)
-    : QWebEnginePage(parent) {
+TmpWebEnginePage::TmpWebEnginePage(QWebEngineProfile *profile, QObject *parent)
+    : QWebEnginePage(profile, parent) {
 }
 
 TmpWebEnginePage::~TmpWebEnginePage() {

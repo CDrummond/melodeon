@@ -108,7 +108,7 @@ void WebEnginePage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMe
 QWebEnginePage * WebEnginePage::createWindow(QWebEnginePage::WebWindowType type) {
     DBUG << type;
     if (QWebEnginePage::WebBrowserTab==type || QWebEnginePage::WebBrowserWindow==type) {
-        return new TmpWebEnginePage(this);
+        return new TmpWebEnginePage(profile(), this);
     }
     return nullptr;
 }

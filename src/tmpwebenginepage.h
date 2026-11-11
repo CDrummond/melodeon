@@ -28,7 +28,7 @@
 class TmpWebEnginePage : public QWebEnginePage {
     Q_OBJECT
 public:
-    explicit TmpWebEnginePage(QObject *parent = nullptr);
+    explicit TmpWebEnginePage(QWebEngineProfile *profile, QObject *parent = nullptr);
     virtual ~TmpWebEnginePage();
 
     bool acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) override;
