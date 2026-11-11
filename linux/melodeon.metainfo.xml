@@ -3,14 +3,14 @@
   <id>io.github.cdrummond.melodeon</id>
   
   <name>Melodeon</name>
-  <summary>Simple QWebEngine wrapper for MaterialSkin UI on Lyrion Music Server</summary>
+  <summary>Remote control for Lyrion Music Server</summary>
   
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   
   <description>
     <p>
-      This application requires MaterialSkin to be installed on LMS but does not need to be set as the default skin.
+      Melodeon is a stand-alone wrapper around Lyrion Music Server’s web interface, using its Material skin.
     </p>
     <p>
       Features:
@@ -21,6 +21,9 @@
 	    <li>Configurable zoom level</li>
 	    <li>Inhibit suspend during playback</li>
     </ul>
+    <p>
+      Note that Melodeon requires the Material Skin plugin to be installed on LMS (but it does not need to be set as the default skin).
+    </p>
   </description>
 
   <developer id="io.github.cdrummmond">
